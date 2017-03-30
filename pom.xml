@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>1.5.2.RELEASE</version>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.mycompany-community</groupId>
+    <artifactId>boot-community-demo</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>Broadleaf Spring Boot Community Demo</name>
+
+    <repositories>
+        <repository>
+            <id>public snapshots</id>
+            <name>public snapshots</name>
+            <url>http://nexus.broadleafcommerce.org/nexus/content/groups/community-snapshots/</url>
+        </repository>
+        <repository>
+            <id>public releases</id>
+            <name>public releases</name>
+            <url>http://nexus.broadleafcommerce.org/nexus/content/groups/community-releases/</url>
+        </repository>
+    </repositories>
+
+    <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <hibernate.version>4.1.11.Final</hibernate.version>
+        <solr.version>5.3.1</solr.version>
+        <hsqldb.version>2.3.2</hsqldb.version>
+        <broadleaf.bom.version>5.2.0-SNAPSHOT</broadleaf.bom.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.uri>${project.baseUri}</project.uri>
+    </properties>
+
+    <scm>
+        <connection>scm:git:git@github.com:BroadleafCommerce/CommuntityStarter.git</connection>
+        <developerConnection>scm:git:git@github.com:BroadleafCommerce/CommunityStarter.git</developerConnection>
+        <url>https://github.com/BroadleafCommerce/CommunityStarter</url>
+        <tag>HEAD</tag>
+    </scm>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <version>2.10</version>
+                    <executions>
+                        <execution>
+                            <id>copy-agent</id>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>copy</goal>
+                            </goals>
+                            <configuration>
+                                <artifactItems>
+                                    <artifactItem>
+                                        <groupId>org.springframework</groupId>
+                                        <artifactId>spring-instrument</artifactId>
+                                        <version>${spring.version}</version>
+                                        <outputDirectory>${project.build.directory}/agents</outputDirectory>
+                                        <destFileName>spring-instrument.jar</destFileName>
+                                    </artifactItem>
+                                </artifactItems>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <configuration>
+                        <agent>${project.build.directory}/agents/spring-instrument.jar</agent>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.zeroturnaround</groupId>
+                <artifactId>jrebel-maven-plugin</artifactId>
+                <version>1.1.7</version>
+                <!-- <configuration>
+                    <rootPath>${basedir}</rootPath>
+                </configuration> -->
+                <executions>
+                    <execution>
+                        <id>generate-rebel-xml</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.broadleafcommerce</groupId>
+                <artifactId>broadleaf-enterprise-bom</artifactId>
+                <version>${broadleaf.bom.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.mycompany-community</groupId>
+                <artifactId>boot-community-demo-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.newrelic.agent.java</groupId>
+                <artifactId>newrelic-api</artifactId>
+                <version>3.16.1</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <modules>
+        <module>site</module>
+        <module>core</module>
+        <module>admin</module>
+    </modules>
+</project>
