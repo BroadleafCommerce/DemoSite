@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jee="http://www.springframework.org/schema/jee"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:mo="http://schema.broadleafcommerce.org/mo"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/jee
+        http://www.springframework.org/schema/jee/spring-jee.xsd
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://schema.broadleafcommerce.org/mo
+        http://schema.broadleafcommerce.org/mo/mo-3.0.xsd">
+
+
+    <bean id="blJsResources" parent="adminJsResourceHttpRequestHandlerBase" />
+    <bean id="blCssResources" parent="adminCssResourceHttpRequestHandlerBase" />
+
+    <mo:override id="blMetadataOverrides">
+        <mo:overrideItem ceilingEntity="org.broadleafcommerce.core.catalog.domain.Product">
+            <mo:field name="templatedEntity.template">
+                <mo:property name="group" value="ProductImpl_General_Misc" />
+                <mo:property name="order" value="1" />
+            </mo:field>
+            <mo:field name="defaultSku.quantityAvailable">
+                <mo:property name="excluded" value="true" />
+            </mo:field>
+            <mo:field name="displayTemplate">
+                <mo:property name="excluded" value="true" />
+            </mo:field>
+        </mo:overrideItem>
+        <mo:overrideItem ceilingEntity="org.broadleafcommerce.core.catalog.domain.Category">
+            <mo:field name="templatedEntity.template">
+                <mo:property name="group" value="CategoryImpl_Category_Miscellaneous" />
+                <mo:property name="order" value="1000" />
+                <mo:property name="tooltip" value="TemplatedEntity_CagtegoryImpl_tooltip" />
+            </mo:field>
+            <mo:field name="displayTemplate">
+                <mo:property name="excluded" value="true" />
+            </mo:field>
+        </mo:overrideItem>
+    </mo:override>
+
+</beans>
