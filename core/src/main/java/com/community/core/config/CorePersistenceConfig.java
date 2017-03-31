@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.community.core.config;
 
 import org.broadleafcommerce.common.extensibility.context.merge.Merge;

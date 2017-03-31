@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.community.configuration;
 
 import org.springframework.boot.web.servlet.ServletContextInitializer;

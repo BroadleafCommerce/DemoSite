@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.community.core.config;
 
 import org.apache.solr.client.solrj.SolrClient;
