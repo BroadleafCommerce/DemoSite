@@ -1,0 +1,13 @@
+<th:block layout:decorate="~{layout/accountLayout}" layout:fragment="content">
+    <div>     
+    
+        <div th:if="${wishlist != null and !#lists.isEmpty(wishlist.discreteOrderItems)}">
+            <table th:replace="account/partials/wishlistItemsTable"></table>
+        </div>
+        
+        <div th:unless="${wishlist != null and !#lists.isEmpty(wishlist.discreteOrderItems)}">
+            <h3>You do not have any items in your wishlist</h3>
+        </div>
+        
+    </div>
+</th:block>

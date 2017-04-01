@@ -1,0 +1,58 @@
+<div id="multiship-add-address">
+    <div id="addAddressContainer">
+        <div id="addAddressTitle">Add a new address</div>
+        <div id="addAddress">
+            <blc:form th:object="${addressForm}" th:action="@{/checkout/add-address}" method="post" id="shipping_address">
+                <input type="hidden" name="address.isoCountryAlpha2" value="US" />
+                
+                <div class="form30">
+                    <label for="firstName">First Name</label> 
+                    <span class="error" th:if="${#fields.hasErrors('address.firstName')}" th:errors="*{address.firstName}"></span>
+                    <input type="text" th:field="*{address.firstName}" class="field30 required" th:classappend="${#fields.hasErrors('address.firstName')}? 'fieldError'"/>
+                </div>
+                <div class="form30 margin20">
+                    <label for="lastName">Last Name</label> 
+                    <span class="error" th:if="${#fields.hasErrors('address.lastName')}" th:errors="*{address.lastName}"></span>
+                    <input type="text" th:field="*{address.lastName}" class="field30 required" th:classappend="${#fields.hasErrors('address.lastName')}? 'fieldError'"/>
+                </div>
+    
+                <div class="form66">
+                    <label for="address1">Address</label> 
+                    <span class="error" th:if="${#fields.hasErrors('address.addressLine1')}" th:errors="*{address.addressLine1}"></span>
+                    <input type="text" th:field="*{address.addressLine1}" class="field66 required" th:classappend="${#fields.hasErrors('address.addressLine1')}? 'fieldError'"/>
+                </div>
+                <div class="form66">
+                    <label for="address2">Address 2</label> 
+                    <span class="error_spacer" th:if="${#fields.hasErrors('address.addressLine1')}">error</span>
+                    <input type="text" th:field="*{address.addressLine2}" class="field66"/>
+                </div>
+    
+                <div class="form30">
+                    <label for="city">City / State</label>
+                    <span class="error" th:if="${#fields.hasErrors('address.city')}" th:errors="*{address.city}"></span>
+                    <br th:if="${#fields.hasErrors('address.city')} and ${#fields.hasErrors('address.stateProvinceRegion')}"/>
+                    <span class="error" th:if="${#fields.hasErrors('address.stateProvinceRegion')}" th:errors="*{address.stateProvinceRegion}"></span>
+                    
+                    <input type="text" th:field="*{address.city}" class="field25 required" th:classappend="${#fields.hasErrors('address.city')}? 'fieldError'" />
+                    <select id="state" th:field="*{address.stateProvinceRegion}" size="1" style="width: 48px;" class="required" th:classappend="${#fields.hasErrors('address.stateProvinceRegion')}? 'fieldError'">
+                        <option value="">--</option>
+                        <option th:each="state : ${states}" th:value="${state.abbreviation}" th:utext="${state.abbreviation}"></option>
+                    </select>
+                </div>
+                <div class="form25 margin20">
+                    <label for="postal_code">Postal Code</label>
+                    <span class="error" th:if="${#fields.hasErrors('address.postalCode')}" th:errors="*{address.postalCode}"></span>
+                    <input type="text" th:field="*{address.postalCode}" class="field30" th:classappend="${#fields.hasErrors('address.postalCode')}? 'fieldError'" />
+                </div>
+                <div class="form30 margin20">
+                <label for="phone"><span th:utext="#{cart.phone}">Phone</span></label> <span class="error_spacer" th:if="${#fields.hasErrors('address.firstName') or #fields.hasErrors('address.lastName')}">error</span>
+                <input type="tel" id="address.phonePrimary" name="address.phonePrimary" th:if="*{address.phonePrimary != null}" th:value="*{address.phonePrimary.phoneNumber}" class="field30 cloneable" />
+                <input type="tel" id="address.phonePrimary" name="address.phonePrimary" th:if="*{address.phonePrimary == null}" value="" class="field30 cloneable" />
+                </div>
+                
+                <input type="submit" class="save medium red" value="Save" />
+                <a th:href="@{/checkout/multiship}" class="cancel small-button gray-button" style="margin-top: 16px;">Cancel</a>
+            </blc:form>
+        </div>
+    </div>
+</div>

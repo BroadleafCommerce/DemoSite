@@ -1,0 +1,15 @@
+<th:block layout:decorate="~{layout/accountLayout}" layout:fragment="content">
+    <h3><span th:utext="#{cart.accountCredit.accounts}">Accounts</span></h3>
+    <ul id="account-credit" th:unless="${#lists.isEmpty(accounts)}" th:inline="text" class="clearfix">
+        <li>
+            <span class="account-number">Account Number</span>
+            <span class="balance">Balance</span>
+        </li>
+        <li class="credit" th:each="account : ${accounts}" th:object="${account}">
+            <div class="account-credit-info-row">
+                <span class="account-number" th:utext="*{accountNumber}"></span>
+                <span class="balance" blc:price="*{balance}"></span>
+            </div>
+        </li>
+    </ul>
+</th:block>

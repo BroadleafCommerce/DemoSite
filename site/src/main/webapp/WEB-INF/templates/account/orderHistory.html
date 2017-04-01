@@ -1,0 +1,24 @@
+<th:block layout:decorate="~{layout/accountLayout}" layout:fragment="content">
+    <div>
+        <ul id="order-history" th:unless="${#lists.isEmpty(orders)}">
+            <li>
+                <span class="order-number">Order Number</span>
+                <span class="submit-date">Date</span>
+                <span class="status">Status</span>
+                <span class="total">Total</span>
+            </li>
+            <li class="order" th:each="order : ${orders}" th:object="${order}" th:attr="data-order-number=*{orderNumber}">
+                <div class="order-info-row">
+                 <span class="order-number"><a th:href="@{/account/orders/} + *{orderNumber}" class="view-order-details" th:utext="*{orderNumber}"></a></span>
+                 <span class="submit-date" th:utext="*{#dates.format(submitDate, 'MM-dd-yyyy')}"></span>
+                 <span class="status" th:utext="*{status.friendlyType}">Processing</span>
+                 <span class="total" blc:price="*{total}"></span>
+             </div>
+                <div class="order-details"></div>
+            </li>
+        </ul>
+        
+        <h3 th:if="${#lists.isEmpty(orders)}">You have not placed any orders.</h3>
+    
+    </div>
+</th:block>

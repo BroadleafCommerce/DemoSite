@@ -1,0 +1,29 @@
+<nav>
+    <div th:remove="all">
+        <!--
+             This template displays the navigation of the site by looking up the menu named "headerNav"
+             and building a list of the categories sub-categories menu items.
+        -->
+    </div>
+    <blc:menu resultVar="menuItems" menuName="Header Nav" ></blc:menu>
+    <ul th:if="${not #lists.isEmpty(menuItems)}">
+        <li th:each="menuItem : ${menuItems}">
+
+            <a th:href="@{${menuItem.url}}" th:class="${menuItemStat.first}? 'home'">
+                <span th:utext="${menuItem.label}"></span>
+            </a>
+            <ul th:if="${not #lists.isEmpty(menuItem.submenu)}" class="sub-menu">
+                <li th:each="submenuItem : ${menuItem.submenu}">
+                    <a th:href="@{${submenuItem.url}}" th:utext="${submenuItem.label}"  class="sub-menu"></a>
+
+                    <ul th:if="${not #lists.isEmpty(submenuItem.submenu)}" class="secondary-sub-menu">
+                        <li th:each="submenuItem1 : ${submenuItem.submenu}">
+                            <a th:href="@{${submenuItem1.url}}" th:utext="${submenuItem1.label}"></a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+        </li>
+    </ul>
+</nav>

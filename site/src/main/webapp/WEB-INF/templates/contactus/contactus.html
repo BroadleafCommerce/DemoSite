@@ -1,0 +1,26 @@
+<div id="account" layout:decorate="~{layout/fullPageLayout}" layout:fragment="content">
+    <head>
+        <title>Contact Us</title>
+    </head>
+    
+    <div id="contactus">
+        <h3>Leave Us A Message</h3>
+        
+        <div class="clearfix">
+	<blc:form id="contactUsForm" th:action="@{/contactus/success}" method="post">
+	  <div class="form50">
+	    <label for="name">Name</label> <input type="text" name="name" class="field50" />
+	  </div>
+	  <div class="form50">
+	    <label for="emailAddress">Email</label> <input type="email" name="emailAddress" class="field50" />
+	  </div>
+	  <div class="form50">
+	    <label for="comments">What should we know?</label> <textarea type="text" name="comments" class="field50" ></textarea>
+	  </div>
+	  <div class="login_register">
+	    <input class="submit big red" type="submit" value="Submit" />
+	  </div>
+	  </blc:form>
+        </div>
+    </div>
+</div>

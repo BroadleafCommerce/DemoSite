@@ -1,0 +1,26 @@
+<th:block layout:decorate="~{layout/accountLayout}" layout:fragment="content">
+    <div class="manage-account-form-wrapper">
+    
+        <p class="success" th:if="${successMessage}" th:utext="${successMessage}"></p>
+        
+        <h2>Update Account Information</h2>
+            <blc:form class="manage-account" action="#" th:action="@{/account}" th:object="${updateAccountForm}" method="POST" style="width: 400px;">
+            <div class="form100">
+                <label for="emailAddress">Email Address:</label>
+                <span class="error" th:if="${#fields.hasErrors('emailAddress')}" th:errors="*{emailAddress}"></span>
+                <input type="email" name="emailAddress" id="emailAddress" th:field="*{emailAddress}" class="field50" th:classappend="${#fields.hasErrors('emailAddress')}? 'fieldError'"/>
+            </div>
+            <div class="form100">
+                <label for="firstName">First Name:</label>
+                <span class="error" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></span>
+                <input type="text" name="firstName" id="firstName" th:field="*{firstName}" class="field50" th:classappend="${#fields.hasErrors('firstName')}? 'fieldError'"/>
+            </div>
+            <div class="form100">
+                <label for="lastName">Last Name:</label>
+                <span class="error" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></span>
+                <input type="text" name="lastName" id="lastName" th:field="*{lastName}" class="field50" th:classappend="${#fields.hasErrors('lastName')}? 'fieldError'"/>
+            </div>
+            <input type="submit" class="medium red" value="Submit" />
+        </blc:form>
+    </div>
+</th:block>

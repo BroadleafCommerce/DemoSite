@@ -1,0 +1,230 @@
+<th:block layout:decorate="~{layout/fullPageLayout}">
+    <head>
+        <title th:utext="${sku.name}"></title>
+    </head>
+
+    <div layout:fragment="content">
+        
+        <section id="left_column">
+        
+            <div id="product_content" class="product_container">
+                <h2 th:inline="text">
+                    [[*{name}]] <span th:each="optionValue : *{productOptionValues}" th:utext="${optionValue.attributeValue}"></span>
+                </h2>
+                
+                <div id="maker" th:utext="*{product.manufacturer}"></div>
+                
+                <div id="price">
+                    <div blc:price="*{salePrice}" th:if="*{onSale}" th:classappend="*{onSale}? 'sale'"></div>
+                    <div blc:price="*{retailPrice}" th:classappend="*{onSale}? 'has-sale'"></div>
+                </div>
+                
+                <th:block th:with="checkInventory=*{inventoryType?.type == 'CHECK_QUANTITY'},
+                                   availableInventory=${checkInventory ? #object.quantityAvailable != null and #object.quantityAvailable != 0 : true},
+                                   inCart=${cart.containsSku(#object)}">
+                    <blc:form method="POST" th:action="@{/cart/add}">
+                        <div th:utext="*{longDescription}" id="description"></div>
+                        
+                        <div id="inventory" th:if="${checkInventory}">
+                            <b>Available inventory:</b> <span th:utext="*{quantityAvailable == null ? '0' : quantityAvailable}" ></span>
+                            <div th:if="${!availableInventory}" class="out_of_stock">
+                                <a disabled="disabled" class="big-button gray-button">Out of Stock</a>
+                            </div>
+                        </div>
+                        
+                        <div th:class="*{'productActions' + id}">
+                            <div class="in_cart" th:classappend="${!inCart}? ' hidden'">
+                                <a class="modalcart big-button gray-button" th:href="@{/cart}">In Cart!</a>
+                            </div>
+                            <div class="add_to_cart" th:classappend="${inCart or !availableInventory}? ' hidden'">
+                                <input type="hidden" name="productId" th:value="*{product.id}" />
+                                <input type="hidden" name="skuId" th:value="*{id}" />
+                                <input type="hidden" name="quantity" value="1" />
+                                <input type="submit" class="addToCart big red" th:value="#{product.buyNow}"/>
+                            </div>
+                            <p class="error" th:if="${param.errorMessage}" th:utext="${param.errorMessage[0]}"></p>
+                        </div>
+                    </blc:form>
+                </th:block>
+    
+                <div th:if="${customer.loggedIn}" th:remove="tag">
+
+                    <blc:form method="POST" th:action="@{/account/wishlist/add}">
+                        <div th:class="*{'productActions' + product.id}">
+
+                            <blc:named_order orderVar="wishlist" orderName="wishlist" ></blc:named_order>
+
+                            <div class="in_wishlist" th:classappend="${!wishlist.containsSku(#object)}? ' hidden'">
+                                <a class="inWishlist small-button gray-button" th:href="@{/account/wishlist}">In Wishlist!</a>
+                            </div>
+                            <div class="add_to_wishlist" th:classappend="${wishlist.containsSku(#object)}? ' hidden'">
+                                <input type="hidden" name="productId" th:value="*{product.id}" />
+                                <input type="hidden" name="skuId" th:value="*{id}" />
+                                <input type="hidden" name="quantity" value="1" />
+                                <input type="submit" class="addToWishlist small dark" value="+ Add to Wishlist" />
+                            </div>
+                        </div>
+                    </blc:form>
+                </div>
+                    
+                <p>
+                    Share this Sauce:
+                    <div class="addthis_toolbox addthis_default_style addthis_32x32_style">
+                        <a class="addthis_button_preferred_1"></a>
+                        <a class="addthis_button_preferred_2"></a>
+                        <a class="addthis_button_preferred_3"></a>
+                        <a class="addthis_button_preferred_4"></a>
+                        <a class="addthis_button_compact"></a>
+                        <a class="addthis_counter addthis_bubble_style"></a>
+                    </div>
+                    <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=ra-5006d3e47d6ace5d"></script>
+                </p>
+                
+            </div>
+            
+            <div id="product_main_image">
+                <th:block th:unless="*{#lists.isEmpty(productOptionValues)}" th:each="optionValue : *{productOptionValues}">
+                    <a th:if="${optionValue.attributeValue == sku.skuMedia['primary']?.tags}" th:href="@{*{#strings.replace(skuMedia['primary'].url + '?browse', 'jpg?browse', 'jpg')}}" class='jqzoom' id='zoom1' rel="gal1">
+                        <img th:src="@{*{skuMedia['primary'].url}+ '?browse'}" alt='' align="left" id="main_image" />
+                    </a>
+                    <a th:if="${optionValue.attributeValue == sku.skuMedia['alt1']?.tags}" th:href="@{*{#strings.replace(skuMedia['alt1'].url + '?browse', 'jpg?browse', 'jpg')}}" class='jqzoom' id='zoom1' rel="gal1">
+                        <img th:src="@{*{skuMedia['alt1'].url}+ '?browse'}" alt='' align="left" id="main_image" />
+                    </a>
+                    <a th:if="${optionValue.attributeValue == sku.skuMedia['alt2']?.tags}" th:href="@{*{#strings.replace(skuMedia['alt2'].url + '?browse', 'jpg?browse', 'jpg')}}" class='jqzoom' id='zoom1' rel="gal1">
+                        <img th:src="@{*{skuMedia['alt2'].url}+ '?browse'}" alt='' align="left" id="main_image" />
+                    </a>
+                </th:block>
+                <a th:if="*{#lists.isEmpty(productOptionValues)}" th:href="@{*{#strings.replace(skuMedia['primary'].url + '?browse', 'jpg?browse', 'jpg')}}" class='jqzoom' id='zoom1' rel="gal1">
+                    <img th:src="@{*{skuMedia['primary'].url}+ '?browse'}" alt='' align="left" id="main_image" />
+                </a>
+            </div>
+            
+            <div th:if="*{#lists.isEmpty(productOptionValues)}" id="product_thumbs_container">
+                <ul id="product_thumbs" class="clearfix">
+                    <li>
+                        <a th:if="*{skuMedia['primary']}" href="javascript:;" class="zoomThumbActive" th:rel="${'{ gallery: ''gal1'', smallimage: ''__@{*{skuMedia['primary'].url}+'?browse'}__'', largeimage: ''__@{*{skuMedia['primary'].url}}__'' }'}" th:attr="data-tags=*{skuMedia['primary'].tags}">
+                            <img th:src="@{*{skuMedia['primary'].url}}" alt="Bottle Closeup" />
+                        </a>
+                        <p th:if="*{#maps.size(skuMedia) > 1}" class="thumbs_nav">Swipe to see more... (<span th:utext="'1 of ' + *{#maps.size(skuMedia) > 3 ? 3 : #maps.size(skuMedia)}"></span>)</p>
+                        
+                    </li>
+                    
+                    <li th:each="media, iterStat : *{skuMedia}" th:unless="${media.key == 'primary'}">
+                        <a href="javascript:;"
+                            th:rel="${'{ gallery: ''gal1'', smallimage: ''__@{${media.value.url}+'?browse'}__'', largeimage: ''__@{${media.value.url}}__'' }'}" th:attr="data-tags=${media.value.tags}">
+                            <img th:src="@{${media.value.url}}" alt="Bottle Closeup" />
+                        </a>
+                        <p class="thumbs_nav" th:utext="${iterStat.count + 1} + ' of ' + *{#maps.size(skuMedia) > 3 ? 3 : #maps.size(skuMedia)}"></p>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="clearfix"></div>
+                <div id="customer-reviews-container">
+                    <blc:ratings itemId="*{id}" ></blc:ratings>
+                    <div th:if="${ratingSummary}" th:object="${ratingSummary}">
+                        <span class="title">Community Rating</span>
+                        <div id="community-rating-container">
+                            <blc:form id="community-rating" class="star-rating" th:attr="data-community-rating=*{averageRating}">
+                                <input type="radio" class="star {split:4}" /> 
+                                <input type="radio" class="star {split:4}" /> 
+                                <input type="radio" class="star {split:4}" /> 
+                                <input type="radio" class="star {split:4}" /> 
+                                <input type="radio" class="star {split:4}" />
+                                <input type="radio" class="star {split:4}" />
+                                <input type="radio" class="star {split:4}" />
+                                <input type="radio" class="star {split:4}" />
+                                <input type="radio" class="star {split:4}" />
+                                <input type="radio" class="star {split:4}" />
+                                <input type="radio" class="star {split:4}" />
+                                <input type="radio" class="star {split:4}" />
+                                <input type="radio" class="star {split:4}" />
+                                <input type="radio" class="star {split:4}" />
+                                <input type="radio" class="star {split:4}" />
+                                <input type="radio" class="star {split:4}" />
+                                <input type="radio" class="star {split:4}" />
+                                <input type="radio" class="star {split:4}" />
+                                <input type="radio" class="star {split:4}" />
+                                <input type="radio" class="star {split:4}" />
+                            </blc:form>
+                            <br/>
+                            <div class="total-reviews">
+                                (<span th:utext="*{numberOfReviews}"></span><span th:if="*{numberOfReviews} == 1"> review</span><span th:if="*{numberOfReviews} > 1"> reviews</span>)
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                            <blc:ratings itemId="*{product.id}" ></blc:ratings>
+                            <div th:if="${currentCustomerReview}" th:object="${currentCustomerReview}" class="customer-reviews current-customer-review">
+                                <h4>Your Review</h4>
+                                <p class="voting-summary" th:if="*{notHelpfulCount()} + *{helpfulCount()} > 0">
+                                    <span th:utext="*{helpfulCount()}">9</span> of
+                                    <span th:utext="*{notHelpfulCount()} + *{helpfulCount()}">10</span> found the following review helpful
+                                </p>
+                                <blc:form class="customer-rating" th:attr="data-customer-rating=*{ratingDetail.rating}">
+                                    <input type="radio" class="star" />
+                                    <input type="radio" class="star" />
+                                    <input type="radio" class="star"/>
+                                    <input type="radio" class="star" />
+                                    <input type="radio" class="star" />
+                                </blc:form>
+                                <span class="reviewer-info">
+                                    on <span th:utext="*{#dates.format(reviewSubmittedDate, 'MMMM d, yyyy')}">1-2-2010</span>
+                                </span>
+                                <div class="clearfix"></div>
+                                <blockquote th:if="!*{#strings.isEmpty(reviewText)}" th:utext="'&quot;' + *{reviewText} + '&quot;'">Review Text</blockquote>
+                            </div>
+                        <div class="helpful-reviews">
+                            <h4>Customer Reviews</h4>
+                            <ul class="customer-reviews">
+                                <li th:each="review, iterStat : *{reviews}" th:object="${review}" th:if="${iterStat.count} lt 4">
+                                    <p class="voting-summary" th:if="*{notHelpfulCount()} + *{helpfulCount()} > 0">
+                                        <span th:utext="*{helpfulCount()}">9</span> of
+                                        <span th:utext="*{notHelpfulCount()} + *{helpfulCount()}">10</span> found the following review helpful
+                                    </p>
+                                    <blc:form class="customer-rating" th:attr="data-customer-rating=*{ratingDetail.rating}">
+                                        <input type="radio" class="star" />
+                                        <input type="radio" class="star" />
+                                        <input type="radio" class="star"/>
+                                        <input type="radio" class="star" />
+                                        <input type="radio" class="star" />
+                                    </blc:form>
+                                    <span class="reviewer-info">
+                                        by <span class="penname" th:utext="${review.customer.firstName}">John</span> on
+                                        <span th:utext="*{#dates.format(reviewSubmittedDate, 'MMMM d, yyyy')}">1-2-2010</span>
+                                    </span>
+                                    <div class="clearfix"></div>
+                                    <blockquote th:if="!*{#strings.isEmpty(reviewText)}" th:utext="'&quot;' + *{reviewText} + '&quot;'">Review Text</blockquote>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div th:if="${customer.loggedIn}">
+                        <div th:if="${ratingSummary}">
+                            <a th:unless="${currentCustomerReview}" class="create-review" th:href="@{'/reviews/product/' + *{product.id}}">Create a review</a> 
+                        </div>
+                        <div th:unless="${ratingSummary}">
+                            <a th:href="@{'/reviews/product/' + *{product.id}}" class="create-review">Be the first to write a review!</a>
+                        </div>
+                    </div>
+                    <div th:unless="${customer.loggedIn}">
+                        <a th:if="${ratingSummary}" href="#" th:href="@{/login}" class="small dark account">Login to create a review</a>
+                        <a th:unless="${ratingSummary}" th:href="@{/login}" class="account">Login and be the first to write a review!</a>
+                    </div>
+                </div>          
+        </section>
+    
+        <section id="right_column">
+            <header>Featured Products</header>
+            <div id="options">
+                <div class="section">
+                    <blc:related_products productId="*{product.id}" quantity="3"></blc:related_products>
+ 
+                    <ul id="featured_products" class="group">
+                        <li th:each="relatedSku : ${relatedSkus}" th:object="${relatedSku}" th:include="catalog/partials/skuListItem" class="product_container"></li>
+                    </ul>
+                </div>                                  
+            </div>
+        </section>              
+    </div>
+    
+</th:block>

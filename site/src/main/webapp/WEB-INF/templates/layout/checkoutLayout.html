@@ -1,0 +1,65 @@
+<!DOCTYPE HTML>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+
+<head>
+    <title layout:title-pattern="$LAYOUT_TITLE - $CONTENT_TITLE">Broadleaf Commerce Demo Store - Heat Clinic - Checkout</title>
+    <th:block th:replace="/layout/partials/head"></th:block>
+</head>
+
+<body th:class="${'locale-' + session.blLocale.localeCode}">
+    <div id="notification_bar"></div>
+
+    <header th:replace="layout/partials/headerCheckout" ></header>
+    
+    <div id="checkout_content" class="width_setter group" role="main">
+    
+        <div layout:fragment="content" ></div>
+    
+    </div>
+
+    <footer th:replace="layout/partials/footer" ></footer>
+
+    <script type="text/javascript" th:inline="javascript">
+        /*<![CDATA[*/
+        $().ready(function() {
+            $('#paymentOptions dd').css({display:"none"});
+            $('#paymentMethod_cc').click();
+            $('#shipping_info').validate({
+                rules: {
+                    'address.firstName': "required",
+                    'address.lastName': "required",
+                    'address.addressLine1': "required",
+                    'address.city': "required",
+                    'address.stateProvinceRegion': "required",
+                    'address.emailAddress' : "required"
+                },
+                messages: {
+                    'address.firstName': "Please enter your first name." + "<br/>",
+                    'address.lastName': "Please enter your last name." + "<br/>",
+                    'address.addressLine1': "Please enter the actual address." + "<br/>",
+                    'address.city': "Please enter the city." + "<br/>",
+                    'address.stateProvinceRegion': "Please enter the state." + "<br/>",
+                    'address.emailAddress' : "Please enter a valid email address." + "<br/>"
+                },
+                errorPlacement: function(error, element) {
+                    $(element).parent().append(error);
+                },
+                highlight: function(element, errorClass) {
+                    $(element).addClass('fieldError');
+                },
+                unhighlight: function(element, errorClass) {
+                    $(element).removeClass('fieldError');
+                },
+                errorElement: "div",
+                errorClass: "error"
+            });
+
+        });
+        /*]]>*/
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,8 @@
+<div class="pager" th:unless="${#lists.isEmpty(products)} and ${#lists.isEmpty(skus)}">
+    <span class="heading"><span th:utext="#{productPagingOptions.page}">Page:</span></span>
+    <ul>
+        <li th:each="num : ${#numbers.sequence(1, result.totalPages)}">
+            <a blc:paginationpagelink="${num}" th:utext="${num}" th:class="${result.page == num}? 'active'"></a>
+        </li>
+    </ul>
+</div>

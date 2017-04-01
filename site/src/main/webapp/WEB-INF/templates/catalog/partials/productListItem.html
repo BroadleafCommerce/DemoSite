@@ -1,0 +1,49 @@
+<div th:if="*{featuredProduct}" class="new_badge">New!</div>
+
+<div class="image">
+    <a th:href="@{*{url}}">
+    <img th:if="*{media['primary']}" blc:src="@{*{media['primary'].url} + '?browse'}" th:alt="*{name}" />
+    <div class="price" th:if="${#object instanceof T(org.broadleafcommerce.core.catalog.domain.ProductBundle)}">
+        <div blc:price="*{salePrice}" th:if="*{onSale}" th:classappend="*{defaultSku.onSale}? 'sale'"></div>
+        <div blc:price="*{retailPrice}" th:classappend="*{onSale}? 'has-sale'"></div>
+    </div>
+    <div class="price" th:unless="${#object instanceof T(org.broadleafcommerce.core.catalog.domain.ProductBundle)}">
+        <div blc:price="*{defaultSku.salePrice}" th:if="*{defaultSku.onSale}" th:classappend="*{defaultSku.onSale}? 'sale'"></div>
+        <div blc:price="*{defaultSku.retailPrice}" th:classappend="*{defaultSku.onSale}? 'has-sale'"></div>
+    </div>
+    </a>
+</div>
+
+<div class="content">
+    <div class="title" th:utext="*{name}"></div>
+    <p th:utext="*{longDescription}"></p>
+</div>
+
+<div th:class="*{'productActions productActions' + id}"
+     th:with="checkInventory=*{defaultSku.inventoryType?.type == 'CHECK_QUANTITY'},
+              availableInventory=${checkInventory ? #object.defaultSku.quantityAvailable != null and #object.defaultSku.quantityAvailable != 0 : true},
+              inCart=${cart.containsSku(#object.defaultSku)} and *{#lists.isEmpty(productOptions)}">
+
+    <div th:if="${checkInventory and !availableInventory}" class="out_of_stock">
+        <a disabled="disabled" class="inCart">Out of Stock</a>
+    </div>
+    <div class="in_cart" th:classappend="${!inCart}? ' hidden'" th:if="*{#lists.isEmpty(productOptions)}">
+        <a class="modalcart inCart" th:href="@{/cart}"><span th:utext="#{product.inCart}">In Cart!</span></a>
+    </div>
+
+    <div class="add_to_cart" th:classappend="${inCart or !availableInventory}? ' hidden'">
+        <blc:form method="POST" th:action="@{/cart/add}">
+            <input type="hidden" name="productId" th:value="*{id}" />
+            <input type="hidden" name="quantity" value="1" />
+            <input type="hidden" name="hasProductOptions" th:value="*{!#lists.isEmpty(productOptions)}" />
+            <input type="submit" class="addToCart" th:value="#{product.buyNow}"/>
+        </blc:form>
+    </div>
+
+</div>
+
+<div style="display: none;" th:id="*{'productOptions' + id}" class="product-options modal">
+    <h3 th:utext="*{name}"></h3>
+    <div class="product-options" th:replace="catalog/partials/productOptions"></div>
+    <input type="button" class="addToCart" th:value="#{product.buyNow}" />
+</div>

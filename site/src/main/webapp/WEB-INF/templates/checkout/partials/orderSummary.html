@@ -1,0 +1,62 @@
+<div th:fragment="order-summary">
+    <div class="cart_title">
+        <span th:utext="#{cart.orderSummary}">Order Summary</span>
+        <a id="cartLink" class="modalcart refreshonclose" th:href="@{/cart}">
+            <span th:utext="#{cart.edit}">Edit</span>
+        </a>
+    </div>
+    <table id="cart_summary" class="order_summary">
+        <thead>
+        <tr>
+            <th>&nbsp;</th>
+            <th align="left"><span th:utext="#{cart.item}">Item</span></th>
+            <th><span th:utext="#{cart.quantity}">Quantity</span></th>
+            <th> <span th:utext="#{cart.price}">Price</span></th>
+            <th> <span th:utext="#{cart.totalSavings}">Total Savings</span></th>
+            <th><span th:utext="#{cart.total}">Total</span></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="item : ${cart.orderItems}" th:object="${item}" th:id="${'productRow' + item.id}">
+             <td>
+                <th:block th:unless="*{#lists.isEmpty(sku.productOptionValues)}" th:each="optionValue : *{sku.productOptionValues}">
+                    <img th:if="${optionValue.attributeValue == item.sku.skuMedia['primary']?.tags}" blc:src="@{*{sku.skuMedia['primary'].url} + '?thumbnail'}" width="60" th:alt="*{sku.name}" />
+                    <img th:if="${optionValue.attributeValue == item.sku.skuMedia['alt1']?.tags}" blc:src="@{*{sku.skuMedia['alt1'].url} + '?thumbnail'}" width="60" th:alt="*{sku.name}" />
+                    <img th:if="${optionValue.attributeValue == item.sku.skuMedia['alt2']?.tags}" blc:src="@{*{sku.skuMedia['alt2'].url} + '?thumbnail'}" width="60" th:alt="*{sku.name}" />
+                </th:block>
+                <img th:if="*{#lists.isEmpty(sku.productOptionValues) and sku.skuMedia['primary'] != null}" blc:src="@{*{sku.skuMedia['primary'].url} + '?thumbnail'}" width="60" th:alt="*{sku.name}" />
+            </td>
+            <td align="left">
+                <a th:unless="${@blSystemPropertiesService.resolveBooleanSystemProperty('solr.index.use.sku')}" th:href="@{*{product.url}}" th:utext="*{product.name}"></a>
+                <a th:if="${@blSystemPropertiesService.resolveBooleanSystemProperty('solr.index.use.sku')} and *{sku.urlKey}" th:href="@{*{product.url} + *{sku.urlKey}}" th:inline="text">
+                   [[*{sku.name}]] <span th:each="optionValue : *{sku.productOptionValues}" th:utext="${optionValue.attributeValue}"></span>
+                </a>
+                <a th:if="${@blSystemPropertiesService.resolveBooleanSystemProperty('solr.index.use.sku')} and !*{sku.urlKey}" th:href="@{*{product.url}}" th:inline="text">
+                   [[*{sku.name}]] <span th:each="optionValue : *{sku.productOptionValues}" th:utext="${optionValue.attributeValue}"></span>
+                </a>
+                <br/>
+                <blc:product_option_display orderItem="${item}" >
+                    <ul th:unless="${#lists.isEmpty(productOptionDisplayValues)}" class="productOptions">
+                        <li th:each="entry: ${productOptionDisplayValues}">
+                            <span  th:utext="${entry.key} + ': ' + ${entry.value}"></span>
+                        </li>
+                    </ul>
+                </blc:product_option_display>
+                <ul th:if="${item instanceof T(org.broadleafcommerce.core.order.domain.BundleOrderItem)}">
+                    <li th:each="doi : *{discreteOrderItems}" th:utext="${doi.quantity + ' x ' + doi.name}" ></li>
+                </ul>
+            </td>
+            <td align="center" th:utext="*{quantity}"></td>
+            <td align="center" blc:price="*{price}"></td>
+            <td align="center" th:if="*{adjustmentValue.zero}">---</td>
+
+            <td align="center" class="discount" th:unless="*{adjustmentValue.zero}" >
+                <span  align="center"  blc:price="*{totalAdjustmentValue}" class="promotion" ></span>
+                <div class="productOptions" th:replace="~{catalog/partials/offers :: offers}"></div>
+
+            </td>
+            <td align="center" class="value" blc:price="*{totalPrice}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,20 @@
+<th:block layout:decorate="~{layout/accountLayout}" layout:fragment="content">
+    <blc:form class="manage-account" action="#" th:action="@{/account/myaccount}" th:object="${updateAccountForm}" method="POST">
+        <div class="form50">
+            <label for="emailAddress">Email Address:</label>
+            <span class="error" th:if="${#fields.hasErrors('emailAddress')}" th:errors="*{emailAddress}"></span>
+            <input type="email" name="emailAddress" id="emailAddress" th:field="*{emailAddress}" class="field50" th:classappend="${#fields.hasErrors('emailAddress')}? 'fieldError'"/>
+        </div>
+        <div class="form50">
+            <label for="firstName">First Name:</label>
+            <span class="error" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></span>
+            <input type="text" name="firstName" id="firstName" th:field="*{firstName}" class="field50" th:classappend="${#fields.hasErrors('firstName')}? 'fieldError'"/>
+        </div>
+        <div class="form50">
+            <label for="lastName">Last Name:</label>
+            <span class="error" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></span>
+            <input type="text" name="lastName" id="lastName" th:field="*{lastName}" class="field50" th:classappend="${#fields.hasErrors('lastName')}? 'fieldError'"/>
+        </div>
+        <input type="submit" class="submitFormButton" value="Update Account" />
+    </blc:form>
+</th:block>

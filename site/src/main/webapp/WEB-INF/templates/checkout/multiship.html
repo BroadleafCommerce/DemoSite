@@ -1,0 +1,69 @@
+<div id="multiship-products">
+    <blc:form th:object="${orderMultishipOptionForm}" th:action="@{/checkout/multiship}" method="post" id="multiship_address">
+        <div class="multishipContainer">
+            <table id="cart_products">
+                <thead>
+                    <tr>
+                        <th colspan="2"><span th:utext="#{cart.item}">Item</span></th>
+                        <th><span th:utext="#{cart.quantity}">Quantity</span></th>
+                        <th><span th:utext="#{cart.address}">Address</span></th>
+                        <th><span th:utext="#{cart.method}">Method</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="omo : ${orderMultishipOptions}" th:id="${'productRow' + omo.orderItem.id}">
+                        <td><img th:if="${omo.orderItem.product.media['primary'] != null}" blc:src="@{${omo.orderItem.product.media['primary'].url} + '?browse'}" width="60" th:alt="${omo.orderItem.product.name}" /></td>
+                        <td class="name">
+                            <a th:href="@{${omo.orderItem.product.url}}" th:utext="${omo.orderItem.product.name}"></a>
+                            <br/>
+                             <blc:product_option_display orderItem="${omo.orderItem}" >
+                               <ul th:unless="${#lists.isEmpty(productOptionDisplayValues)}" class="productOptions">
+                                   <li th:each="entry: ${productOptionDisplayValues}">
+                                     <span  th:utext="${entry.key} + ': ' + ${entry.value}"></span>
+                                   </li>
+                               </ul>
+                            </blc:product_option_display>
+                        </td>
+                        <td align="center">
+                            <span>1</span>
+                        </td>
+                        <td align="center">
+                            <select class="multiship-address" 
+                                th:name="${'options[' + omoStat.index + '].addressId'}" 
+                                th:classappend="${#fields.hasErrors('options[' + omoStat.index + '].addressId')}? 'fieldError'">
+                                
+                                    <option value="">--</option>
+                                    <option th:each="customerAddress : ${customerAddresses}" 
+                                            th:value="${customerAddress.address.id}" 
+                                            th:utext="${customerAddress}"
+                                            th:selected="${customerAddress.address.equals(omo.address)}"></option>
+                                    <option value="addNewAddress"><span th:utext="#{cart.addNewAddress}">Add New Address...</span></option>
+                            </select>
+                        </td>
+                        <td align="center">
+                            <select class="multiship-method" 
+                            th:name="${'options[' + omoStat.index + '].fulfillmentOptionId'}"
+                            th:classappend="${#fields.hasErrors('options[' + omoStat.index + '].fulfillmentOptionId')}? 'fieldError'">
+                                    <option value="">--</option>
+                                    <option th:each="fulfillmentOption : ${fulfillmentOptions}" 
+                                            th:value="${fulfillmentOption.id}" 
+                                            th:utext="${fulfillmentOption.name + ' (' + fulfillmentOption.longDescription + ')'}"
+                                            th:selected="${fulfillmentOption.equals(omo.fulfillmentOption)}"></option>
+                            </select>
+                        </td>
+                        
+                        <input type="hidden" th:name="${'options[' + omoStat.index + '].orderItemId'}" th:value="${omo.orderItem.id}" />
+                        <input type="hidden" th:name="${'options[' + omoStat.index + '].id'}" th:value="${omo.id}" />
+                        
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+            
+        <div id="multiship-actions">
+            <input type="submit" class="save medium red" value="Save" />
+            <a class="add-address-link small-button dark-button" th:href="@{/checkout/add-address}"><span th:utext="#{cart.addAddress}">Add New Address</span></a>
+            <a th:href="@{/checkout}" class="cancel small-button gray-button"><span th:utext="#{cart.cancel}">Cancel</span></a>
+        </div>
+    </blc:form>
+</div>

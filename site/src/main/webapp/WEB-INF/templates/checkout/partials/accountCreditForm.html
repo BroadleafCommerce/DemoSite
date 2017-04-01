@@ -1,0 +1,17 @@
+<div th:fragment="account-credit-form">
+    <blc:form class="manage-account" th:object="${giftCardInfoForm}" th:action="@{/sample-giftcard/apply}" method="POST" id="applyGiftcard_form">
+        <div>
+            <div class="form50">
+                <label for="giftCardNumber" class="prompt"><span th:utext="#{cart.giftCardNumber}">Gift Card Number</span></label>
+                <span class="error" th:if="${#fields.hasErrors('giftCardNumber')}" th:errors="*{giftCardNumber}"></span>
+                <div class="form100">
+                    <input type="text" th:field="*{giftCardNumber}" id="giftCardNumber" class="field35" th:classappend="${#fields.hasErrors('giftCardNumber')}? 'fieldError'"/>
+                </div>
+            </div>
+
+            <div>
+                <input type="submit" class="medium red apply" th:value="#{cart.giftCard.apply}" />
+            </div>
+        </div>
+    </blc:form>
+</div>

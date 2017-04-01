@@ -1,0 +1,48 @@
+<table id="wishlist_items">
+    <thead>
+        <tr>
+            <th colspan="2">Item</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Total</th>
+            <th>&nbsp;</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="item : ${wishlist.discreteOrderItems}" th:object="${item}" th:id="${'productRow' + item.id}">
+            <td><img blc:src="@{*{product.media['primary'].url} + '?thumbnail'}" width="60" th:alt="*{product.name}" /></td>
+            <td class="name">
+                <a th:href="@{*{product.url}}" th:utext="*{product.name}"></a>
+                <br/>
+                <blc:product_option_display orderItem="${item}" >
+                     <ul th:unless="${#lists.isEmpty(productOptionDisplayValues)}" class="productOptions">
+                         <li th:each="entry: ${productOptionDisplayValues}">
+                           <span  th:utext="${entry.key} + ': ' + ${entry.value}"></span>
+                         </li>
+                     </ul>
+                </blc:product_option_display>
+            </td>
+            <td align="center">
+                <div th:utext="*{quantity}"></div>
+                <a class="cartLinkBtn remove_from_wishlist" th:href="@{/account/wishlist/remove(orderItemId=*{id})}">Remove</a>
+            </td>
+            <td align="center" blc:price="*{price}"></td>
+
+            <td align="center" class="value" th:utext="*{price.multiply(quantity)}"></td>
+            
+            <td align="center">
+                <blc:form method="POST" th:action="@{/account/wishlist/moveItemToCart}">
+                    <input type="hidden" name="itemId" th:value="*{id}" />
+                    <input type="submit" class="small red" value="Move Item to Cart"/>
+                </blc:form>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="6" align="right" class="last">
+                <blc:form method="POST" th:action="@{/account/wishlist/moveListToCart}">
+                    <input class="medium red" type="submit" value="Move Wishlist to Cart" />
+                </blc:form>
+            </td>
+        </tr>
+    </tbody>
+</table>

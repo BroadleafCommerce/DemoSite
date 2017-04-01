@@ -1,0 +1,24 @@
+<div id="review">
+        <h3>Share Your Opinion</h3>
+        <div>
+        </div>
+        <blc:form action="#" th:object="${reviewForm}" th:action="@{'/reviews/product/' + *{product.id}}" method="post">
+            <div class="rate-product">
+                <label>Rating</label> 
+                <input type="radio" class="star" name="rating" value="1" />
+                <input type="radio" class="star" name="rating" value="2" />
+                <input type="radio" class="star" name="rating" value="3" />
+                <input type="radio" class="star" name="rating" value="4" />
+                <input type="radio" class="star" name="rating" value="5" />
+            </div>
+            <div class="clearfix"></div>
+            <div class="form100">
+                <label for="reviewText">Review</label>
+                <span class="error" th:if="${#fields.hasErrors('reviewText')}" th:errors="*{reviewText}"></span>
+                <textarea type="text" th:field="*{reviewText}" class="field100" th:classappend="${#fields.hasErrors('reviewText')}? 'fieldError'" rows="6" ></textarea>
+            </div>
+            <div class="login_register">
+                <input class="review_button big red" type="submit" value="Submit Review"/>
+            </div>
+        </blc:form>
+</div>

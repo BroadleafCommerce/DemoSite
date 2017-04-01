@@ -1,0 +1,57 @@
+<footer class="group">
+    <div id="left_content">
+        <h4><span th:utext="#{footer.delivering}">Delivering Texas Sized Heat</span></h4>
+        &copy; <span th:utext="#{footer.copyrightHC}">Copyright 2013 The Heat Clinic</span><br />
+        <a href=""><span th:utext="#{footer.privacyPolicy}">Privacy Policy</span></a>
+    </div>
+    <div id="right_content">
+        <h4><span th:utext="#{footer.since1978}">Since Nineteen Seventy Eight</span></h4>
+        <span th:utext="#{footer.allRights}">All Rights Reserved</span>.<br />
+        <a href=""><span th:utext="#{footer.customerService}">Customer Service</span></a>
+    </div>
+    <div id="blc_brand">
+        <a href="http://www.broadleafcommerce.com"  >
+            <img blc:src="@{/img/broadleaf-seal.png}" alt="Broadleaf Commerce" />
+            <h4><span th:utext="#{footer.branding.poweredByBLC}">Powered by Broadleaf Commerce</span></h4>
+            <br />
+        </a>
+        <p>&copy; <span th:utext="#{footer.branding.copyrightBLC}">Copyright 2013 Broadleaf Commerce</span><br /></p>
+    </div>
+
+    <div th:remove="all">
+        <!--
+            Include this template at the bottom of a page (automatically included by partials/footer.html
+            to gain access to jQuery and other plugins used throughout the site.
+            
+            We will attempt to load the jQuery library from Google's CDN, but fallback on our own provided
+            jQuery if necessary.
+            
+            Other than this jQuery loading script, no other scripts should be defined inline.
+        -->
+    </div>
+    
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script th:inline="text">
+        //<![CDATA[
+        window.jQuery || document.write('<script src="[[@{/js/lib/jquery-1.9.1.js}]]"><\/script>');
+        //]]>
+    </script>
+    
+    <blc:bundle name="lib.js" 
+                mapping-prefix="/js/"
+                files="plugins.js,
+                       libs/jquery.MetaData.js,
+                       libs/jquery.rating.pack.js,
+                       libs/jquery.dotdotdot-1.5.1.js" ></blc:bundle>
+    
+    <blc:bundle name="heatclinic.js" 
+                mapping-prefix="/js/"
+                files="BLC.js,
+                       heatClinic.js,
+                       cartOperations.js,
+                       checkoutOperations.js,
+                       globalOnReady.js,
+                       manageAccountOperations.js,
+                       reviewOperations.js" ></blc:bundle>
+
+</footer>

@@ -1,0 +1,78 @@
+<div th:remove="tag">
+    
+    <!-- Active facets -->
+    <div th:each="facetDto : ${facets}" th:if="${facetDto.active}" class="section">
+        <h3>
+            <span th:utext="${facetDto.facet.label}" th:remove="tag"></span>
+            <a th:if="${facetDto.facet.canMultiselect}" 
+                th:attr="onclick=${'HC.showFacetMultiselect(''__${facetDto.facet.field.abbreviation}__'')'}"
+                href="javascript:;" 
+                class="remove_facet_values">[ <span th:utext="#{facet.edit}">Edit</span> ]</a>
+            <a blc:removefacetvalueslink="${facetDto}" class="remove_facet_values">[ Clear ]</a>
+        </h3>
+        
+        <li th:each="facetValue : ${facetDto.facetValues}" th:if="${facetValue.active}">
+            <!-- Facet Value display fragment -->
+            <span th:remove="tag" th:fragment="facet-value-display">
+                <span th:if="${facetValue.value != null}" th:remove="tag" th:utext="${facetValue.value}"></span>
+                <span th:unless="${facetValue.value != null}" th:remove="tag">
+                    <span blc:price="${facetValue.minValue}" th:remove="tag"></span>
+                    <span th:utext="${facetValue.maxValue == null ? ' __#{facet.orMore}__ ' : ' - '}" th:remove="tag"></span>
+                    <span th:if="${facetValue.maxValue != null}" blc:price="${facetValue.maxValue}" th:remove="tag"></span>
+                </span>
+            </span>
+        </li>
+    </div>
+    
+    <!-- Inactive facets -->
+    <div th:each="facetDto : ${facets}" th:unless="${facetDto.active}" class="section">
+        <h3 th:utext="${facetDto.facet.label}"></h3>
+        <ul>
+            <li th:each="facetValue : ${facetDto.facetValues}" th:class="${facetValue.active}? 'active'" th:if="${!facetDto.showQuantity or facetValue.quantity > 0}">
+                <a blc:togglefacetlink="${facetValue}" class="maker">
+                    
+                    <span th:replace="~{catalog/partials/facetFilter :: facet-value-display}" ></span>
+                
+                    <span class="facetCount" th:if="${facetDto.showQuantity and !facetDto.active}" th:utext="${facetValue.quantity}"></span>
+                    <i th:if="${facetValue.active}" class="icon-remove"></i>
+                </a>
+            </li>
+            <li>
+                <a th:if="${facetDto.facet.canMultiselect}" 
+                    th:attr="onclick=${'HC.showFacetMultiselect(''__${facetDto.facet.field.abbreviation}__'')'}"
+                    href="javascript:;" 
+                    class="maker multiple"><span th:utext="#{facet.chooseMultiple}">Choose Multiple...</span></a>
+            </li>
+        </ul>
+    </div>
+    
+    <!-- Multiselect facets -->
+    <div th:each="facetDto : ${facets}" th:if="${facetDto.facet.canMultiselect}">
+        <div th:id="${'facet-' + facetDto.facet.field.abbreviation}" style="display: none;" class="multiselect_facet_container">
+            <h3 th:utext="${facetDto.facet.label}"></h3>
+            <blc:form method="GET">
+                <li th:each="facetValue : ${facetDto.facetValues}" th:if="${facetDto.active or (!facetDto.showQuantity or facetValue.quantity > 0)}">
+                    <input type="checkbox" 
+                        th:name="${facetDto.facet.field.abbreviation + '-' + facetValue.valueKey}" 
+                        th:id="${facetDto.facet.field.abbreviation + '-' + facetValue.valueKey}" 
+                        th:checked="${facetValue.active}" />
+                        
+                    <label th:for="${facetDto.facet.field.abbreviation + '-' + facetValue.valueKey}">
+                        <span th:replace="~{catalog/partials/facetFilter :: facet-value-display}" ></span>
+                    </label>
+                </li>
+                
+                <div th:each="facetDto2 : ${facets}" th:remove="tag">
+                    <input type="hidden" 
+                        th:each="facetValue : ${facetDto2.facetValues}" 
+                        th:if="${facetValue.active}" 
+                        th:name="${facetDto2.facet.field.abbreviation}" 
+                        th:value="${facetValue.valueKey}" />
+                </div>
+                <input type="hidden" th:if="${originalQuery}" name="q" th:value="${originalQuery}" />
+                <input type="hidden" name="facetField" th:value="${facetDto.facet.field.abbreviation}" />
+                <input type="submit" class="medium red" />
+            </blc:form>
+        </div>
+    </div>
+</div>

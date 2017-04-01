@@ -1,0 +1,40 @@
+<div th:fragment="payment-info-form">
+
+    <div class="cart_title">
+        <span th:utext="#{cart.payment.options}">Payment Options</span>
+    </div>
+
+    <div class="clearfix"></div>
+
+    <div class="checkout_warning"
+         th:if="${'INACTIVE' == sectionDTO.state.type}">
+        <span th:utext="${sectionDTO.helpMessage}"></span>
+    </div>
+
+    <div th:if="${'FORM' == sectionDTO.state.type}"
+         id="payment_info_form">
+
+        <dl id="promoCreditOptions">
+            <dt>
+                <input type="checkbox" id="promoCreditOption_credit" />
+                <span th:utext="#{cart.payment.accountCredit}">Gift Cards and Customer Credit</span>
+            </dt>
+            <dd>
+                <div th:replace="~{checkout/partials/accountCreditForm :: account-credit-form}"></div>
+            </dd>
+            <dt>
+                <input type="checkbox" id="promoCreditOption_promo" />
+                <span th:utext="#{cart.payment.promo}">Promotion Codes</span>
+            </dt>
+            <dd>
+                <div th:replace="~{checkout/partials/promoCodes :: promo-code-form}"></div>
+            </dd>
+        </dl>
+
+        <div th:replace="~{checkout/partials/paymentMethodForm :: payment-method-form}"></div>
+
+        <div class="clearfix"></div>
+
+    </div>
+
+</div>
