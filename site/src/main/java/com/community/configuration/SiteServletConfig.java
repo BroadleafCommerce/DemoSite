@@ -1,6 +1,7 @@
 package com.community.configuration;
 
 import org.broadleafcommerce.cms.web.PageHandlerMapping;
+import org.broadleafcommerce.common.extensibility.context.merge.Merge;
 import org.broadleafcommerce.core.web.catalog.CategoryHandlerMapping;
 import org.broadleafcommerce.core.web.catalog.ProductHandlerMapping;
 import org.springframework.context.annotation.Bean;
@@ -15,6 +16,8 @@ import org.springframework.web.servlet.handler.SimpleUrlHandlerMapping;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 
@@ -49,6 +52,26 @@ public class SiteServletConfig extends WebMvcConfigurerAdapter {
         mappings.put("/fonts/**", "blFontResources");
         resourceMapping.setMappings(mappings);
         return resourceMapping;
+    }
+    
+    @Merge("blJsLocations")
+    public List<String> jsLocations() {
+        return Collections.singletonList("/js/");
+    }
+
+    @Merge("blCssLocations")
+    public List<String> cssLocations() {
+        return Collections.singletonList("/css/");
+    }
+
+    @Merge("blImageLocations")
+    public List<String> imageLocations() {
+        return Collections.singletonList("/img/");
+    }
+
+    @Merge("blFontLocations")
+    public List<String> fontLocations() {
+        return Collections.singletonList("/fonts/");
     }
     
     @Bean
