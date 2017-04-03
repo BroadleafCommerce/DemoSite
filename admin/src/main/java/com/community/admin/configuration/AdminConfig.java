@@ -2,18 +2,15 @@ package com.community.admin.configuration;
 
 import org.apache.catalina.connector.Connector;
 import org.broadleafcommerce.common.extensibility.context.merge.Merge;
-import org.broadleafcommerce.common.web.filter.FilterOrdered;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
-import org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter;
 
 import com.community.core.config.CoreConfig;
 import com.community.core.config.StringFactoryBean;
@@ -52,21 +49,6 @@ public class AdminConfig {
     @Merge("blMergedCacheConfigLocations")
     public List<String> adminOverrideCache() {
         return Arrays.asList("classpath:bl-override-ehcache-admin.xml");
-    }
-
-    /**
-     * Setup the "blEventPU" entity manager on the request thread using the entity-manager-in-view pattern
-     *
-     * @return
-     */
-    @Bean
-    public FilterRegistrationBean openEventEntityManagerInViewFilterFilterRegistrationBean() {
-        FilterRegistrationBean registrationBean = new FilterRegistrationBean();
-        OpenEntityManagerInViewFilter openEventEntityManagerInViewFilter = new OpenEntityManagerInViewFilter();
-        registrationBean.setFilter(openEventEntityManagerInViewFilter);
-        registrationBean.setName("openEventEntityManagerInViewFilter");
-        registrationBean.setOrder(FilterOrdered.PRE_SECURITY_HIGH);
-        return registrationBean;
     }
 
     /**
