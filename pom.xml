@@ -127,8 +127,9 @@
     </dependencyManagement>
 
     <modules>
-        <module>site</module>
         <module>core</module>
+        <module>site</module>
         <module>admin</module>
+        <module>api</module>
     </modules>
 </project>
