@@ -1,6 +1,7 @@
 package com.community.core.config;
 
 import org.broadleafcommerce.common.web.filter.FilterOrdered;
+import org.broadleafcommerce.common.web.filter.IgnorableOpenEntityManagerInViewFilter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -27,7 +28,7 @@ public class CoreConfig {
     @Bean
     public FilterRegistrationBean openEntityManagerInViewFilterFilterRegistrationBean() {
         FilterRegistrationBean registrationBean = new FilterRegistrationBean();
-        OpenEntityManagerInViewFilter openEntityManagerInViewFilter = new OpenEntityManagerInViewFilter();
+        OpenEntityManagerInViewFilter openEntityManagerInViewFilter = new IgnorableOpenEntityManagerInViewFilter();
         registrationBean.setFilter(openEntityManagerInViewFilter);
         registrationBean.setName("openEntityManagerInViewFilter");
         registrationBean.setOrder(FilterOrdered.PRE_SECURITY_HIGH);
