@@ -3,7 +3,7 @@ package com.community.configuration;
 import org.broadleafcommerce.common.security.BroadleafAuthenticationFailureHandler;
 import org.broadleafcommerce.common.security.handler.SecurityFilter;
 import org.broadleafcommerce.core.web.order.security.BroadleafAuthenticationSuccessHandler;
-import org.broadleafcommerce.profile.web.core.security.SessionFixationProtectionFilter;
+import org.broadleafcommerce.profile.web.site.security.SessionFixationProtectionFilter;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
