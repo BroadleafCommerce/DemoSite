@@ -5,7 +5,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.session.SessionAutoConfiguration;
-import org.springframework.boot.autoconfigure.thymeleaf.ThymeleafAutoConfiguration;
 import org.springframework.boot.autoconfigure.validation.ValidationAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.MultipartAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -14,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
 
 @SpringBootApplication
 //The exclude of ValidationAutoConfiguration is a temporary fix for https://github.com/spring-projects/spring-boot/issues/8495
-@EnableAutoConfiguration(exclude = {ThymeleafAutoConfiguration.class, SessionAutoConfiguration.class, ValidationAutoConfiguration.class, MultipartAutoConfiguration.class} )
+@EnableAutoConfiguration(exclude = {SessionAutoConfiguration.class, ValidationAutoConfiguration.class, MultipartAutoConfiguration.class} )
 public class AdminApplication extends SpringBootServletInitializer {
 
  @Configuration
