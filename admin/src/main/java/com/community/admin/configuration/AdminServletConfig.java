@@ -28,9 +28,9 @@ public class AdminServletConfig extends AdminWebMvcConfiguration {
         registry.addResourceHandler("/fonts/**")
             .addResourceLocations("classpath:/open_admin_style/fonts/", "classpath:/community-demo-style/fonts/", "classpath:/common_style/fonts/");
         registry.addResourceHandler("/favicon.ico")
-            .addResourceLocations("WEB-INF/favicon.ico");
+            .addResourceLocations("classpath:/favicon.ico");
         registry.addResourceHandler("/robots.txt")
-            .addResourceLocations("WEB-INF/robots.txt");
+            .addResourceLocations("classpath:/robots.txt");
     }
     
     @Bean

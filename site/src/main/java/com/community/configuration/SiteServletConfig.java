@@ -38,7 +38,7 @@ public class SiteServletConfig extends WebMvcConfigurerAdapter {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/favicon.ico")
-            .addResourceLocations("WEB-INF/favicon.ico");
+            .addResourceLocations("classpath:/favicon.ico");
     }
     
     @Bean
@@ -56,22 +56,22 @@ public class SiteServletConfig extends WebMvcConfigurerAdapter {
     
     @Merge("blJsLocations")
     public List<String> jsLocations() {
-        return Collections.singletonList("/js/");
+        return Collections.singletonList("classpath:/js/");
     }
 
     @Merge("blCssLocations")
     public List<String> cssLocations() {
-        return Collections.singletonList("/css/");
+        return Collections.singletonList("classpath:/css/");
     }
 
     @Merge("blImageLocations")
     public List<String> imageLocations() {
-        return Collections.singletonList("/img/");
+        return Collections.singletonList("classpath:/img/");
     }
 
     @Merge("blFontLocations")
     public List<String> fontLocations() {
-        return Collections.singletonList("/fonts/");
+        return Collections.singletonList("classpath:/fonts/");
     }
     
     @Bean
