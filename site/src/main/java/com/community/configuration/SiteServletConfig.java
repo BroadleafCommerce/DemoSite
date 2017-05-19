@@ -2,11 +2,15 @@ package com.community.configuration;
 
 import org.broadleafcommerce.cms.web.PageHandlerMapping;
 import org.broadleafcommerce.common.extensibility.context.merge.Merge;
+import org.broadleafcommerce.common.web.filter.FilterOrdered;
+import org.broadleafcommerce.common.web.filter.IgnorableOpenEntityManagerInViewFilter;
 import org.broadleafcommerce.core.web.catalog.CategoryHandlerMapping;
 import org.broadleafcommerce.core.web.catalog.ProductHandlerMapping;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter;
 import org.springframework.web.servlet.HandlerMapping;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -15,6 +19,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import org.springframework.web.servlet.handler.SimpleUrlHandlerMapping;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
+import org.springframework.web.servlet.resource.ResourceUrlEncodingFilter;
 
 import java.util.Collections;
 import java.util.List;
@@ -39,6 +44,28 @@ public class SiteServletConfig extends WebMvcConfigurerAdapter {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/favicon.ico")
             .addResourceLocations("classpath:/favicon.ico");
+    }
+    
+    /**
+     * Setup the "blPU" entity manager on the request thread using the entity-manager-in-view pattern
+     */
+    @Bean
+    public FilterRegistrationBean openEntityManagerInViewFilterFilterRegistrationBean() {
+        FilterRegistrationBean registrationBean = new FilterRegistrationBean();
+        OpenEntityManagerInViewFilter openEntityManagerInViewFilter = new IgnorableOpenEntityManagerInViewFilter();
+        registrationBean.setFilter(openEntityManagerInViewFilter);
+        registrationBean.setName("openEntityManagerInViewFilter");
+        registrationBean.setOrder(FilterOrdered.PRE_SECURITY_HIGH);
+        return registrationBean;
+    }
+
+    @Bean
+    public FilterRegistrationBean resourceUrlEncodingFilter() {
+        FilterRegistrationBean registrationBean = new FilterRegistrationBean();
+        ResourceUrlEncodingFilter resourceUrlEncodingFilter = new ResourceUrlEncodingFilter();
+        registrationBean.setFilter(resourceUrlEncodingFilter);
+        registrationBean.setOrder(FilterOrdered.POST_SECURITY_HIGH);
+        return registrationBean;
     }
     
     @Bean

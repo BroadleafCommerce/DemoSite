@@ -21,7 +21,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.RedirectStrategy;
-import org.springframework.security.web.access.channel.ChannelDecisionManagerImpl;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -39,7 +38,7 @@ import javax.servlet.Filter;
 @Configuration
 @EnableWebSecurity
 @ComponentScan({"org.broadleafcommerce.common.web.security","org.broadleafcommerce.profile.web.core.security","org.broadleafcommerce.core.web.order.security"})
-@EnableGlobalMethodSecurity(securedEnabled = true)
+@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 public class SiteSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Configuration
@@ -67,11 +66,7 @@ public class SiteSecurityConfig extends WebSecurityConfigurerAdapter {
             SecurityFilter securityFilter = new SecurityFilter();
             List<String> excludedRequestPatterns = new ArrayList<>();
             excludedRequestPatterns.add("/sample-checkout/**");
-            excludedRequestPatterns.add("/sample-giftcard/**");
-            excludedRequestPatterns.add("/sample-customer-payment/**");
-            excludedRequestPatterns.add("/sample-customer-payment-oms/**");
             excludedRequestPatterns.add("/hosted/sample-checkout/**");
-            excludedRequestPatterns.add("/punchout/**");
             securityFilter.setExcludedRequestPatterns(excludedRequestPatterns);
             return securityFilter;
         }
@@ -80,9 +75,6 @@ public class SiteSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Value("${asset.server.url.prefix.internal}")
     protected String assetServerUrlPrefixInternal;
-
-    @Value("${enforce.secure:true}")
-    protected boolean enforceSecure;
 
     @Resource(name="blAuthenticationSuccessHandler")
     protected AuthenticationSuccessHandler successHandler;
@@ -147,12 +139,8 @@ public class SiteSecurityConfig extends WebSecurityConfigurerAdapter {
                 .access("isAuthenticated()")
                 .and()
             .requiresChannel()
-                .antMatchers(urlsRequiringSpecificChannel())
-                .requires(enforceSecure?"REQUIRES_SECURE_CHANNEL":"REQUIRES_INSECURE_CHANNEL")
-                .antMatchers(urlsRequiringAnyChannel())
-                .requires(ChannelDecisionManagerImpl.ANY_CHANNEL)
                 .antMatchers("/","/**")
-                .requiresInsecure()
+                .requiresSecure()
                 .and()
             .logout()
                 .invalidateHttpSession(true)
@@ -161,40 +149,6 @@ public class SiteSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
             .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
             .addFilterBefore(sessionFixationProtectionFilter, SessionManagementFilter.class);
-    }
-
-    protected String[] urlsRequiringSpecificChannel() {
-        List<String> urlList = new ArrayList<String>();
-        urlList.add("/register*");
-        urlList.add("/login*/**");
-        urlList.add("/account/**");
-        urlList.add("/checkout/**");
-        urlList.add("/quote-checkout/**");
-        urlList.add("/order-approval/**");
-        urlList.add("/giftcard/**");
-        urlList.add("/sample-checkout/**");
-        urlList.add("/sample-giftcard/**");
-        urlList.add("/sample-customer-payment/**");
-        urlList.add("/sample-customer-payment-oms/**");
-        urlList.add("/confirmation/**");
-        urlList.add("/crossappauth");
-        urlList.add("/oms-csrtools/checkout/**");
-
-        String[] urls = new String[urlList.size()];
-        return urlList.toArray(urls);
-    }
-
-    protected String[] urlsRequiringAnyChannel() {
-        List<String> urlList = new ArrayList<String>();
-        urlList.add("/sandbox/view-selector");
-        urlList.add("/csrtools/**");
-        urlList.add("/account/wishlist/**");
-        urlList.add("/cart/**");
-        urlList.add("/oms-csrtools/**");
-        urlList.add("/quote-sellertools/**");
-
-        String[] urls = new String[urlList.size()];
-        return urlList.toArray(urls);
     }
 
     /**
@@ -225,6 +179,5 @@ public class SiteSecurityConfig extends WebSecurityConfigurerAdapter {
         registrationBean.setEnabled(false);
         return registrationBean;
     }
-
 
 }

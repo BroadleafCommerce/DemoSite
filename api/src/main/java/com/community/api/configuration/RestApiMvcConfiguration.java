@@ -9,6 +9,7 @@ import com.broadleafcommerce.rest.api.BroadleafRestApiMvcConfiguration;
 
 @Configuration
 @EnableWebMvc
+@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 @ComponentScan("com.community.api")
 public class RestApiMvcConfiguration extends BroadleafRestApiMvcConfiguration {
     

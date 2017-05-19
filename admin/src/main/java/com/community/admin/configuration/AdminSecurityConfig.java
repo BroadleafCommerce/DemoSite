@@ -12,13 +12,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.access.channel.ChannelDecisionManagerImpl;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -32,6 +32,7 @@ import javax.servlet.Filter;
  */
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 @ComponentScan({"org.broadleafcommerce.profile.web.core.security","org.broadleafcommerce.core.web.order.security"})
 public class AdminSecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -115,8 +116,6 @@ public class AdminSecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginProcessingUrl("/login_admin_post")
                 .and()
             .authorizeRequests()
-                .antMatchers("/global", "/global-*", "/global-*/**/*")
-                .access("hasRole('GLOBAL_ADMIN')")
                 .antMatchers("/sendResetPassword", "/forgotUsername", "/forgotPassword", "/resetPassword", "/login")
                 .access("permitAll")
                 .antMatchers("/**")
@@ -124,7 +123,7 @@ public class AdminSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
             .requiresChannel()
                 .antMatchers("/**")
-                .requires(ChannelDecisionManagerImpl.ANY_CHANNEL)
+                .requiresSecure()
                 .and()
             .logout()
                 .invalidateHttpSession(true)
