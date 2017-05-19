@@ -10,7 +10,6 @@ import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.Profile;
 
 import com.community.core.config.CoreConfig;
@@ -32,9 +31,6 @@ import nz.net.ultraq.thymeleaf.LayoutDialect;
 @Import({
         CoreConfig.class,
         SiteSecurityConfig.class})
-@ImportResource({
-        "classpath:applicationContext.xml",
-})
 public class SiteConfig {
 
     @Bean
