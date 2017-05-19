@@ -14,7 +14,7 @@
     <description>Web Module For Customized Broadleaf Commerce Site</description>
     
     <properties>
-        <thymeleaf.version>3.0.2.RELEASE</thymeleaf.version>
+        <thymeleaf.version>3.0.6.RELEASE</thymeleaf.version>
     </properties>
     
     <dependencies>
