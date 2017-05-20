@@ -1,6 +1,7 @@
 package com.community.admin.configuration;
 
 import org.broadleafcommerce.common.web.controller.FrameworkControllerHandlerMapping;
+import org.broadleafcommerce.common.web.controller.annotation.EnableAllFrameworkControllers;
 import org.broadleafcommerce.common.web.filter.FilterOrdered;
 import org.broadleafcommerce.common.web.filter.IgnorableOpenEntityManagerInViewFilter;
 import org.broadleafcommerce.openadmin.web.controller.config.AdminWebMvcConfiguration;
@@ -24,6 +25,7 @@ import java.util.Properties;
  * @author Elbert Bautista (elbertbautista)
  */
 @Configuration
+@EnableAllFrameworkControllers
 public class AdminServletConfig extends AdminWebMvcConfiguration {
 
     @Override

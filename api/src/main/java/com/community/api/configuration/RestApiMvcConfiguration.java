@@ -1,5 +1,6 @@
 package com.community.api.configuration;
 
+import org.broadleafcommerce.common.web.controller.annotation.EnableFrameworkRestControllers;
 import org.broadleafcommerce.common.web.filter.FilterOrdered;
 import org.broadleafcommerce.common.web.filter.IgnorableOpenEntityManagerInViewFilter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 
@@ -41,7 +41,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @Configuration
 @EnableWebMvc
 @EnableSwagger2
-@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
+@EnableFrameworkRestControllers
 @ComponentScan("com.community.api")
 public class RestApiMvcConfiguration extends BroadleafRestApiMvcConfiguration {
     

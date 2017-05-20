@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.access.channel.ChannelDecisionManagerImpl;
 import org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter;
+
 import javax.servlet.Filter;
 
 /**
@@ -19,7 +20,7 @@ import javax.servlet.Filter;
  */
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(securedEnabled = true)
+@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Value("${asset.server.url.prefix.internal}")

@@ -2,6 +2,7 @@ package com.community.configuration;
 
 import org.broadleafcommerce.cms.web.PageHandlerMapping;
 import org.broadleafcommerce.common.extensibility.context.merge.Merge;
+import org.broadleafcommerce.common.web.controller.annotation.EnableAllFrameworkControllers;
 import org.broadleafcommerce.common.web.filter.FilterOrdered;
 import org.broadleafcommerce.common.web.filter.IgnorableOpenEntityManagerInViewFilter;
 import org.broadleafcommerce.core.web.catalog.CategoryHandlerMapping;
@@ -30,6 +31,7 @@ import java.util.Properties;
  * @author Elbert Bautista (elbertbautista)
  */
 @Configuration
+@EnableAllFrameworkControllers
 @ComponentScan("com.mycompany.controller")
 public class SiteServletConfig extends WebMvcConfigurerAdapter {
     
