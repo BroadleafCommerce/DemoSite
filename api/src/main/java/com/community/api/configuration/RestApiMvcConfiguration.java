@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Set;
 
 import springfox.documentation.builders.ApiInfoBuilder;
-import springfox.documentation.builders.AuthorizationScopeBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
@@ -36,10 +35,12 @@ import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
 import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 
 @Configuration
 @EnableWebMvc
+@EnableSwagger2
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 @ComponentScan("com.community.api")
 public class RestApiMvcConfiguration extends BroadleafRestApiMvcConfiguration {
@@ -64,7 +65,6 @@ public class RestApiMvcConfiguration extends BroadleafRestApiMvcConfiguration {
                   .apis(RequestHandlerSelectors.any())
                   .paths(PathSelectors.any())
                   .build()
-                .pathMapping("/api/v1")
                 .securitySchemes(Arrays.asList(new BasicAuth("basicAuth")))
                 .securityContexts(Arrays.asList(securityContext()))
                 .useDefaultResponseMessages(false)
@@ -79,13 +79,9 @@ public class RestApiMvcConfiguration extends BroadleafRestApiMvcConfiguration {
     }
 
     private List<SecurityReference> basicAuth() {
-        AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
-        authorizationScopes[0] = new AuthorizationScopeBuilder()
-            .scope("")
-            .build();
         return Arrays.asList(SecurityReference.builder()
             .reference("basicAuth")
-            .scopes(authorizationScopes)
+            .scopes(new AuthorizationScope[0])
             .build());
     }
 
