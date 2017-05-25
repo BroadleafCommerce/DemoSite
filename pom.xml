@@ -31,11 +31,27 @@
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        
+        <debug.args>-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=${debug.port}</debug.args>
+        <boot.jvm.memory>-Xmx1536M</boot.jvm.memory>
+        <boot.jvm.args>${boot.jvm.memory} ${debug.args}</boot.jvm.args>
+        
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.uri>${project.baseUri}</project.uri>
     </properties>
 
     <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <configuration>
+                        <jvmArguments>${boot.jvm.args}</jvmArguments>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
         <plugins>
             <plugin>
                 <groupId>org.zeroturnaround</groupId>
@@ -53,6 +69,15 @@
             </plugin>
         </plugins>
     </build>
+    
+    <profiles>
+        <profile>
+            <id>jrebel</id>
+            <properties>
+                <boot.jvm.args>${boot.jvm.memory} ${debug.args} ${jrebel.agent.args}</boot.jvm.args>
+            </properties>
+        </profile>
+    </profiles>
 
     <dependencyManagement>
         <dependencies>

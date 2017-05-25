@@ -13,6 +13,10 @@
     <name>Community Demo API</name>
     <description>API Module For Customized Broadleaf Commerce Site</description>
 
+    <properties>
+        <debug.port>8002</debug.port>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>com.mycompany-community</groupId>
@@ -73,9 +77,6 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <jvmArguments>-Xmx1536M -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8002</jvmArguments>
-                </configuration>
             </plugin>
         </plugins>
     </build>
