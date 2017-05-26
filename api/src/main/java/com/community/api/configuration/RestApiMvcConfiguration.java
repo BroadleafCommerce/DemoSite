@@ -41,10 +41,13 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @Configuration
 @EnableWebMvc
 @EnableSwagger2
-@EnableFrameworkRestControllers
 @ComponentScan("com.community.api")
 public class RestApiMvcConfiguration extends BroadleafRestApiMvcConfiguration {
-    
+
+    @Configuration
+    @EnableFrameworkRestControllers
+    public static class EnableBroadleafRestControllers {}
+
     /**
      * Setup the "blPU" entity manager on the request thread using the entity-manager-in-view pattern
      */
