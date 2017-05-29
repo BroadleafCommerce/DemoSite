@@ -40,7 +40,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Configuration
 @EnableWebMvc
-@EnableSwagger2
 @ComponentScan("com.community.api")
 public class RestApiMvcConfiguration extends BroadleafRestApiMvcConfiguration {
 
@@ -61,41 +60,14 @@ public class RestApiMvcConfiguration extends BroadleafRestApiMvcConfiguration {
         return registrationBean;
     }
     
-    @Bean
-    public Docket globalApi() {
-        return new Docket(DocumentationType.SWAGGER_2)
-                .select()
-                  .apis(RequestHandlerSelectors.any())
-                  .paths(PathSelectors.any())
-                  .build()
-                .securitySchemes(Arrays.asList(new BasicAuth("basicAuth")))
-                .securityContexts(Arrays.asList(securityContext()))
-                .useDefaultResponseMessages(false)
-                .apiInfo(apiInfo());
-    }
+    /*********************************************
+     * 
+     * Below is required swagger configuration for the APIs with Basic Authentication. If you do not want to
+     * use Swagger then remove everything below as well as the springfox dependency
+     * 
+     *********************************************
+     */
     
-    private SecurityContext securityContext() {
-        return SecurityContext.builder()
-            .securityReferences(basicAuth())
-            .forPaths(PathSelectors.any())
-            .build();
-    }
-
-    private List<SecurityReference> basicAuth() {
-        return Arrays.asList(SecurityReference.builder()
-            .reference("basicAuth")
-            .scopes(new AuthorizationScope[0])
-            .build());
-    }
-
-
-    protected ApiInfo apiInfo () {
-        return new ApiInfoBuilder().title("Broadleaf Commerce API")
-                .description("The default Broadleaf Commerce APIs")
-                .version("v1")
-                .build();
-    }
-
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("swagger-ui.html")
@@ -111,38 +83,77 @@ public class RestApiMvcConfiguration extends BroadleafRestApiMvcConfiguration {
                 .addResourceLocations("classpath:/META-INF/resources/webjars/images/favicon-16x16.png");
     }
     
-    @Bean
-    public TranslationOperationBuilderPlugin translationPlugin() {
-        return new TranslationOperationBuilderPlugin();
-    }
+    @EnableSwagger2
+    @Configuration
+    public static class SwaggerConfig {
     
-    @Order(Ordered.LOWEST_PRECEDENCE)
-    public static class TranslationOperationBuilderPlugin implements OperationBuilderPlugin {
-
-        @Autowired
-        protected MessageSource translator;
-        
-        @Override
-        public boolean supports(DocumentationType delimiter) {
-            return true;
+        @Bean
+        public Docket globalApi() {
+            return new Docket(DocumentationType.SWAGGER_2)
+                    .select()
+                      .apis(RequestHandlerSelectors.any())
+                      .paths(PathSelectors.any())
+                      .build()
+                    .securitySchemes(Arrays.asList(new BasicAuth("basicAuth")))
+                    .securityContexts(Arrays.asList(securityContext()))
+                    .useDefaultResponseMessages(false)
+                    .apiInfo(apiInfo());
         }
-
-        @Override
-        public void apply(OperationContext context) {
-            Set<ResponseMessage> messages = context.operationBuilder().build().getResponseMessages();
-            Set<ResponseMessage> translated = new HashSet<>();
-            for (ResponseMessage untranslated : messages) {
-                String translation = translator.getMessage(untranslated.getMessage(), null, untranslated.getMessage(), null);
-                translated.add(new ResponseMessage(untranslated.getCode(),
-                    translation,
-                    untranslated.getResponseModel(),
-                    untranslated.getHeaders(),
-                    untranslated.getVendorExtensions()));
+        
+        private SecurityContext securityContext() {
+            return SecurityContext.builder()
+                .securityReferences(basicAuth())
+                .forPaths(PathSelectors.any())
+                .build();
+        }
+    
+        private List<SecurityReference> basicAuth() {
+            return Arrays.asList(SecurityReference.builder()
+                .reference("basicAuth")
+                .scopes(new AuthorizationScope[0])
+                .build());
+        }
+    
+    
+        protected ApiInfo apiInfo () {
+            return new ApiInfoBuilder().title("Broadleaf Commerce API")
+                    .description("The default Broadleaf Commerce APIs")
+                    .version("v1")
+                    .build();
+        }
+    
+        @Bean
+        public TranslationOperationBuilderPlugin translationPlugin() {
+            return new TranslationOperationBuilderPlugin();
+        }
+        
+        @Order(Ordered.LOWEST_PRECEDENCE)
+        public static class TranslationOperationBuilderPlugin implements OperationBuilderPlugin {
+    
+            @Autowired
+            protected MessageSource translator;
+            
+            @Override
+            public boolean supports(DocumentationType delimiter) {
+                return true;
             }
-            context.operationBuilder().responseMessages(translated);
+    
+            @Override
+            public void apply(OperationContext context) {
+                Set<ResponseMessage> messages = context.operationBuilder().build().getResponseMessages();
+                Set<ResponseMessage> translated = new HashSet<>();
+                for (ResponseMessage untranslated : messages) {
+                    String translation = translator.getMessage(untranslated.getMessage(), null, untranslated.getMessage(), null);
+                    translated.add(new ResponseMessage(untranslated.getCode(),
+                        translation,
+                        untranslated.getResponseModel(),
+                        untranslated.getHeaders(),
+                        untranslated.getVendorExtensions()));
+                }
+                context.operationBuilder().responseMessages(translated);
+            }
+            
         }
-        
     }
-
 
 }
