@@ -6,11 +6,9 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
-import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.web.servlet.DispatcherServlet;
 
 import com.community.core.config.CoreConfig;
 import com.community.core.config.StringFactoryBean;
@@ -33,13 +31,6 @@ public class ApiConfig {
         return new ApiServletContextInitializer();
     }
     
-    @Bean
-    public ServletRegistrationBean dispatcherRegistration(DispatcherServlet dispatcherServlet) {
-        ServletRegistrationBean registration = new ServletRegistrationBean(dispatcherServlet);
-        registration.addUrlMappings("/api/v1/*");
-        return registration;
-    }
-
     /**
      * Spring Boot does not support the configuration of both an HTTP connector and an HTTPS connector via properties.
      * In order to have both, we’ll need to configure one of them programmatically (HTTP).
