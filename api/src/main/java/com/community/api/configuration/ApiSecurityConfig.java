@@ -83,7 +83,8 @@ public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest()
                 .requires(ChannelDecisionManagerImpl.ANY_CHANNEL)
             .and()
-            .addFilterAfter(apiCustomerStateFilter(), RememberMeAuthenticationFilter.class);    }
+            .addFilterAfter(apiCustomerStateFilter(), RememberMeAuthenticationFilter.class);
+    }
     
     @Bean
     public Filter apiCustomerStateFilter() {
