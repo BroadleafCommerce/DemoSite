@@ -17,18 +17,18 @@ import org.springframework.context.annotation.Configuration;
 @EnableAutoConfiguration(exclude = {ThymeleafAutoConfiguration.class, SessionAutoConfiguration.class, ValidationAutoConfiguration.class, MultipartAutoConfiguration.class} )
 public class AdminApplication extends SpringBootServletInitializer {
 
- @Configuration
- @EnableBroadleafAdminAutoConfiguration
- public static class BroadleafFrameworkConfiguration {}
+    @Configuration
+    @EnableBroadleafAdminAutoConfiguration
+    public static class BroadleafFrameworkConfiguration {}
 
- public static void main(String[] args) {
-     SpringApplication.run(AdminApplication.class, args);
- }
+    public static void main(String[] args) {
+        SpringApplication.run(AdminApplication.class, args);
+    }
  
- @Override
- protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-     return application.sources(AdminApplication.class);
- }
+    @Override
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+        return application.sources(AdminApplication.class);
+    }
 
 }
 
