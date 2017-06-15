@@ -4,7 +4,6 @@ import org.broadleafcommerce.common.web.controller.FrameworkControllerHandlerMap
 import org.broadleafcommerce.common.web.controller.annotation.EnableAllFrameworkControllers;
 import org.broadleafcommerce.common.web.filter.FilterOrdered;
 import org.broadleafcommerce.common.web.filter.IgnorableOpenEntityManagerInViewFilter;
-import org.broadleafcommerce.openadmin.web.controller.config.AdminWebMvcConfiguration;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,6 +12,7 @@ import org.springframework.web.servlet.HandlerMapping;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.handler.SimpleUrlHandlerMapping;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
@@ -26,7 +26,7 @@ import java.util.Properties;
  */
 @Configuration
 @EnableAllFrameworkControllers
-public class AdminServletConfig extends AdminWebMvcConfiguration {
+public class AdminServletConfig extends WebMvcConfigurerAdapter {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
