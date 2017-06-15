@@ -13,7 +13,6 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 
 import com.broadleafcommerce.rest.api.BroadleafRestApiMvcConfiguration;
@@ -40,7 +39,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 
 @Configuration
-@EnableWebMvc
 @ComponentScan("com.community.api")
 public class RestApiMvcConfiguration extends BroadleafRestApiMvcConfiguration {
 
