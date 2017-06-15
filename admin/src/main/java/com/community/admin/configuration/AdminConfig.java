@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
-import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -37,15 +36,6 @@ public class AdminConfig {
         return new StringFactoryBean();
     }
 
-    /**
-     * Initialize Broadleaf's Servlet Context
-     * @return ServletContextInitializer
-     */
-    @Bean
-    public ServletContextInitializer initialize() {
-        return new AdminServletContextInitializer();
-    }
-    
     @Merge("blMergedCacheConfigLocations")
     public List<String> adminOverrideCache() {
         return Arrays.asList("classpath:bl-override-ehcache-admin.xml");

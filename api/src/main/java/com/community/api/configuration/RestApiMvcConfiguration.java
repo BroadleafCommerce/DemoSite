@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter;
+import org.springframework.security.web.session.HttpSessionEventPublisher;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 
@@ -58,6 +59,11 @@ public class RestApiMvcConfiguration extends BroadleafRestApiMvcConfiguration {
         registrationBean.setName("openEntityManagerInViewFilter");
         registrationBean.setOrder(FilterOrdered.PRE_SECURITY_HIGH);
         return registrationBean;
+    }
+    
+    @Bean
+    public HttpSessionEventPublisher sessionEventPublisher() {
+        return new HttpSessionEventPublisher();
     }
     
     /*********************************************

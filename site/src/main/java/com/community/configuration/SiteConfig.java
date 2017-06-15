@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
-import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -16,13 +15,9 @@ import com.community.core.config.CoreConfig;
 import com.community.core.config.StringFactoryBean;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
-import nz.net.ultraq.thymeleaf.LayoutDialect;
 
 /**
  * @author Elbert Bautista (elbertbautista)
@@ -39,15 +34,6 @@ public class SiteConfig {
         return new StringFactoryBean();
     }
 
-    /**
-     * Initialize Broadleaf's Servlet Context
-     * @return ServletContextInitializer
-     */
-    @Bean
-    public ServletContextInitializer initialize() {
-        return new SiteServletContextInitializer();
-    }
-    
     @Merge("blMessageSourceBaseNames")
     public List<String> customMessages() {
         return Arrays.asList("classpath:messages");
@@ -86,11 +72,6 @@ public class SiteConfig {
         operations.put("thumbnail", thumbnailOperation);
         
         return operations;
-    }
-    
-    @Merge("blWebDialects")
-    public Set<?> siteWebDialect() {
-        return Collections.singleton(new LayoutDialect());
     }
 
     /**
