@@ -4,13 +4,11 @@ import org.broadleafcommerce.common.config.EnableBroadleafSiteAutoConfiguration;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Configuration;
 
 @SpringBootApplication
 @EnableAutoConfiguration
-public class SiteApplication extends SpringBootServletInitializer {
+public class SiteApplication {
 
     @Configuration
     @EnableBroadleafSiteAutoConfiguration
@@ -20,8 +18,4 @@ public class SiteApplication extends SpringBootServletInitializer {
         SpringApplication.run(SiteApplication.class, args);
     }
     
-    @Override
-    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-        return application.sources(SiteApplication.class);
-    }
 }
