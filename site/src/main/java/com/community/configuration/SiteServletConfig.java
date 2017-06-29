@@ -14,11 +14,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
 import org.springframework.web.servlet.HandlerMapping;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.handler.SimpleUrlHandlerMapping;
-import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 
 import java.util.Collections;
 import java.util.List;
@@ -29,15 +27,8 @@ import java.util.Properties;
  */
 @Configuration
 @EnableAllFrameworkControllers
-@ComponentScan("com.mycompany.controller")
+@ComponentScan("com.community.controller")
 public class SiteServletConfig extends WebMvcConfigurerAdapter {
-    
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        LocaleChangeInterceptor localeInterceptor = new LocaleChangeInterceptor();
-        localeInterceptor.setParamName("blLocaleCode");
-        registry.addInterceptor(localeInterceptor);
-    }
     
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
