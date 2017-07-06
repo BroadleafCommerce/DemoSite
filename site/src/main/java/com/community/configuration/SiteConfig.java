@@ -2,6 +2,11 @@ package com.community.configuration;
 
 import org.apache.catalina.connector.Connector;
 import org.broadleafcommerce.common.extensibility.context.merge.Merge;
+import org.broadleafcommerce.core.search.service.solr.index.SolrIndexService;
+import org.quartz.JobDetail;
+import org.quartz.Trigger;
+import org.springframework.beans.factory.FactoryBean;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
@@ -10,6 +15,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
+import org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean;
+import org.springframework.scheduling.quartz.SchedulerFactoryBean;
+import org.springframework.scheduling.quartz.SimpleTriggerFactoryBean;
 
 import com.community.core.config.CoreConfig;
 import com.community.core.config.StringFactoryBean;
@@ -72,6 +80,42 @@ public class SiteConfig {
         operations.put("thumbnail", thumbnailOperation);
         
         return operations;
+    }
+    
+    /**
+     * This ensures the Solr index is rebuilt at a regular interval since there is no automatic rebuilding or
+     * invalidation of the index in core Broadleaf otherwise
+     * 
+     * @author Phillip Verheyden (phillipuniverse)
+     */
+    @Configuration
+    public static class SolrReindexConfig {
+        
+        @Bean
+        public SchedulerFactoryBean rebuildIndexScheduler(@Qualifier("rebuildIndexTrigger") Trigger rebuildIndexTrigger) {
+            SchedulerFactoryBean scheduler = new SchedulerFactoryBean();
+            scheduler.setTriggers(rebuildIndexTrigger);
+            return scheduler;
+        }
+        
+        @Bean
+        public SimpleTriggerFactoryBean rebuildIndexTrigger(@Qualifier("solrReindexJobDetail") JobDetail detail,
+            @Value("${solr.index.start.delay}") long startDelay,
+            @Value("${solr.index.repeat.interval}") long repeatInterval) {
+            SimpleTriggerFactoryBean trigger = new SimpleTriggerFactoryBean();
+            trigger.setJobDetail(detail);
+            trigger.setStartDelay(startDelay);
+            trigger.setRepeatInterval(repeatInterval);
+            return trigger;
+        }
+        
+        @Bean
+        public FactoryBean<JobDetail> solrReindexJobDetail(SolrIndexService indexService) {
+            MethodInvokingJobDetailFactoryBean detail = new MethodInvokingJobDetailFactoryBean();
+            detail.setTargetObject(indexService);
+            detail.setTargetMethod("rebuildIndex");
+            return detail;
+        }
     }
 
     /**
