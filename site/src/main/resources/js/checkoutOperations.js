@@ -332,7 +332,7 @@
      *
      * @return
      */
-    function shouldUseCustomerPayment() {debugger;
+    function shouldUseCustomerPayment() {
         var $useCustomerPaymentCheckbox = $("[name='shouldUseCustomerPayment']");
         var shouldUseCustomerPayment = $useCustomerPaymentCheckbox.length > 0 && $useCustomerPaymentCheckbox.val() === "true";
 
