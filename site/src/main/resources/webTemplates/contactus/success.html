@@ -2,8 +2,13 @@
     <head>
         <title>Contact Us</title>
     </head>
-    
-    <div id="contactus">
-	<p>Thanks you for contacting us. We will write back to you shortly.</p>                          
-       </div>
+
+    <div class="section">
+        <div id="contact-us-success" class="contact-us-success col-sm-6 col-sm-offset-3">
+            <h3 class="header header-primary card-title pull-" th:utext="#{contactus.title}">Contact Us</h3>
+            <p th:utext="#{contactus.thanks}">Thanks for contacting us. We will write back to you shortly.</p>
+            <a th:href="@{/}" class="btn btn-sm btn-primary" th:utext="#{contactus.returnHome}">Return to
+                the homepage</a>
+        </div>
+    </div>
 </div>

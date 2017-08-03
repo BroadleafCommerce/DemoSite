@@ -1,0 +1,40 @@
+<div th:fragment="customer-address-new">
+    <li class="js-manage-address active" data-value="new-address">
+        <div class="shipping-address-btn">
+            Add a new address
+        </div>
+    </li>
+</div>
+
+<div th:fragment="customer-address-existing">
+    <li class="js-manage-address"
+        th:each="customerAddress : ${customerAddresses}"
+        th:object="${customerAddress}"
+        th:attr="data-value=@{'/account/addresses/' + *{id}}">
+
+        <div class="shipping-address-btn">
+            <strong>[[*{addressName}]]</strong>
+            <small th:if="*{address.default}">&nbsp;&nbsp;(Default)</small>
+            <br/>
+            <th:block
+                    th:unless="${@blSystemPropertiesService.resolveBooleanSystemProperty('validator.address.fullNameOnly')}">
+                [[*{address.firstName}]]&nbsp;[[*{address.lastName}]]<br/>
+            </th:block>
+            <th:block
+                    th:if="${@blSystemPropertiesService.resolveBooleanSystemProperty('validator.address.fullNameOnly')}">
+                [[*{address.fullName}]]<br/>
+            </th:block>
+            [[*{address.addressLine1}]]<br/> [[*{address.addressLine2}]]<br
+                th:if="!*{#strings.isEmpty(address.addressLine2)}"/>
+            [[*{address.city}]],&nbsp;[[*{address.stateProvinceRegion}]]&nbsp;[[*{address.postalCode}]]<br/>
+            <th:block th:if="*{address.phonePrimary != null and address.phonePrimary.phoneNumber != null}">
+                [[*{address.phonePrimary.phoneNumber}]]
+            </th:block>
+
+            <div class="btn btn-simple js-remove-address" type="submit" th:unless="${managePaymentMethods}">
+                Remove
+                <input type="hidden" name="removeAddress" value="Remove"/>
+            </div>
+        </div>
+    </li>
+</div>

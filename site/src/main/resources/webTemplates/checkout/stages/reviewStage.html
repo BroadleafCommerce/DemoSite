@@ -1,0 +1,21 @@
+<div class="card checkout-card"  th:with="isLaterStage=${#checkoutStage.isLaterStage('REVIEW', activeStage)}">
+    <div class="checkout-stage-title">
+        <h4 th:utext="#{checkout.stages.review}">Review</h4>
+    </div>
+
+    <div class="checkout-stage js-reviewStageContent" th:classappend="${isLaterStage}? 'is-hidden'">
+        <div class="col-sm-8 checkout-review-stage-prompt" th:utext="#{checkout.completion.prompt}"></div>
+
+        <blc:form id="CreditCardCheckoutSubmissionForm" class="is-hidden" th:action="@{/checkout/complete}" method="POST" novalidate="novalidate">
+            <input id="payment_method_nonce" name="payment_method_nonce" type="text" />
+        </blc:form>
+
+        <blc:form id="CODCheckoutSubmissionForm" class="is-hidden" th:action="@{/checkout/cod/complete}" method="POST" novalidate="novalidate"></blc:form>
+
+        <div class="col-sm-4 checkout-stage-action">
+            <a href="#" class="btn btn-primary pull-right js-performCheckout">
+                <span th:utext="#{checkout.completion.submit}">Place Your Order</span> <i class="material-icons">keyboard_arrow_right</i>
+            </a>
+        </div>
+    </div>
+</div>

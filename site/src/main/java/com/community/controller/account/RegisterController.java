@@ -53,4 +53,9 @@ public class RegisterController extends BroadleafRegisterController {
     public RegisterCustomerForm initCustomerRegistrationForm() {
         return super.initCustomerRegistrationForm();        
     }
+
+    @Override
+    public String getRegisterView() {
+        return "authentication/login";
+    }
 }

@@ -1,0 +1,85 @@
+<th:block th:fragment="read-only">
+
+    <div class="read-only-credit-card">
+        <ul class="credit-card-types">
+            <li th:if="${cardType} == 'AMEX'"><img th:src="@{/img/payment/american-express-curved-32px.png}"/></li>
+            <li th:if="${cardType} == 'MASTERCARD'"><img th:src="@{/img/payment/mastercard-curved-32px.png}"/></li>
+            <li th:if="${cardType} == 'VISA'"><img th:src="@{/img/payment/visa-curved-32px.png}"/></li>
+            <li th:if="${cardType} == 'DISCOVER'"><img th:src="@{/img/payment/discover-curved-32px.png}"/></li>
+        </ul>
+        <div class="credit-card-number" th:if="!${#strings.isEmpty(lastFour)}">
+            <span class="credit-card-hidden-chars">**** **** **** </span>
+            <span class="credit-card-last-four" th:utext="${lastFour}"></span>
+        </div>
+    </div>
+    <div class="credit-card-exp" th:utext="#{account.payments.exp} + ' ' + ${expDate}"></div>
+
+</th:block>
+
+<th:block th:fragment="hidden-read-only">
+
+    <div class="read-only-credit-card">
+        <ul class="credit-card-types">
+            <li id="AmericanExpress" class="is-hidden"><img th:src="@{/img/payment/american-express-curved-32px.png}"/></li>
+            <li id="MasterCard" class="is-hidden"><img th:src="@{/img/payment/mastercard-curved-32px.png}"/></li>
+            <li id="Visa" class="is-hidden"><img th:src="@{/img/payment/visa-curved-32px.png}"/></li>
+            <li id="Discover" class="is-hidden"><img th:src="@{/img/payment/discover-curved-32px.png}"/></li>
+        </ul>
+        <div class="credit-card-number js-creditCardNumber is-hidden">
+            <span class="credit-card-hidden-chars">**** **** **** </span>
+            <span class="credit-card-last-four js-creditCardLastFour"></span>
+        </div>
+    </div>
+    <div class="credit-card-exp js-creditCardExpDate is-hidden"></div>
+
+</th:block>
+
+<th:block th:fragment="form-inputs">
+    <div class="js-creditCardData">
+        <blc:credit_card_types>
+            <div class="row" th:if="${paymentGatewayCardTypes != null}">
+                <div class="col-sm-12">
+                    <div class="form-group label-floating">
+                        <label class="control-label" for="cartType" th:utext="#{cart.firstName}"></label>
+                        <select id="cartType" class="form-control" th:name="${#paymentGatewayField.mapName('creditCard.creditCardType')}">
+                            <option th:each="entry : ${paymentGatewayCardTypes}" th:value="${entry.key}" th:utext="${entry.value}"></option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </blc:credit_card_types>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group label-floating">
+                    <label class="control-label" for="cardNumber" th:utext="#{cart.cardNumber}"></label>
+                    <input id="cardNumber" type="text"
+                           th:name="${#paymentGatewayField.mapName('creditCard.creditCardNum')}"
+                           value="4111111111111111"
+                           autocomplete="off"
+                           class="form-control" />
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="form-group label-floating">
+                    <label class="control-label" for="securityCode" th:utext="#{cart.cvv}"></label>
+                    <input id="securityCode" type="text"
+                           th:name="${#paymentGatewayField.mapName('creditCard.creditCardCvv')}"
+                           value="123"
+                           autocomplete="off"
+                           class="form-control" />
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="form-group label-floating">
+                    <label class="control-label" for="cardExpDate" th:utext="#{cart.experationDate}"></label>
+                    <input id="cardExpDate" type="text"
+                           th:name="${#paymentGatewayField.mapName('creditCard.creditCardExpDate')}"
+                           placeholder="MM/YY"
+                           value="01/99"
+                           autocomplete="off"
+                           class="form-control" />
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>

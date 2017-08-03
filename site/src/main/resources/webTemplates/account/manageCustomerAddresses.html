@@ -1,83 +1,422 @@
 <th:block layout:decorate="~{layout/accountLayout}" layout:fragment="content">
-    <div class="manage-account-form-wrapper">
-        <p class="success" th:if="${successMessage}" th:utext="${successMessage}"></p>
-        <h2>Address Book</h2>
-        <p th:if="${#lists.isEmpty(customerAddresses)}" style="margin: 20px 10px;">
-            You have not yet added any addresses to your account. Start by adding one below. 
-        </p>
-        <div style="margin: 20px 10px;" th:unless="${#lists.isEmpty(customerAddresses)}">
-            Options:
-            <select onchange="location.href=this.options[selectedIndex].value">
-                <option>Choose an address to update...</option>
-                <option th:each="customerAddress : ${customerAddresses}" th:object="${customerAddress}" th:value="@{'/account/addresses/' + *{id}}">
-                    <span th:utext="*{!#strings.isEmpty(addressName) ? addressName + ' (' + address.addressLine1 + ')' : address.addressLine1}"></span>
-                </option>
-            </select>
-            <span th:if="${customerAddressForm.customerAddressId}">&nbsp;&nbsp;- or -&nbsp;&nbsp;<a th:href="@{/account/addresses}" class="medium red">create a new address</a></span>
-            <span th:unless="${customerAddressForm.customerAddressId}">&nbsp;&nbsp;- or -&nbsp;&nbsp;create a new address below</span>
+    <div class="card manage-account-form-wrapper js-manageAccountFormWrapper">
+        <h3>Address Book</h3>
+        <hr />
+
+        <p class="text-success" th:if="${successMessage}" th:utext="${successMessage}"></p>
+
+        <div>
+            <div class="row">
+                <div class="col-sm-6 manage-address">
+                    <ul>
+                        <div th:replace="~{account/partials/customerAddress :: customer-address-new}"></div>
+
+                        <div th:replace="~{account/partials/customerAddress :: customer-address-existing}"></div>
+                    </ul>
+                </div>
+
+                <div class="col-sm-6 js-manage-address-entry">
+                    <th:block th:if="${#module.isPresent('i18n Enterprise') and false}">
+                        <blc:dynamic_regional_form th:object="${customerAddressForm}"
+                                                   th:action="@{'/account/addresses/' + ${customerAddressForm.customerAddressId != null ? customerAddressForm.customerAddressId : ''}}"
+                                                   th:country="${customerAddressForm.address.isoCountryAlpha2?.alpha2}"
+                                                   name="CUSTOMER_ADDRESS_FORM"
+                                                   method="post">
+
+                            <div class="form50">
+                                <select id="customer_address_country"
+                                        class="js-dynamicAddressCountry js-customerAddressCountry js-cloneable js-clearable dynamicAddressCountry required"
+                                        name="address.isoCountryAlpha2"
+                                        th:classappend="${#fields.hasErrors('address.isoCountryAlpha2')}? 'fieldError'">
+                                    <option value="" th:attr="data-href=@{/account/addresses}">- Please Select a Country -</option>
+                                    <option th:each="country : ${countries}"
+                                            th:if="${country.name}"
+                                            th:value="${country.alpha2}"
+                                            th:attr="data-href=@{/account/addresses/customer-address-country(blDynamicFormCountryCode=${country.alpha2})}"
+                                            th:selected="${country.alpha2.equals(blDynamicCountry)}"
+                                            th:utext="${country.name + ' (' + country.alpha2 + ')'}">
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="clearfix"></div>
+
+                            <div th:if="${blDynamicRegionalForm}" id="dynamicCustomerAddressForm" class="js-dynamicCustomerAddressForm form50">
+                                <span class="error" th:if="${#fields.hasErrors('*')}" th:errors="*"></span>
+                                <div th:each="fieldGroup : ${blFieldGroups}">
+
+                                    <div th:if="${#lists.size(fieldGroup.value)} &gt;1">
+                                        <div class="form50">
+                            <span th:each="fieldItem : ${fieldGroup.value}">
+                                <span th:if="${#strings.isEmpty(fieldItem.type.lookupCategory) == false}">
+                                    <select class="js-cloneable js-clearable dynamic_address_country_sub_small required"
+                                            th:field="*{__${fieldItem.type.modelAttributeName}__}">
+                                        <option th:if="${#strings.isEmpty(__${fieldItem.type.lookupCategory}__)}" value="">--</option>
+                                        <option th:each="subdivision : ${__${fieldItem.type.lookupCategory}__}"
+                                                th:value="${subdivision.alternateAbbreviation}"
+                                                th:utext="${subdivision.name}">
+                                        </option>
+                                    </select>
+                                </span>
+                                <span th:if="${#strings.isEmpty(fieldItem.type.lookupCategory) == true and #strings.isEmpty(fieldItem.placeHolder) == false}">
+                                    <span th:if="*{__${fieldItem.type.modelAttributeName}__}">
+                                        <input
+                                                th:if="${fieldItem.type.modelAttributeName} == ${blPrimaryPhoneType.modelAttributeName} or ${fieldItem.type.modelAttributeName} == ${blSecondaryPhoneType.modelAttributeName} or ${fieldItem.type.modelAttributeName} == ${blFaxPhoneType.modelAttributeName}"
+                                                type="text"
+                                                class="js-cloneable js-clearable field15"
+                                                th:classappend="${#fields.hasErrors('__${fieldItem.type.modelAttributeName}__')}? fieldError"
+                                                th:placeholder="#{${fieldItem.type.friendlyType}}"
+                                                th:field="*{__${fieldItem.type.modelAttributeName}__.phoneNumber}"
+                                        />
+                                    </span>
+                                    <span th:unless="*{__${fieldItem.type.modelAttributeName}__}">
+                                        <input
+                                                th:if="${fieldItem.type.modelAttributeName} == ${blPrimaryPhoneType.modelAttributeName} or ${fieldItem.type.modelAttributeName} == ${blSecondaryPhoneType.modelAttributeName} or ${fieldItem.type.modelAttributeName} == ${blFaxPhoneType.modelAttributeName}"
+                                                type="text"
+                                                class="js-cloneable js-clearable field15"
+                                                th:classappend="${#fields.hasErrors('__${fieldItem.type.modelAttributeName}__')}? fieldError"
+                                                th:placeholder="#{${fieldItem.type.friendlyType}}"
+                                                th:id="__${fieldItem.type.modelAttributeName}__.phoneNumber"
+                                                th:name="__${fieldItem.type.modelAttributeName}__.phoneNumber"
+                                        />
+                                    </span>
+                                    <input th:unless="${fieldItem.type.modelAttributeName} == ${blPrimaryPhoneType.modelAttributeName} or ${fieldItem.type.modelAttributeName} == ${blSecondaryPhoneType.modelAttributeName} or ${fieldItem.type.modelAttributeName} == ${blFaxPhoneType.modelAttributeName}"
+                                           type="text"
+                                           class="js-clearable field15"
+                                           th:classappend="${#fields.hasErrors('__${fieldItem.type.modelAttributeName}__')}? fieldError"
+                                           th:placeholder="#{${fieldItem.placeHolder}}"
+                                           th:field="*{__${fieldItem.type.modelAttributeName}__}"
+                                    />
+                                </span>
+                                <span th:if="${#strings.isEmpty(fieldItem.type.lookupCategory) == true and #strings.isEmpty(fieldItem.placeHolder) == true and #strings.isEmpty(fieldItem.label) == false}">
+                                    <span th:if="*{__${fieldItem.type.modelAttributeName}__}">
+                                        <input
+                                                th:if="${fieldItem.type.modelAttributeName} == ${blPrimaryPhoneType.modelAttributeName} or ${fieldItem.type.modelAttributeName} == ${blSecondaryPhoneType.modelAttributeName} or ${fieldItem.type.modelAttributeName} == ${blFaxPhoneType.modelAttributeName}"
+                                                type="text"
+                                                class="js-cloneable js-clearable field15"
+                                                th:classappend="${#fields.hasErrors('__${fieldItem.type.modelAttributeName}__')}? fieldError"
+                                                th:placeholder="#{${fieldItem.type.friendlyType}}"
+                                                th:field="*{__${fieldItem.type.modelAttributeName}__.phoneNumber}"
+                                        />
+                                    </span>
+                                    <span th:unless="*{__${fieldItem.type.modelAttributeName}__}">
+                                        <input
+                                                th:if="${fieldItem.type.modelAttributeName} == ${blPrimaryPhoneType.modelAttributeName} or ${fieldItem.type.modelAttributeName} == ${blSecondaryPhoneType.modelAttributeName} or ${fieldItem.type.modelAttributeName} == ${blFaxPhoneType.modelAttributeName}"
+                                                type="text"
+                                                class="js-cloneable js-clearable field15"
+                                                th:classappend="${#fields.hasErrors('__${fieldItem.type.modelAttributeName}__')}? fieldError"
+                                                th:placeholder="#{${fieldItem.type.friendlyType}}"
+                                                th:id="__${fieldItem.type.modelAttributeName}__.phoneNumber"
+                                                th:name="__${fieldItem.type.modelAttributeName}__.phoneNumber"
+                                        />
+                                    </span>
+                                    <input th:unless="${fieldItem.type.modelAttributeName} == ${blPrimaryPhoneType.modelAttributeName} or ${fieldItem.type.modelAttributeName} == ${blSecondaryPhoneType.modelAttributeName} or ${fieldItem.type.modelAttributeName} == ${blFaxPhoneType.modelAttributeName}"
+                                           type="text"
+                                           class="js-clearable field15"
+                                           th:classappend="${#fields.hasErrors('__${fieldItem.type.modelAttributeName}__')}? fieldError"
+                                           th:placeholder="#{${fieldItem.label}}"
+                                           th:field="*{__${fieldItem.type.modelAttributeName}__}"
+                                    />
+                                </span>
+                                <span th:if="${#strings.isEmpty(fieldItem.type.lookupCategory) == true and #strings.isEmpty(fieldItem.placeHolder) == true and #strings.isEmpty(fieldItem.label) == true}">
+                                    <span th:if="*{__${fieldItem.type.modelAttributeName}__}">
+                                        <input
+                                                th:if="${fieldItem.type.modelAttributeName} == ${blPrimaryPhoneType.modelAttributeName} or ${fieldItem.type.modelAttributeName} == ${blSecondaryPhoneType.modelAttributeName} or ${fieldItem.type.modelAttributeName} == ${blFaxPhoneType.modelAttributeName}"
+                                                type="text"
+                                                class="js-cloneable js-clearable field15"
+                                                th:classappend="${#fields.hasErrors('__${fieldItem.type.modelAttributeName}__')}? fieldError"
+                                                th:placeholder="#{${fieldItem.type.friendlyType}}"
+                                                th:field="*{__${fieldItem.type.modelAttributeName}__.phoneNumber}"
+                                        />
+                                    </span>
+                                    <span th:unless="*{__${fieldItem.type.modelAttributeName}__}">
+                                        <input
+                                                th:if="${fieldItem.type.modelAttributeName} == ${blPrimaryPhoneType.modelAttributeName} or ${fieldItem.type.modelAttributeName} == ${blSecondaryPhoneType.modelAttributeName} or ${fieldItem.type.modelAttributeName} == ${blFaxPhoneType.modelAttributeName}"
+                                                type="text"
+                                                class="js-cloneable js-clearable field15"
+                                                th:classappend="${#fields.hasErrors('__${fieldItem.type.modelAttributeName}__')}? fieldError"
+                                                th:placeholder="#{${fieldItem.type.friendlyType}}"
+                                                th:id="__${fieldItem.type.modelAttributeName}__.phoneNumber"
+                                                th:name="__${fieldItem.type.modelAttributeName}__.phoneNumber"
+                                        />
+                                    </span>
+                                    <input th:unless="${fieldItem.type.modelAttributeName} == ${blPrimaryPhoneType.modelAttributeName} or ${fieldItem.type.modelAttributeName} == ${blSecondaryPhoneType.modelAttributeName} or ${fieldItem.type.modelAttributeName} == ${blFaxPhoneType.modelAttributeName}"
+                                           type="text"
+                                           class="js-clearable field15"
+                                           th:classappend="${#fields.hasErrors('__${fieldItem.type.modelAttributeName}__')}? fieldError"
+                                           th:placeholder="#{${fieldItem.type.friendlyType}}"
+                                           th:field="*{__${fieldItem.type.modelAttributeName}__}"
+                                    />
+                                </span>
+                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div th:if="${#lists.size(fieldGroup.value)}&lt;2">
+                                        <div class="form50">
+                            <span th:each="fieldItem : ${fieldGroup.value}">
+                                <span th:if="${#strings.isEmpty(__${fieldItem.type.lookupCategory}__) == false}">
+                                    <select class="js-cloneable js-clearable dynamic_address_country_sub_small required"
+                                            th:field="*{__${fieldItem.type.modelAttributeName}__}">
+                                        <option th:if="${#strings.isEmpty(__${fieldItem.type.lookupCategory}__)}" value="">--</option>
+                                        <option th:each="subdivision : ${__${fieldItem.type.lookupCategory}__}"
+                                                th:value="${subdivision.alternateAbbreviation}"
+                                                th:utext="${subdivision.name}">
+                                        </option>
+                                    </select>
+                                </span>
+                                <span th:if="${#strings.isEmpty(__${fieldItem.type.lookupCategory}__) == true and #strings.isEmpty(fieldItem.placeHolder) == false}">
+                                    <span th:if="*{__${fieldItem.type.modelAttributeName}__}">
+                                        <input
+                                                th:if="${fieldItem.type.modelAttributeName} == ${blPrimaryPhoneType.modelAttributeName} or ${fieldItem.type.modelAttributeName} == ${blSecondaryPhoneType.modelAttributeName} or ${fieldItem.type.modelAttributeName} == ${blFaxPhoneType.modelAttributeName}"
+                                                type="text"
+                                                class="js-cloneable js-clearable field50"
+                                                th:classappend="${#fields.hasErrors('__${fieldItem.type.modelAttributeName}__')}? fieldError"
+                                                th:placeholder="#{${fieldItem.type.friendlyType}}"
+                                                th:field="*{__${fieldItem.type.modelAttributeName}__.phoneNumber}"
+                                        />
+                                    </span>
+                                    <span th:unless="*{__${fieldItem.type.modelAttributeName}__}">
+                                        <input
+                                                th:if="${fieldItem.type.modelAttributeName} == ${blPrimaryPhoneType.modelAttributeName} or ${fieldItem.type.modelAttributeName} == ${blSecondaryPhoneType.modelAttributeName} or ${fieldItem.type.modelAttributeName} == ${blFaxPhoneType.modelAttributeName}"
+                                                type="text"
+                                                class="js-cloneable js-clearable field50"
+                                                th:classappend="${#fields.hasErrors('__${fieldItem.type.modelAttributeName}__')}? fieldError"
+                                                th:placeholder="#{${fieldItem.type.friendlyType}}"
+                                                th:id="__${fieldItem.type.modelAttributeName}__.phoneNumber"
+                                                th:name="__${fieldItem.type.modelAttributeName}__.phoneNumber"
+                                        />
+                                    </span>
+                                    <input th:unless="${fieldItem.type.modelAttributeName} == ${blPrimaryPhoneType.modelAttributeName} or ${fieldItem.type.modelAttributeName} == ${blSecondaryPhoneType.modelAttributeName} or ${fieldItem.type.modelAttributeName} == ${blFaxPhoneType.modelAttributeName}"
+                                           type="text"
+                                           class="js-clearable field50"
+                                           th:classappend="${#fields.hasErrors('__${fieldItem.type.modelAttributeName}__')}? fieldError"
+                                           th:placeholder="#{${fieldItem.placeHolder}}"
+                                           th:field="*{__${fieldItem.type.modelAttributeName}__}"
+                                    />
+                                </span>
+                                <span th:if="${#strings.isEmpty(__${fieldItem.type.lookupCategory}__) == true and #strings.isEmpty(fieldItem.placeHolder) == true and #strings.isEmpty(fieldItem.label) == false}">
+                                    <span th:if="*{__${fieldItem.type.modelAttributeName}__}">
+                                        <input
+                                                th:if="${fieldItem.type.modelAttributeName} == ${blPrimaryPhoneType.modelAttributeName} or ${fieldItem.type.modelAttributeName} == ${blSecondaryPhoneType.modelAttributeName} or ${fieldItem.type.modelAttributeName} == ${blFaxPhoneType.modelAttributeName}"
+                                                type="text"
+                                                class="js-cloneable js-clearable field50"
+                                                th:classappend="${#fields.hasErrors('__${fieldItem.type.modelAttributeName}__')}? fieldError"
+                                                th:placeholder="#{${fieldItem.type.friendlyType}}"
+                                                th:field="*{__${fieldItem.type.modelAttributeName}__.phoneNumber}"
+                                        />
+                                    </span>
+                                    <span th:unless="*{__${fieldItem.type.modelAttributeName}__}">
+                                        <input
+                                                th:if="${fieldItem.type.modelAttributeName} == ${blPrimaryPhoneType.modelAttributeName} or ${fieldItem.type.modelAttributeName} == ${blSecondaryPhoneType.modelAttributeName} or ${fieldItem.type.modelAttributeName} == ${blFaxPhoneType.modelAttributeName}"
+                                                type="text"
+                                                class="js-cloneable js-clearable field50"
+                                                th:classappend="${#fields.hasErrors('__${fieldItem.type.modelAttributeName}__')}? fieldError"
+                                                th:placeholder="#{${fieldItem.type.friendlyType}}"
+                                                th:id="__${fieldItem.type.modelAttributeName}__.phoneNumber"
+                                                th:name="__${fieldItem.type.modelAttributeName}__.phoneNumber"
+                                        />
+                                    </span>
+                                    <input th:unless="${fieldItem.type.modelAttributeName} == ${blPrimaryPhoneType.modelAttributeName} or ${fieldItem.type.modelAttributeName} == ${blSecondaryPhoneType.modelAttributeName} or ${fieldItem.type.modelAttributeName} == ${blFaxPhoneType.modelAttributeName}"
+                                           type="text"
+                                           class="js-clearable field50"
+                                           th:classappend="${#fields.hasErrors('__${fieldItem.type.modelAttributeName}__')}? fieldError"
+                                           th:placeholder="#{${fieldItem.label}}"
+                                           th:field="*{__${fieldItem.type.modelAttributeName}__}"
+                                    />
+                                </span>
+                                <span th:if="${#strings.isEmpty(__${fieldItem.type.lookupCategory}__) == true and #strings.isEmpty(fieldItem.placeHolder) == true and #strings.isEmpty(fieldItem.label) == true}">
+                                    <span th:if="*{__${fieldItem.type.modelAttributeName}__}">
+                                        <input
+                                                th:if="${fieldItem.type.modelAttributeName} == ${blPrimaryPhoneType.modelAttributeName} or ${fieldItem.type.modelAttributeName} == ${blSecondaryPhoneType.modelAttributeName} or ${fieldItem.type.modelAttributeName} == ${blFaxPhoneType.modelAttributeName}"
+                                                type="text"
+                                                class="js-cloneable js-clearable field50"
+                                                th:classappend="${#fields.hasErrors('__${fieldItem.type.modelAttributeName}__')}? fieldError"
+                                                th:placeholder="#{${fieldItem.type.friendlyType}}"
+                                                th:field="*{__${fieldItem.type.modelAttributeName}__.phoneNumber}"
+                                        />
+                                    </span>
+                                    <span th:unless="*{__${fieldItem.type.modelAttributeName}__}">
+                                        <input
+                                                th:if="${fieldItem.type.modelAttributeName} == ${blPrimaryPhoneType.modelAttributeName} or ${fieldItem.type.modelAttributeName} == ${blSecondaryPhoneType.modelAttributeName} or ${fieldItem.type.modelAttributeName} == ${blFaxPhoneType.modelAttributeName}"
+                                                type="text"
+                                                class="js-cloneable js-clearable field50"
+                                                th:classappend="${#fields.hasErrors('__${fieldItem.type.modelAttributeName}__')}? fieldError"
+                                                th:placeholder="#{${fieldItem.type.friendlyType}}"
+                                                th:id="__${fieldItem.type.modelAttributeName}__.phoneNumber"
+                                                th:name="__${fieldItem.type.modelAttributeName}__.phoneNumber"
+                                        />
+                                    </span>
+                                    <input th:unless="${fieldItem.type.modelAttributeName} == ${blPrimaryPhoneType.modelAttributeName} or ${fieldItem.type.modelAttributeName} == ${blSecondaryPhoneType.modelAttributeName} or ${fieldItem.type.modelAttributeName} == ${blFaxPhoneType.modelAttributeName}"
+                                           type="text"
+                                           class="js-clearable field50"
+                                           th:classappend="${#fields.hasErrors('__${fieldItem.type.modelAttributeName}__')}? fieldError"
+                                           th:placeholder="#{${fieldItem.type.friendlyType}}"
+                                           th:field="*{__${fieldItem.type.modelAttributeName}__}"
+                                    />
+                                </span>
+                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="clearfix"></div>
+
+                                </div>
+                            </div>
+
+                            <div class="clearfix"></div>
+
+                            <div class="form50">
+                                <input type="checkbox" th:field="*{address.default}" class="field25" style="width:22px;" /> Make Default
+                            </div>
+
+                            <div class="clearfix"></div>
+
+                            <div class="form100">
+                                <input type="text" th:field="*{addressName}" th:placeHolder="#{Address Name}" class="field50" />
+                            </div>
+
+                            <div class="clearfix"></div>
+
+                            <div>
+                                <input type="submit" th:value="*{customerAddressId != null ? 'Update Address' : 'Create New Address'}" class="medium red" />
+                                <input th:if="*{customerAddressId}" type="submit" name="removeAddress" value="Remove" class="small dark" />
+                                <span class="error" th:if="${errorMessage}" th:utext="${errorMessage}"></span>
+                            </div>
+
+                        </blc:dynamic_regional_form>
+                    </th:block>
+
+                    <th:block th:unless="${#module.isPresent('i18n Enterprise') and false}">
+                        <blc:form class="manage-account"
+                                  method="post"
+                                  th:action="@{'/account/addresses/' + ${customerAddressForm.customerAddressId != null ? customerAddressForm.customerAddressId : ''}}"
+                                  th:object="${customerAddressForm}">
+
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group label-floating" th:classappend="${#fields.hasErrors('addressName')}? 'has-error'">
+                                        <label class="control-label" for="addressName">Address Name</label>
+                                        <input id="addressName" type="text" th:field="*{addressName}" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row" th:unless="${@blSystemPropertiesService.resolveBooleanSystemProperty('validator.address.fullNameOnly')}">
+                                <div class="col-sm-6">
+                                    <div class="form-group label-floating" th:classappend="${#fields.hasErrors('address.firstName')}? 'has-error'">
+                                        <label class="control-label" for="firstName">First Name</label>
+                                        <input id="firstName" type="text" th:field="*{address.firstName}" class="js-clearable form-control" />
+                                        <span class="text-danger" th:if="${#fields.hasErrors('address.firstName')}" th:errors="*{address.firstName}"></span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group label-floating" th:classappend="${#fields.hasErrors('address.lastName')}? 'has-error'">
+                                        <label class="control-label" for="lastName">Last Name</label>
+                                        <input id="lastName" type="text" th:field="*{address.lastName}" class="js-clearable form-control" />
+                                        <span class="text-danger" th:if="${#fields.hasErrors('address.firstName')}" th:errors="*{address.lastName}"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" th:if="${@blSystemPropertiesService.resolveBooleanSystemProperty('validator.address.fullNameOnly')}">
+                                <div class="col-sm-12">
+                                    <div class="form-group label-floating" th:classappend="${#fields.hasErrors('address.fullName')}? 'has-error'">
+                                        <label class="control-label" for="fullName">Full Name</label>
+                                        <input id="fullName" type="text" th:field="*{address.fullName}" class="js-clearable form-control" />
+                                        <span class="text-danger" th:if="${#fields.hasErrors('address.fullName')}" th:errors="*{address.fullName}"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group label-floating" th:classappend="${#fields.hasErrors('address.addressLine1')}? 'has-error'">
+                                        <label class="control-label" for="addressLine1">Address</label>
+                                        <input id="addressLine1" type="text" th:field="*{address.addressLine1}" class="form-control" th:classappend="${#fields.hasErrors('address.addressLine1')}? 'fieldError'" />
+                                        <span class="text-danger" th:if="${#fields.hasErrors('address.addressLine1')}" th:errors="*{address.addressLine1}"></span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="form-group label-floating" th:classappend="${#fields.hasErrors('address.addressLine2')}? 'has-error'">
+                                        <label class="control-label" for="addressLine2">Address 2</label>
+                                        <input id="addressLine2" type="text" th:field="*{address.addressLine2}" class="form-control" />
+                                        <span class="text-danger" th:if="${#fields.hasErrors('address.addressLine2')}" th:errors="*{address.addressLine2}"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-5">
+                                    <div class="form-group label-floating" th:classappend="${#fields.hasErrors('address.city')}? 'has-error'">
+                                        <label class="control-label" for="city">City</label>
+                                        <input id="city" type="text" th:field="*{address.city}" class="form-control" th:classappend="${#fields.hasErrors('address.city')}? 'fieldError'" />
+                                        <span class="text-danger" th:if="${#fields.hasErrors('address.city')}" th:errors="*{address.city}"></span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group label-floating" th:classappend="${#fields.hasErrors('address.stateProvinceRegion')}? 'has-error'">
+                                        <label class="control-label" for="state" th:utext="#{cart.state}"></label>
+                                        <select id="state" th:field="*{address.stateProvinceRegion}" class="js-clearable form-control">
+                                            <option value=""></option>
+                                            <option th:each="state : ${#address.getStateOptions()}"
+                                                    th:value="${state.abbreviation}"
+                                                    th:utext="${state.abbreviation}"></option>
+                                        </select>
+                                        <span class="text-danger" th:if="${#fields.hasErrors('address.stateProvinceRegion')}" th:errors="*{address.stateProvinceRegion}"></span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group label-floating" th:classappend="${#fields.hasErrors('address.postalCode')}? 'has-error'">
+                                        <label class="control-label" for="postalCode">Postal Code</label>
+                                        <input id="postalCode" type="text" th:field="*{address.postalCode}" class="form-control" th:classappend="${#fields.hasErrors('address.postalCode')}? 'fieldError'" />
+                                        <span class="text-danger" th:if="${#fields.hasErrors('address.postalCode')}" th:errors="*{address.postalCode}"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <div class="form-group label-floating" th:classappend="${#fields.hasErrors('address.phonePrimary')}? 'has-error'">
+                                        <label class="control-label" for="phone">Phone</label>
+                                        <input id="phone" type="tel" name="address.phonePrimary" th:value="*{address.phonePrimary.phoneNumber}" class="form-control" />
+                                        <span class="text-danger" th:if="*{#fields.hasErrors('address.phonePrimary.phoneNumber')}" th:errors="*{address.phonePrimary.phoneNumber}"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="checkbox">
+                                        <label for="address.default-check">
+                                            <input type="hidden" value="false" name="address.default">
+                                            <input id="address.default-check" type="checkbox" name="address.default-check" th:checked="*{address.default}">
+                                            Default Shipping
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <input type="hidden" name="address.isoCountryAlpha2" value="US" />
+
+                            <div class="text-right">
+                                <input class="btn btn-primary" type="submit" value="Save" />
+                                <!--<button class="btn btn-danger" th:if="*{customerAddressId}" type="submit">-->
+                                    <!--<i class="material-icons">clear</i>&nbsp;Remove-->
+                                    <!--<input type="hidden" name="removeAddress" value="Remove"/>-->
+                                <!--</button>-->
+                                <!--<a th:if="${customerAddressForm.customerAddressId}"-->
+                                   <!--th:href="@{/account/addresses}"-->
+                                   <!--class="btn btn-default">-->
+                                    <!--<i class="material-icons">add</i>&nbsp;Add new Address-->
+                                <!--</a>-->
+                                <span class="text-danger" th:if="${errorMessage}" th:utext="${errorMessage}"></span>
+                            </div>
+                        </blc:form>
+                    </th:block>
+                </div>
+
+            </div>
         </div>
-        <blc:form class="manage-account" 
-            method="post" 
-            th:action="@{'/account/addresses/' + ${customerAddressForm.customerAddressId != null ? customerAddressForm.customerAddressId : ''}}" 
-            th:object="${customerAddressForm}">    
-            <div>
-                <div class="form30">
-                    <label for="firstName">First Name</label>
-                    <span class="error" th:if="${#fields.hasErrors('address.firstName')}" th:errors="*{address.firstName}"></span>
-                    <input type="text" class="field30 required" th:field="*{address.firstName}" th:classappend="${#fields.hasErrors('address.firstName')}? 'fieldError'" />
-                </div>
-                <div class="form30 margin20">
-                    <label for="lastName">Last Name</label>
-                    <span class="error" th:if="${#fields.hasErrors('address.lastName')}" th:errors="*{address.lastName}"></span>
-                    <input type="text" th:field="*{address.lastName}" class="field30 required cloneable" th:classappend="${#fields.hasErrors('address.lastName')}? 'fieldError'" />
-                </div>
-                <div class="form30 margin20">
-                    <label for="phone">Phone</label>
-                    <span class="error_spacer" th:if="${#fields.hasErrors('address.firstName') or #fields.hasErrors('address.lastName')}">error</span>
-                    <input type="tel" id="address.phonePrimary" name="address.phonePrimary" th:value="*{address.phonePrimary.phoneNumber}" class="field30 cloneable" />
-                </div>
-                <div class="form50">
-                    <label for="address1">Address</label>
-                    <span class="error" th:if="${#fields.hasErrors('address.addressLine1')}" th:errors="*{address.addressLine1}"></span>
-                    <input type="text" th:field="*{address.addressLine1}" class="field50 required cloneable" th:classappend="${#fields.hasErrors('address.addressLine1')}? 'fieldError'" />
-                </div>
-                <div class="form50 margin20">
-                    <label for="address2">Address 2</label>
-                    <span class="error_spacer" th:if="${#fields.hasErrors('address.addressLine1')}">error</span>
-                    <input type="text" th:field="*{address.addressLine2}" class="field50 cloneable" />
-                </div>
-                <div class="form30">
-                    <label for="city">City / State</label>
-                    <span class="error" th:if="${#fields.hasErrors('address.city')}" th:errors="*{address.city}"></span>
-                    <br th:if="${#fields.hasErrors('address.city')} and ${#fields.hasErrors('address.stateProvinceRegion')}"/>
-                    <span class="error" th:if="${#fields.hasErrors('address.stateProvinceRegion')}" th:errors="*{address.stateProvinceRegion}"></span>
-                    <input type="text" th:field="*{address.city}" class="field25 required cloneable" th:classappend="${#fields.hasErrors('address.city')}? 'fieldError'" />
-                    <select id="state" th:field="*{address.stateProvinceRegion}" size="1" style="width: 48px;" class="required cloneable" th:classappend="${#fields.hasErrors('address.stateProvinceRegion')}? 'fieldError'">
-                        <option value="">--</option>
-                        <option th:each="state : ${states}" th:value="${state.abbreviation}" th:utext="${state.abbreviation}"></option>
-                    </select>
-                </div>
-                <div class="form25 margin20">
-                    <label for="postal_code">Postal Code</label>
-                    <span class="error" th:if="${#fields.hasErrors('address.postalCode')}" th:errors="*{address.postalCode}"></span>
-                    <input type="text" th:field="*{address.postalCode}" class="field25 cloneable" th:classappend="${#fields.hasErrors('address.postalCode')}? 'fieldError'" />
-                </div>
-                <div class="form25 margin20">
-                    <label>&nbsp;</label>
-                    <input type="checkbox" th:field="*{address.default}" class="field25" style="width:22px;" /> Make Default
-                </div>                      
-                <div class="form100">
-                    <label for="address_name">Address Name</label>
-                    <input type="text" th:field="*{addressName}" class="field50" />
-                </div>
-                <input type="hidden" name="address.isoCountryAlpha2" value="US" />
-                <div class="clearfix"></div>
-            </div>
-            <div>
-                <input type="submit" th:value="*{customerAddressId != null ? 'Update Address' : 'Create New Address'}" class="medium red" />
-                <input th:if="*{customerAddressId}" type="submit" name="removeAddress" value="Remove" class="small dark" />
-                <span class="error" th:if="${errorMessage}" th:utext="${errorMessage}"></span>
-            </div>
-        </blc:form>
+
     </div>
 </th:block>

@@ -1,0 +1,12 @@
+<th:block layout:decorator="layout/fullPageLayout" layout:fragment="content">
+    <head>
+        <title th:text="${BLC_PAGE.description}"></title>
+    </head>
+    <header>
+        <h1 th:text="${BLC_PAGE.pageFields[header]}"></h1>
+    </header>
+    <section id="left_column" class="left-column">
+        <div class="clearfix"></div>
+        <div th:utext="${BLC_PAGE.pageFields[body]}"/>
+    </section>
+</th:block>

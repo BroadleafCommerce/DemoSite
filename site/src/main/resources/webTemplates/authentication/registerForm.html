@@ -1,0 +1,70 @@
+<div class="text-center">
+    <h3 th:utext="#{home.register}" class="card-title">Register</h3>
+</div>
+
+<p th:utext="#{register.signUpNow}">Don't have an account yet? Sign up for one now to gain access to all our
+    member tools.</p>
+
+<blc:form id="registrationForm" action="#" th:object="${registrationForm}" th:action="@{/register}"
+          method="post" class="registration-form clearfix">
+    <input type="hidden" th:field="*{redirectUrl}"/>
+
+    <div class="input-group">
+        <div class="input-group-addon"><i class="material-icons">email</i></div>
+        <div class="label-floating form-group error-group"
+             th:classappend="${#fields.hasErrors('customer.emailAddress')}? 'has-error'">
+            <label for="customer.emailAddress" class="control-label"
+                   th:utext="#{register.email}">Email</label>
+            <input type="email" th:field="*{customer.emailAddress}" class="form-control"/>
+            <span class="material-icons form-control-feedback">clear</span>
+            <span class="text-danger" th:each="err : ${#fields.errors('customer.emailAddress')}"
+                  th:utext="${err}"></span>
+        </div>
+    </div>
+    <div class="input-group">
+        <div class="input-group-addon"><i class="material-icons">person</i></div>
+        <div class="label-floating form-group error-group"
+             th:classappend="${#fields.hasErrors('customer.firstName')}? 'has-error'">
+            <label for="customer.firstName" class="control-label"><span th:utext="#{register.firstName}">First Name</span></label>
+            <input type="text" th:field="*{customer.firstName}" class="form-control"/>
+            <span class="material-icons form-control-feedback">clear</span>
+            <span class="text-danger" th:each="err : ${#fields.errors('customer.firstName')}"
+                  th:utext="${err}"></span>
+        </div>
+    </div>
+    <div class="register-input-no-icon">
+        <div class="label-floating form-group"
+             th:classappend="${#fields.hasErrors('customer.lastName')}? 'has-error'">
+            <label for="customer.lastName" class="control-label"><span th:utext="#{register.lastName}">Last Name</span></label>
+            <input type="text" th:field="*{customer.lastName}" class="form-control"/>
+            <span class="material-icons form-control-feedback">clear</span>
+            <span class="text-danger" th:each="err : ${#fields.errors('customer.lastName')}"
+                  th:utext="${err}"></span>
+        </div>
+    </div>
+    <div class="input-group">
+        <div class="input-group-addon"><i class="material-icons">lock</i></div>
+        <div class="label-floating form-group error-group"
+             th:classappend="${#fields.hasErrors('password')}? 'has-error'">
+            <label for="password" class="control-label" th:utext="#{register.password}">Password</label>
+            <input type="password" th:field="*{password}" class="form-control"/>
+            <span class="material-icons form-control-feedback">clear</span>
+            <span class="text-danger" th:each="err : ${#fields.errors('password')}" th:utext="${err}"></span>
+        </div>
+    </div>
+    <div class="register-input-no-icon">
+        <div class="label-floating form-group error-group"
+             th:classappend="${#fields.hasErrors('passwordConfirm')}? 'has-error'">
+            <label for="confirmPassword" class="control-label" th:utext="#{register.confirmPassword}">Confirm
+                Password</label>
+            <input type="password" th:field="*{passwordConfirm}" class="form-control"/>
+            <span class="material-icons form-control-feedback">clear</span>
+            <span class="text-danger" th:each="err : ${#fields.errors('passwordConfirm')}"
+                  th:utext="${err}"></span>
+        </div>
+        <span id="confirm-password-text" class="text-danger" th:utext="#{register.passwordsDontMatch}"
+              style="visibility: hidden">The passwords do not match</span>
+    </div>
+
+    <button class="btn btn-primary pull-right" type="submit" th:utext="#{register.register}"></button>
+</blc:form>

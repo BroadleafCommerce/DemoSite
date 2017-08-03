@@ -5,9 +5,9 @@
 
     <div layout:fragment="content">
         
-        <section id="left_column">
+        <section id="left_column" class="left-column">
         
-            <div id="product_content" class="product_container">
+            <div id="product_content" class="js-productContainer productContainer">
                 <h2 th:inline="text">
                     [[*{name}]] <span th:each="optionValue : *{productOptionValues}" th:utext="${optionValue.attributeValue}"></span>
                 </h2>
@@ -27,45 +27,45 @@
                         
                         <div id="inventory" th:if="${checkInventory}">
                             <b>Available inventory:</b> <span th:utext="*{quantityAvailable == null ? '0' : quantityAvailable}" ></span>
-                            <div th:if="${!availableInventory}" class="out_of_stock">
+                            <div th:if="${!availableInventory}" class="js-outOfStock out-of-stock">
                                 <a disabled="disabled" class="big-button gray-button">Out of Stock</a>
                             </div>
                         </div>
                         
-                        <div th:class="*{'productActions' + id}">
-                            <div class="in_cart" th:classappend="${!inCart}? ' hidden'">
-                                <a class="modalcart big-button gray-button" th:href="@{/cart}">In Cart!</a>
+                        <div th:class="*{'js-productActions' + id}">
+                            <div class="js-inCartLinkContainer inCartLinkContainer" th:classappend="${!inCart}? ' is-hidden'">
+                                <a class="js-modalCartLink big-button gray-button" th:href="@{/cart}">In Cart!</a>
                             </div>
-                            <div class="add_to_cart" th:classappend="${inCart or !availableInventory}? ' hidden'">
+                            <div class="js-addToCartContainer addToCartContainer" th:classappend="${inCart or !availableInventory}? ' is-hidden'">
                                 <input type="hidden" name="productId" th:value="*{product.id}" />
                                 <input type="hidden" name="skuId" th:value="*{id}" />
                                 <input type="hidden" name="quantity" value="1" />
-                                <input type="submit" class="addToCart big red" th:value="#{product.buyNow}"/>
+                                <input type="submit" class="js-addToCart add-to-cart" th:value="#{product.buyNow}"/>
                             </div>
                             <p class="error" th:if="${param.errorMessage}" th:utext="${param.errorMessage[0]}"></p>
                         </div>
                     </blc:form>
                 </th:block>
     
-                <div th:if="${customer.loggedIn}" th:remove="tag">
+                <th:block th:if="${customer.loggedIn}">
 
                     <blc:form method="POST" th:action="@{/account/wishlist/add}">
-                        <div th:class="*{'productActions' + product.id}">
+                        <div th:class="*{'js-productActions' + product.id}">
 
                             <blc:named_order orderVar="wishlist" orderName="wishlist" ></blc:named_order>
 
-                            <div class="in_wishlist" th:classappend="${!wishlist.containsSku(#object)}? ' hidden'">
+                            <div class="js-inWishListLinkContainer inWishListLinkContainer" th:classappend="${!wishlist.containsSku(#object)}? ' is-hidden'">
                                 <a class="inWishlist small-button gray-button" th:href="@{/account/wishlist}">In Wishlist!</a>
                             </div>
-                            <div class="add_to_wishlist" th:classappend="${wishlist.containsSku(#object)}? ' hidden'">
+                            <div class="addToWishListContainer" th:classappend="${wishlist.containsSku(#object)}? ' is-hidden'">
                                 <input type="hidden" name="productId" th:value="*{product.id}" />
                                 <input type="hidden" name="skuId" th:value="*{id}" />
                                 <input type="hidden" name="quantity" value="1" />
-                                <input type="submit" class="addToWishlist small dark" value="+ Add to Wishlist" />
+                                <input type="submit" class="js-addToWishlist addToWishlist small dark" value="+ Add to Wishlist" />
                             </div>
                         </div>
                     </blc:form>
-                </div>
+                </th:block>
                     
                 <p>
                     Share this Sauce:
@@ -82,7 +82,7 @@
                 
             </div>
             
-            <div id="product_main_image">
+            <div id="product_main_image" class="product-main-image">
                 <th:block th:unless="*{#lists.isEmpty(productOptionValues)}" th:each="optionValue : *{productOptionValues}">
                     <a th:if="${optionValue.attributeValue == sku.skuMedia['primary']?.tags}" th:href="@{*{#strings.replace(skuMedia['primary'].url + '?browse', 'jpg?browse', 'jpg')}}" class='jqzoom' id='zoom1' rel="gal1">
                         <img th:src="@{*{skuMedia['primary'].url}+ '?browse'}" alt='' align="left" id="main_image" />
@@ -94,13 +94,13 @@
                         <img th:src="@{*{skuMedia['alt2'].url}+ '?browse'}" alt='' align="left" id="main_image" />
                     </a>
                 </th:block>
-                <a th:if="*{#lists.isEmpty(productOptionValues)}" th:href="@{*{#strings.replace(skuMedia['primary'].url + '?browse', 'jpg?browse', 'jpg')}}" class='jqzoom' id='zoom1' rel="gal1">
-                    <img th:src="@{*{skuMedia['primary'].url}+ '?browse'}" alt='' align="left" id="main_image" />
+                <a th:if="*{#lists.isEmpty(productOptionValues)}" th:href="@{*{#strings.replace(skuMedia['primary']?.url + '?browse', 'jpg?browse', 'jpg')}}" class='jqzoom' id='zoom1' rel="gal1">
+                    <img th:src="@{*{skuMedia['primary']?.url}+ '?browse'}" alt='' align="left" id="main_image" />
                 </a>
             </div>
             
-            <div th:if="*{#lists.isEmpty(productOptionValues)}" id="product_thumbs_container">
-                <ul id="product_thumbs" class="clearfix">
+            <div th:if="*{#lists.isEmpty(productOptionValues)}" id="productThumbsContainer">
+                <ul id="productThumbs" class="js-productThumbs clearfix">
                     <li>
                         <a th:if="*{skuMedia['primary']}" href="javascript:;" class="zoomThumbActive" th:rel="${'{ gallery: ''gal1'', smallimage: ''__@{*{skuMedia['primary'].url}+'?browse'}__'', largeimage: ''__@{*{skuMedia['primary'].url}}__'' }'}" th:attr="data-tags=*{skuMedia['primary'].tags}">
                             <img th:src="@{*{skuMedia['primary'].url}}" alt="Bottle Closeup" />
@@ -200,10 +200,10 @@
                     </div>
                     <div th:if="${customer.loggedIn}">
                         <div th:if="${ratingSummary}">
-                            <a th:unless="${currentCustomerReview}" class="create-review" th:href="@{'/reviews/product/' + *{product.id}}">Create a review</a> 
+                            <a th:unless="${currentCustomerReview}" class="js-createReview" th:href="@{'/reviews/product/' + *{product.id}}">Create a review</a>
                         </div>
                         <div th:unless="${ratingSummary}">
-                            <a th:href="@{'/reviews/product/' + *{product.id}}" class="create-review">Be the first to write a review!</a>
+                            <a th:href="@{'/reviews/product/' + *{product.id}}" class="js-createReview">Be the first to write a review!</a>
                         </div>
                     </div>
                     <div th:unless="${customer.loggedIn}">
@@ -217,10 +217,11 @@
             <header>Featured Products</header>
             <div id="options">
                 <div class="section">
-                    <blc:related_products productId="*{product.id}" quantity="3"></blc:related_products>
- 
-                    <ul id="featured_products" class="group">
-                        <li th:each="relatedSku : ${relatedSkus}" th:object="${relatedSku}" th:include="catalog/partials/skuListItem" class="product_container"></li>
+                    <ul id="featuredProducts" class="js-featuredProducts group" th:with="relatedProducts=${#related_products.findByProduct(__*{product.id}__)}">
+                        <li th:each="product : ${relatedProducts}"
+                            th:object="${product}"
+                            th:include="catalog/partials/productListItem"
+                            class="js-productContainer productContainer"></li>
                     </ul>
                 </div>                                  
             </div>

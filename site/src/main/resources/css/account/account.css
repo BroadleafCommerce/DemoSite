@@ -1,0 +1,318 @@
+.account-menu hr {
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+.account-menu h4 {
+    font-weight: 400;
+}
+
+.account-menu {
+    padding: 15px;
+    margin-top: 0;
+}
+
+@media (max-width: 768px) {
+    .account-menu-collapsible {
+        padding: 0;
+        display: none;
+    }
+
+    .account-menu-col {
+        padding-left: 0;
+        padding-right: 0;
+    }
+}
+
+@media (min-width: 769px) {
+    .account-menu-dropdown{
+        display: none;
+    }
+}
+
+/**********************/
+/*** ACCOUNT PAGES ****/
+/**********************/
+
+.account-page {
+    background-color: #f2f2f2;
+}
+
+.error-group .text-danger {
+    margin-bottom: 7px;
+    font-size: small;
+}
+
+.order-info-row, .order-info-header-row {
+    list-style: none;
+    display: flex;
+}
+
+.order-info-row > span, .order-info-header-row > span {
+    display: inline-block;
+    padding: 8px 6px;
+    vertical-align: middle;
+}
+
+.order-info-header-row > span {
+    font-size: 1.25em;
+    font-weight: 300;
+}
+
+.order-history {
+    padding-left: 0;
+}
+
+@media (max-width: 768px) {
+    .order-history {
+        overflow-x: scroll;
+    }
+}
+
+.order-history > div:nth-of-type(2n) {
+    background-color: #fafafa;
+}
+
+.order-history > div:nth-of-type(2n+1) {
+    background-color: #f5f5f5;
+}
+
+.order-number {
+    flex: 2;
+}
+
+.order-submit-date {
+    text-align: right;
+    flex: 1;
+}
+
+.order-status {
+    text-align: right;
+    flex: 1;
+}
+
+.order-total {
+    text-align: right;
+    flex: 1;
+}
+
+.shipping-groups {
+    list-style: none;
+    padding-left: 0;
+}
+
+.wishlist-to-cart-btn > i {
+    font-size: 20px !important;
+}
+
+.wishlist-all-to-cart-btn > i {
+    font-size: 24px !important;
+}
+
+.wishlist-btn-remove {
+    padding: 6px 6px !important;
+}
+
+.wishlist-product-actions form {
+    display: inline;
+}
+.wishlist-product-actions .btn:hover {
+    color: #FFFFFF !important;
+    background-color: #E40037 !important;
+    box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(228, 0, 55, 0.4);
+}
+
+.contact-us-success {
+    text-align: center;
+}
+
+@media (max-width: 768px) {
+    .table-shopping > tbody > tr > td {
+        font-size: 14px;
+    }
+    .manage-account-form-wrapper {
+        padding: 5px !important;
+    }
+}
+
+@media (min-width: 769px) {
+    .table-responsive-slim {
+        overflow-x: visible; !important;
+    }
+}
+
+.manage-account-form-wrapper .form-group {
+    margin: 1em 0 0 0;
+}
+
+.manage-address ul {
+    list-style: none;
+    padding: 0;
+}
+.manage-address ul li {
+    padding: 5px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    cursor: pointer;
+    position: relative;
+}
+.manage-address ul li:hover {
+    box-shadow: 0 14px 26px -12px rgba(153, 153, 153, 0.42), 0 4px 23px 0 rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(153, 153, 153, 0.2);
+}
+.manage-address ul li.active {
+    margin: -1px -1px 9px;
+    border: 2px solid #E40037;
+}
+.manage-address ul li.active:hover {
+    box-shadow: 0 14px 26px -12px rgba(228, 0, 55, 0.42), 0 4px 23px 0 rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(228, 0, 55, 0.2);
+}
+.manage-address ul li .btn {
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin: 0;
+}
+
+/**********************/
+/*** ORDER DETAILS ****/
+/**********************/
+
+.order-details-container {
+    padding-top: 10px;
+}
+
+.order-details-container h5 {
+    background-color: #e8e8e8;
+    padding: 5px;
+    font-size: 16px;
+}
+
+.order-details-row {
+    background-color: #fafafa;
+    padding: 10px;
+}
+
+.order-items, .order-summary {
+    width: 100%;
+}
+
+.shipment-summary.merchandise-total {
+    border-top: solid 1px #CCCCCC;
+}
+
+.grand-total {
+    border-top: solid 1px #AAAAAA;
+    font-weight: 300;
+}
+
+.price {
+    text-align: right;
+}
+
+.order-items tr, .order-summary tr {
+    background-color: transparent;
+    padding: 5px;
+}
+
+@media (min-width: 769px) {
+    .order-items tr, .order-summary tr {
+        animation-name: tr-hover-off;
+        animation-duration: 200ms;
+    }
+
+    .order-items tr:hover, .order-summary tr:hover {
+        background-color: #EEEEEE;
+        animation-name: tr-hover-on;
+        animation-duration: 200ms;
+    }
+}
+
+.shipping-groups h6 {
+    margin-bottom: 5px;
+}
+
+.payment-method {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+@media (max-width: 768px) {
+    .order-items tr:nth-of-type(2n-1), .order-summary tr:nth-of-type(2n-1) {
+        background-color: #EEEEEE;
+    }
+}
+
+@keyframes tr-hover-on {
+    from { background-color: transparent; }
+    to { background-color: #EEEEEE; }
+}
+
+@keyframes tr-hover-off {
+    from { background-color: #EEEEEE; }
+    to { background-color: transparent; }
+}
+
+.manage-account-form-wrapper {
+    padding: 10px 30px;
+}
+
+/**********************/
+/*** CUST PAYMENTS ****/
+/**********************/
+.saved-payment-info .checkbox {
+    margin-top: 25px;
+}
+
+.saved-payment-info .credit-card-types-wrapper {
+    margin-top: 15px;
+    margin-bottom: 17px;
+}
+
+.payment-method-card {
+    padding: 10px;
+}
+
+.payment-method-card .card {
+    margin-bottom: 0;
+}
+
+.payment-method-card .card>:not(.back) .card-title {
+    min-height: 21px;
+}
+
+.payment-method-card .card .card-content,
+.payment-method-card .card .back .card-content {
+    height: 100%;
+    width: 100%;
+    padding: 15px 20px;
+}
+
+.payment-method-card .card .back .card-flip-action {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+}
+
+.payment-method-card .card .back .card-content .payment-method-action-wrapper {
+    text-align: center;
+}
+
+.payment-method-card .card .back .card-content .payment-method-action-wrapper a {
+    display: inline-block;
+    margin-bottom: 0;
+    width: 120px;
+}
+
+.payment-method-card .card-flip-action {
+    margin: 0.3em 0 0 0;
+    padding: 0;
+}
+
+.manage-payments-billing .billing_info_stage .manage-address ul {
+    display: block;
+}
+
+.manage-payments-billing .billing_info_stage .manage-address ul li {
+    width: 100%;
+}

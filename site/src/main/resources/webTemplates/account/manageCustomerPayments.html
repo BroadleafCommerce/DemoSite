@@ -1,0 +1,27 @@
+<th:block layout:decorate="~{layout/accountLayout}" layout:fragment="content" xmlns:th="http://www.w3.org/1999/html">
+    <div class="card manage-account-form-wrapper js-manageAccountFormWrapper">
+        <h3 th:utext="#{account.payments.managePayments}">Manage Payment Methods</h3>
+
+        <hr/>
+
+        <div class="row js-savedPaymentCards" th:unless="${#lists.isEmpty(#customer.getCustomerPayments())}">
+            <th:block th:each="payment : ${#customer.getCustomerPayments()}">
+                <th:block th:replace="~{partials/savedPaymentCard}" />
+            </th:block>
+        </div>
+
+        <p th:utext="#{account.payments.noSavedPayments}" th:if="${#lists.isEmpty(#customer.getCustomerPayments())}">You have no saved payments.</p>
+
+        <hr />
+
+        <div class="row saved-payment-info">
+            <div class="col-sm-12">
+                <th:block th:replace="~{account/partials/savedPaymentForm}" />
+            </div>
+
+            <div class="col-sm-12 text-right">
+                <input type="submit" class="btn btn-primary js-savePayment" th:value="#{account.payments.save}"/>
+            </div>
+        </div>
+    </div>
+</th:block>

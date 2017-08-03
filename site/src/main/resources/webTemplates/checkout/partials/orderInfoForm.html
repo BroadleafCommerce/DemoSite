@@ -1,4 +1,4 @@
-<div th:fragment="order-info-form">
+<div id="order_info_section" th:fragment="order-info-form">
 
     <div class="cart_title">
         <span th:utext="#{cart.orderInformation}">Order Information</span>
@@ -27,7 +27,6 @@
             </p>
         
             <blc:form th:object="${orderInfoForm}" th:action="@{/checkout/savedetails}" method="post" id="order_info" novalidate="novalidate">
-        
                 <div class="form50">
                     <label for="emailAddress"><span th:utext="#{cart.emailAddress}">Email Address</span></label>
                     <span class="error" th:if="${#fields.hasErrors('emailAddress')}" th:errors="*{emailAddress}"></span> 

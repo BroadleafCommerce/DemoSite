@@ -1,68 +1,59 @@
 <th:block layout:decorate="~{layout/fullPageLayout}">
-	<head th:include="/layout/partials/head (pageTitle='Search - Broadleaf Demo - Heat Clinic')"></head>
-	
-	<div layout:fragment="content">
-	    
-	    <div id="content" class="width_setter group" role="main">
-	    
-	        <section id="left_column">
-	    
-	            <header>
-	                <h1 th:unless="${#strings.isEmpty(originalQuery)}" th:inline="text">
-	                    <span th:utext="#{search.results}">Search Results for</span> [[${originalQuery}]] ([[${result.startResult}]] - [[${result.endResult}]] <span th:utext="#{search.of}">of</span> [[${result.totalResults}]])
-	                </h1>
-	                <h1 th:if="${#strings.isEmpty(originalQuery)}">
-	                    <span th:utext="#{search.resultsFor}">Search Results for</span> (0)
-	                </h1>
-	                <div th:replace="catalog/partials/productSortOptions"></div>
-	            </header>
-	            
-	            <ul th:if="${products}" id="products" class="group">
-	                <li th:each="product : ${products}" th:object="${product}" th:include="catalog/partials/productListItem" class="product_container"></li>
-	            </ul>
-	            
-	            <ul th:if="${skus}" id="products" class="group">
-	                <li th:each="sku : ${skus}" th:object="${sku}" th:include="catalog/partials/skuListItem" class="product_container"></li>
-	            </ul>
-	            
-	            <div th:replace="catalog/partials/productPagingOptions" ></div>
-	            
-	        </section>
-	    
-	        <section id="right_column">
-	            <header><span th:utext="#{search.filterSearch}">Filter your search</span></header>
-	            <div id="options">
-	            
-	                <div th:replace="catalog/partials/facetFilter" ></div>
-	                
-	                <div th:replace="catalog/partials/rightHandBannerAds" ></div>
-	                
-	                <section id="right_column" th:unless="${#lists.isEmpty(products)} and ${#lists.isEmpty(skus)}">
-	                    <header><span th:utext="#{search.featuredProducts}">Featured Products</span></header>
-	                    <div id="options">
-	                        <div class="section">
-	                            <th:block th:unless="${skus}">
-	                                <blc:related_products productId="${products[0].id}" quantity="3" ></blc:related_products>
-     
-	                                <ul th:unless="${skus}" id="featured_products" class="group">
-	                                    <li th:each="product : ${products}" th:object="${product}" th:include="catalog/partials/productListItem" class="product_container"></li>
-	                                </ul>
-	                            </th:block>
-	                            <th:block th:if="${skus}">
-	                                <blc:related_products productId="${skus[0].product.id}" quantity="3" ></blc:related_products>
-     
-	                                <ul th:if="${skus}" id="featured_products" class="group">
-	                                    <li th:each="relatedSku : ${relatedSkus}" th:object="${relatedSku}" th:include="catalog/partials/skuListItem" class="product_container"></li>
-	                                </ul>
-	                             </th:block>    
-	                        </div>                                  
-	                    </div>
-	                </section>  
-	                
-	            </div>
-	        </section>
-	            
-	    </div>
-	    
-	</div>
+    <head>
+        <title>Search</title>
+    </head>
+
+    <div layout:fragment="content" id="search" class="ecommerce-page" th:fragment="ajax">
+
+        <th:block blc:cache="true" cacheSearch="true">
+
+            <!-- Search Title -->
+            <div class="row">
+                <div id="category-search-title" class="container show-bottom-border">
+                    <h2 class="section-title" th:unless="${#strings.isEmpty(originalQuery)}" th:inline="text">
+                        <span th:utext="#{search.results}">
+                            Search Results
+                        </span>
+                    </h2>
+
+                    <span class="small-text pull-right page-results-counter" th:if="${result}">
+                        ([[${result.startResult}]] - [[${result.endResult}]]
+                        <span th:utext="#{search.of}">of</span>
+                        [[${result.totalResults}]])
+                    </span>
+                </div>
+            </div>
+
+            <div id="category-search-content" class="category-search-content container">
+
+                <!-- Product Filters -->
+                <div id="left_column" class="left-column col-md-3">
+                    <div id="options" class="ecommerce-page">
+                        <div th:include="catalog/partials/facetFilter"></div>
+                        <div class="js-rightHandBannerAdsPlaceholder"></div>
+                    </div>
+                </div>
+
+
+                <!-- Product List -->
+                <div class="col-md-9" id="right_column" blc:cache="true" cacheCategory="true">
+                    <div th:if="${products}" id="products" class="products row">
+                        <div th:each="product : ${products}" th:object="${product}"
+                             th:include="catalog/partials/productListItem" class="col-md-4"></div>
+                    </div>
+
+                    <ul th:if="${skus}" id="products" class="products js-products group">
+                        <li th:each="sku : ${skus}" th:object="${sku}" th:include="catalog/partials/skuListItem"
+                            class="js-productContainer productContainer"></li>
+                    </ul>
+
+                    <div th:include="catalog/partials/productPagingOptions"></div>
+
+                </div>
+
+            </div>
+
+        </th:block>
+    </div>
+    <div layout:fragment="post-content" th:replace="catalog/partials/rightHandBannerAds"></div>
 </th:block>

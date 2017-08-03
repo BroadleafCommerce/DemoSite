@@ -1,13 +1,22 @@
 <th:block layout:decorate="~{layout/accountLayout}" layout:fragment="content">
-    <div>     
-    
-        <div th:if="${wishlist != null and !#lists.isEmpty(wishlist.discreteOrderItems)}">
-            <table th:replace="account/partials/wishlistItemsTable"></table>
+    <div class="card manage-account-form-wrapper js-manageAccountFormWrapper js-wishlist" th:fragment="ajax">
+        <h3 th:utext="#{account.wishlist.title}">Your Wishlist</h3>
+        <hr />
+
+        <p th:style="${wishlist != null and !#lists.isEmpty(wishlist.discreteOrderItems) ? 'display: none' : ''}"
+           th:utext="#{account.wishlist.noItems}">You do not have any items in your wishlist.</p>
+
+        <div class="col-sm-12" th:if="${wishlist != null and !#lists.isEmpty(wishlist.discreteOrderItems)}">
+            <th:block th:include="account/partials/wishlistItemsRow"/>
+
+            <blc:form method="POST" th:action="@{/account/wishlist/moveListToCart}">
+                <div class="pull-right">
+                    <button class="btn btn-primary wishlist-all-to-cart-btn" type="submit">
+                        <i class="material-icons">add_shopping_cart</i>
+                        <span th:utext="#{account.wishlist.moveWishlist}">Move Wishlist to Cart</span>
+                    </button>
+                </div>
+            </blc:form>
         </div>
-        
-        <div th:unless="${wishlist != null and !#lists.isEmpty(wishlist.discreteOrderItems)}">
-            <h3>You do not have any items in your wishlist</h3>
-        </div>
-        
     </div>
 </th:block>

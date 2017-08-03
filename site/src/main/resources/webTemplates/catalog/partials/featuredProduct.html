@@ -1,0 +1,47 @@
+
+<div layout:decorate="~{layout/fullPageLayout}">
+
+    <head layout:fragment="custom-head">
+        <title th:utext="${BLC_PAGE.description}"></title>
+        <th:block th:include="layout/partials/head" th:with="hasMetaDesc=${false}"></th:block>
+    </head>
+
+    <div layout:fragment="content" class="main-content">
+        <div class="section-space"></div>
+
+        <div class="container main-raised">
+            <!--Header Row-->
+            <div class="row">
+                <div class="container col-md-10" >
+                    <h2 class="section-title" th:text="${BLC_PAGE.pageFields[header]}">
+                    </h2>
+                </div>
+            </div>
+            <!--End Of Header-->
+
+            <!--Page Body-->
+            <div class="row  " >
+                <div class="container ">
+                    <div class="col-md-10 card-description">
+                        <h5  th:utext="${pageFields[description]}" />
+                    </div>
+
+                </div>
+            </div>
+            <!--End of Page Body-->
+
+            <!--Product Image-->
+            <div class="row" th:object="${pageFields[product]}">
+                <div class="container product-main-image" id="product_main_image">
+                    <div>
+                        <img class="img-rounded img-responsive img-raised" th:src="@{*{media[primary].url}}" />
+                    </div>
+                </div>
+            </div>
+            <!--End of Prodouct Image-->
+        </div>
+
+    </div>
+
+
+</div >

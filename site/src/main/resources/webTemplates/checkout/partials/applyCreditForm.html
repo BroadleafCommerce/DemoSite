@@ -1,0 +1,35 @@
+<h4><span th:utext="#{cart.accountCredit.accounts}">Accounts</span></h4>
+
+<ul id="account-credit" th:inline="text" class="clearfix">
+    <li>
+        <span class="account-number">Account Number</span>
+        <span class="balance">Balance</span>
+    </li>
+</ul>
+<br/><br/>
+
+<div th:if="${#lists.isEmpty(accounts)}">
+    <p>
+        You currently do not have any credit. <a th:href="@{/account/giftcard/redeem}">Redeem your gift cards</a> and apply it to your account!
+    </p>
+</div>
+<blc:form th:unless="${#lists.isEmpty(accounts)}"
+          th:object="${creditInfoForm}"
+          th:inline="text"
+          th:action="@{/account/credit/apply}"
+          method="post"
+          id="applyCredit_form">
+
+    <ul th:inline="text">
+        <li th:each="account : ${accounts}" th:unless="${account.balance.amount == 0.00}">
+            <input type="checkbox" th:value="${account.accountNumber}" th:field="*{accountNumbers}" />
+            <label th:for="${#ids.prev('accountNumbers')}">
+                <span th:utext="${account.accountNumber}"></span>
+                <span class="balance" blc:price="${account.balance}"></span>
+            </label>
+        </li>
+    </ul>
+    <div>
+        <input type="submit" class="medium red apply" th:value="#{cart.giftCard.apply}" />
+    </div>
+</blc:form>

@@ -1,13 +1,13 @@
-<div th:if="*{product.featuredProduct}" class="new_badge">New!</div>
+<div th:if="*{product.featuredProduct}" class="new-badge">New!</div>
 
-<div class="image">
+<div class="js-image image">
     <a th:href="@{*{product.url} + *{#strings.isEmpty(urlKey)? '' : urlKey}}">
         <th:block th:unless="*{#lists.isEmpty(productOptionValues)}" th:each="optionValue : *{productOptionValues}">
             <img th:if="${optionValue.attributeValue == #object.skuMedia['primary']?.tags}" th:src="@{*{skuMedia['primary'].url} + '?browse'}" alt="Sauce Image" />
             <img th:if="${optionValue.attributeValue == #object.skuMedia['alt1']?.tags}" th:src="@{*{skuMedia['alt1'].url} + '?browse'}" alt="Sauce Image" />
             <img th:if="${optionValue.attributeValue == #object.skuMedia['alt2']?.tags}" th:src="@{*{skuMedia['alt2'].url} + '?browse'}" alt="Sauce Image" />
         </th:block>
-        <img th:if="*{#lists.isEmpty(productOptionValues)}" th:src="@{*{skuMedia['primary'].url} + '?browse'}" alt="Sauce Image" />
+        <img th:if="*{#lists.isEmpty(productOptionValues)}" th:src="@{*{skuMedia['primary']?.url} + '?browse'}" alt="Sauce Image" />
         <div class="price">
             <div blc:price="*{salePrice}" th:if="*{onSale}" th:classappend="*{onSale}? 'sale'"></div>
             <div blc:price="*{retailPrice}" th:classappend="*{onSale}? 'has-sale'"></div>
@@ -22,24 +22,24 @@
     <p th:utext="*{longDescription}"></p>
 </div>
 
-<div th:class="*{'productActions productActions' + id}"
+<div th:class="*{'product-actions js-productActions' + id}"
      th:with="checkInventory=*{inventoryType?.type == 'CHECK_QUANTITY'},
               availableInventory=${checkInventory ? #object.quantityAvailable != null and #object.quantityAvailable != 0 : true},
               inCart=${cart.containsSku(#object)}">
 
-    <div th:if="${checkInventory and !availableInventory}" class="out_of_stock">
+    <div th:if="${checkInventory and !availableInventory}" class="js-outOfStock out-of-stock">
         <a disabled="disabled" class="inCart">Out of Stock</a>
     </div>
-    <div class="in_cart" th:classappend="${!inCart}? ' hidden'">
-        <a class="modalcart inCart" th:href="@{/cart}"><span th:utext="#{product.inCart}">In Cart!</span></a>
+    <div class="js-inCartLinkContainer inCartLinkContainer" th:classappend="${!inCart}? ' is-hidden'">
+        <a class="js-modalCartLink inCart" th:href="@{/cart}"><span th:utext="#{product.inCart}">In Cart!</span></a>
     </div>
 
-    <div class="add_to_cart" th:classappend="${inCart or !availableInventory}? ' hidden'">
+    <div class="js-addToCartContainer addToCartContainer" th:classappend="${inCart or !availableInventory}? ' is-hidden'">
         <blc:form method="POST" th:action="@{/cart/add}">
             <input type="hidden" name="productId" th:value="*{product.id}" />
             <input type="hidden" name="skuId" th:value="*{id}" />
             <input type="hidden" name="quantity" value="1" />
-            <input type="submit" class="addToCart" th:value="#{product.buyNow}"/>
+            <input type="submit" class="js-addToCart add-to-cart" th:value="#{product.buyNow}"/>
         </blc:form>
     </div>
 

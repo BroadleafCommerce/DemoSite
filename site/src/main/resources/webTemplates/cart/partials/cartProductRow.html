@@ -1,0 +1,122 @@
+<div th:id="${'productRow' + item.id}"
+     class="row cart-product-row text-center-mobile"
+     th:each="item : ${cart.orderItems}"
+     th:object="${item}"
+     th:if="${item.parentOrderItem == null}">
+
+    <!-- Product Image -->
+    <div th:if="${item instanceof T(org.broadleafcommerce.core.order.domain.DiscreteOrderItem)}" class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+        <div class="img-container">
+            <th:block th:unless="*{#lists.isEmpty(sku.productOptionValues)}" th:each="optionValue : *{sku.productOptionValues}">
+                <img th:if="${optionValue.attributeValue == item.sku.skuMedia['primary']?.tags}" th:src="@{*{sku.skuMedia['primary'].url}}" th:alt="*{sku.name}" />
+                <img th:if="${optionValue.attributeValue == item.sku.skuMedia['alt1']?.tags}" th:src="@{*{sku.skuMedia['alt1'].url}}" th:alt="*{sku.name}" />
+                <img th:if="${optionValue.attributeValue == item.sku.skuMedia['alt2']?.tags}" th:src="@{*{sku.skuMedia['alt2'].url}}" th:alt="*{sku.name}" />
+            </th:block>
+            <img th:if="*{#lists.isEmpty(sku.productOptionValues) and sku.skuMedia['primary'] != null}" th:src="@{*{sku.skuMedia['primary']?.url}}" th:alt="*{sku.name}" />
+        </div>
+    </div>
+
+    <!-- Product Description -->
+    <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+        <div class="row">
+
+            <!-- Product Name -->
+            <div class="col-lg-7">
+                <div class="cart-product-name text-uppercase">
+                    <th:block th:if="${item instanceof T(org.broadleafcommerce.core.order.domain.DiscreteOrderItem)}">
+                        <a th:unless="${@blSystemPropertiesService.resolveBooleanSystemProperty('solr.index.use.sku')}" th:href="@{*{product.url}}" th:utext="*{name}"></a>
+                        <a th:if="${@blSystemPropertiesService.resolveBooleanSystemProperty('solr.index.use.sku')} and *{sku.urlKey}" th:href="@{*{product.url} + *{sku.urlKey}}" th:inline="text">
+                            [[*{sku.name}]] <span th:each="optionValue : *{sku.productOptionValues}" th:utext="${optionValue.attributeValue}"></span>
+                        </a>
+                        <a th:if="${@blSystemPropertiesService.resolveBooleanSystemProperty('solr.index.use.sku')} and !*{sku.urlKey}" th:href="@{*{product.url}}" th:inline="text">
+                            [[*{sku.name}]] <span th:each="optionValue : *{sku.productOptionValues}" th:utext="${optionValue.attributeValue}"></span>
+                        </a>
+                    </th:block>
+                    <th:block th:unless="${item instanceof T(org.broadleafcommerce.core.order.domain.DiscreteOrderItem)}">
+                        <span th:utext="*{name}"></span>
+                    </th:block>
+                </div>
+            </div>
+
+            <!-- Product Pricing -->
+            <div class="col-lg-5 cart-product-pricing">
+                <div>
+                    <!-- Per Unit Price -->
+                    <th:block blc:price="*{getPriceBeforeAdjustments(true, true)}" />
+
+                    <span> x </span>
+
+                    <!-- Item Quantity -->
+                    <blc:form method="POST" th:action="@{/cart/updateQuantity}">
+                        <input type="hidden" name="productId" th:value="*{product?.id}" />
+                        <input type="hidden" name="skuId" th:value="*{sku?.id}" />
+                        <input type="hidden" name="orderItemId" th:value="*{id}" />
+                        <select name="quantity" th:value="*{quantity}" class="js-updateQuantity">
+                            <option th:each="i : ${#numbers.sequence(1, 99)}"
+                                    th:selected="${i} == *{quantity}"
+                                    th:value="${i}"
+                                    th:text="${i}">
+                            </option>
+                        </select>
+                    </blc:form>
+
+                    <!-- Line Item Total -->
+                    <span blc:price="*{getTotalPrice(true)}"></span>
+                </div>
+
+                <!-- Discount Savings -->
+                <div class="discount" th:unless="*{getTotalAdjustmentValue(true).zero}">
+                    Savings: <span blc:price="*{getTotalAdjustmentValue(true)}"></span>
+                </div>
+
+                <!-- CSR Price Override -->
+                <div th:if="${#brc.csrMode}">
+                    <a th:href="@{*{'/csrtools/override-item-price/' + id}}" class="csr-direct-edit-price">Edit</a>
+                    <a th:if="*{isRetailPriceOverride()}"
+                       th:href="@{*{'/csrtools/clear-item-price-override/' + id}}"
+                       class="csr-clear-override">Clear</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Item Details -->
+        <div class="row">
+            <div class="col-lg-12">
+                <div th:each="message : ${item.cartMessages}" class="promotion-message">
+                    <span th:text="${message}"></span>
+                </div>
+                <blc:product_option_display orderItem="${item}">
+                    <ul>
+                        <!-- Product Options -->
+                        <li th:each="entry: ${productOptionDisplayValues}" th:unless="${#lists.isEmpty(productOptionDisplayValues)}">
+                            <span th:utext="${entry.key} + ': ' + ${entry.value}"></span>
+                        </li>
+
+                        <!-- Bundled Products -->
+                        <li th:replace="cart/partials/cartBundledProducts"></li>
+
+                        <!-- Item Actions -->
+                        <li class="mini-cart-item-actions">
+                            <th:block th:if="${item instanceof T(org.broadleafcommerce.core.order.domain.DiscreteOrderItem)}">
+                                <th:block th:replace="checkout/partials/orderItemConfigureMessaging" />
+                            </th:block>
+
+                            <th:block th:if="${item instanceof T(org.broadleafcommerce.core.order.domain.DiscreteOrderItem)}">
+                                <a th:unless="${@blSystemPropertiesService.resolveBooleanSystemProperty('solr.index.use.sku')}" class="btn btn-simple btn-bordered btn-xs js-removeFromCart" th:href="@{/cart/remove(orderItemId=*{id}, productId=*{product.id})}">Remove</a>
+                                <a th:if="${@blSystemPropertiesService.resolveBooleanSystemProperty('solr.index.use.sku')}" class="btn btn-simple btn-bordered btn-xs js-removeFromCart" th:href="@{/cart/remove(orderItemId=*{id}, skuId=*{sku.id})}">Remove</a>
+                            </th:block>
+                            <th:block th:unless="${item instanceof T(org.broadleafcommerce.core.order.domain.DiscreteOrderItem)}">
+                                <a class="btn btn-simple btn-xs js-removeFromCart" th:href="@{/cart/remove(orderItemId=*{id})}">Remove</a>
+                            </th:block>
+                        </li>
+                    </ul>
+                </blc:product_option_display>
+
+                <!-- Applied Promotions -->
+                <div th:unless="*{adjustmentValue.zero}" class="product-promotion-row">
+                    <div th:replace="~{catalog/partials/offers :: offers}"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

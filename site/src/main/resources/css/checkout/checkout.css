@@ -1,0 +1,436 @@
+/* *************************************************** */
+/* Shared Styles */
+/* *************************************************** */
+
+.cart,
+.checkout {
+    padding-top: 1em;
+    padding-bottom: 7em;
+}
+
+.order-confirmation {
+    padding-top: 2em;
+    padding-bottom: 7em;
+}
+
+.cart .card,
+.checkout .card,
+.order-confirmation .card
+.checkout-page .card {
+    margin-bottom: 15px;
+    overflow: hidden;
+}
+
+.cart h1,
+.checkout h1,
+.cart-warning h1 {
+    font-size: 2.6em;
+    margin-bottom: 0.5em;
+}
+
+.checkout-stage-title,
+.card-summary-title,
+.cart-summary-title,
+.cart-item-summary-title,
+.accordion-checkout-card .panel-title {
+    font-weight: bold;
+    border-bottom: 1px solid #ccc;
+    width: 100%;
+}
+.checkout-stage-title h4,
+.card-summary-title h4,
+.cart-summary-title h4,
+.cart-item-summary-title h4,
+.accordion-checkout-card .panel-title {
+    margin: 0;
+    padding: 10px 20px;
+    text-transform: uppercase;
+    display: inline-block;
+    font-weight: 500;
+}
+
+.checkout-stage-title a.btn,
+.cart-item-summary-title a.btn {
+    padding: 8px 15px;
+    margin: 7px 0;
+}
+
+.cart-title-row h3,
+.checkout-stage-title h3 {
+    margin-bottom: 0;
+}
+
+/* *************************************************** */
+/* Cart Styles */
+/* *************************************************** */
+
+.cart-title-row {
+    border-bottom: 2px solid rgb(85, 85, 85);
+    font-weight: bold;
+}
+
+.cart-products-wrapper > div:first-of-type {
+    border: none;
+}
+
+.cart-product-row {
+    padding: 1em 0;
+    margin: 0;
+}
+.cart-product-row:not(:first-child) {
+    border-top: 1px solid #ccc;
+}
+.cart-product-row .img-container img {
+    width: 11em;
+    height: 11em;
+    object-fit: cover;
+}
+.cart-product-row .cart-product-name {
+    font-weight: 500;
+}
+.cart-product-row ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.cart-product-row .cart-product-pricing {
+    text-align: right;
+    white-space: nowrap;
+}
+.cart-product-row .cart-product-pricing span {
+    padding: 1em;
+    font-weight: bold;
+}
+.cart-product-row .cart-product-pricing form {
+    display: inline;
+}
+.cart-product-row li.child-item {
+    padding-left: 1em;
+}
+.cart-product-row .product-promotion-row {
+    float: right;
+    padding: 0 1em;
+}
+.cart-product-actions .btn-simple:hover {
+    color: #FFFFFF;
+    background-color: #E40037;
+    box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(228, 0, 55, 0.4);
+}
+
+.cart-empty {
+    padding: 1em 0;
+}
+
+.cart-summary-row .row {
+    margin: 0;
+}
+.cart-summary-row .cart-summary-breakdown {
+    padding: 10px 20px;
+}
+.cart-summary-row .cart-total,
+.cart-summary-row .cart-estimated-total {
+    font-weight: bold;
+    border-top: 1px solid rgb(150, 150, 150);
+    margin-top: 1em;
+    padding-top: 1em;
+}
+.cart-summary-row .cart-estimated-total p {
+    font-weight: normal;
+    font-size: smaller;
+    line-height: normal;
+    text-transform: none;
+    color: rgb(150, 150, 150);
+}
+.cart-summary-row .cart-actions {
+    text-align: center;
+    font-weight: bold;
+    padding-top: 1em;
+    border-top: 1px solid rgb(150, 150, 150);
+    margin-top: 2em;
+}
+.cart-summary-row .cart-actions a {
+    width: 100%;
+}
+.cart-summary-row .cart-actions .cart-action-divider {
+    padding: 0 0 0.7em;
+    font-size: smaller;
+}
+
+.cart-item-summary {
+    padding: 0;
+    font-size: small;
+    line-height: 16px;
+    max-height: 20em;
+    overflow: scroll;
+}
+.cart-item-summary li {
+    padding: 1em 1em 0;
+    vertical-align: top;
+    display: flex;
+}
+
+.cart-promo-error {
+    font-size: small;
+    padding-bottom: 0.75em;
+}
+
+.cart-warning {
+    text-align: center;
+}
+.cart-warning a {
+    display: inline-block;
+}
+
+/* *************************************************** */
+/* Checkout Styles */
+/* *************************************************** */
+
+.checkout-stage {
+    padding: 0 2em;
+}
+.checkout-stage .btn-white {
+    background: white;
+    color: black;
+    border: 1px solid #ccc;
+}
+.checkout-stage .form-group {
+    margin: 1em 0 0 0;
+}
+.checkout-stage h4 {
+    border-bottom: 1px solid #ccc;
+}
+.checkout-stage .choose-shipping-address,
+.checkout-stage .choose-billing-address {
+    margin-bottom: 1em;
+}
+@media (max-width: 768px) {
+    .checkout-stage .use-shipping-address-wrapper {
+        line-height: 8em;
+    }
+}
+.checkout-stage .payment-options > div {
+    margin-top: 2em;
+}
+.checkout-stage .shipping-methods-wrapper label,
+.checkout-stage .checkbox label {
+    color: rgba(0,0,0, 0.87);
+    font-weight: 200;
+}
+.checkout-stage .checkout-stage-action a {
+    margin-right: -18px;
+}
+.checkout-stage .form-group .text-danger {
+    margin-top: -5px;
+    font-size: 11px;
+    position: absolute;
+    line-height: 12px;
+}
+.checkout-stage .checkout-review-stage-prompt {
+    margin-top: 0.7em;
+}
+
+.checkout-page {
+    background-color: #f2f2f2;
+}
+
+.checkout-guest-wrapper {
+    padding: 20px;
+}
+
+.checkout-guest-text {
+    margin-top: 50px;
+}
+
+.accordion-checkout-card .panel-heading {
+    padding: 0;
+    border: none;
+}
+.accordion-checkout-card .panel-body {
+    padding: 0 1em 1em 1em;
+}
+.accordion-checkout-card .panel-body .form-group {
+    margin-top: 10px;
+}
+.accordion-checkout-card .panel-body .input-group {
+    width: 100%;
+}
+.accordion-checkout-card .panel-body .input-group-button {
+    display: table-cell;
+    padding-left: 1.5em;
+}
+.accordion-checkout-card .cart-applied-promo-codes .promo-code {
+    font-weight: normal;
+    font-size: 12px;
+    margin-right: 5px;
+    padding: 5px 6px 5px 12px;
+}
+.accordion-checkout-card .cart-applied-promo-codes i {
+    font-size: 20px;
+    margin-top: -0.15em;
+    color: #FFFFFF;
+}
+
+.checkout-stage-title h4 i {
+    vertical-align: text-bottom;
+}
+
+.shipping-address-btn,
+.billing-address-btn {
+    padding: 0 1em;
+}
+
+.payment-alert {
+    margin: 1em 0 0 0;
+}
+
+.payment-processing-error .payment-alert {
+    margin: 0;
+}
+
+.payment-methods,
+.payment-method-selectors {
+    margin: 1em 0;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #ccc;
+}
+
+.choose-saved-payment .card,
+.choose-saved-payment-action .card {
+    cursor: pointer;
+}
+.choose-saved-payment .card:hover,
+.choose-saved-payment-action .card:hover {
+    box-shadow: 0 14px 26px -12px rgba(153, 153, 153, 0.42), 0 4px 23px 0 rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(153, 153, 153, 0.2);
+}
+.choose-saved-payment .card.active {
+    border: 2px solid #E40037;
+}
+.choose-saved-payment .card.active .card-content {
+    padding: 13px 18px;
+}
+.choose-saved-payment .card.active:hover {
+    box-shadow: 0 14px 26px -12px rgba(228, 0, 55, 0.42), 0 4px 23px 0 rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(228, 0, 55, 0.2);
+}
+.choose-saved-payment .card.define-new-credit-card {
+    height: 110px;
+}
+.choose-saved-payment .card.define-new-credit-card .card-content {
+    text-align: center;
+    padding: 20px;
+}
+.choose-saved-payment .card.define-new-credit-card .card-content .material-icons {
+    font-size: 36px;
+}
+.choose-saved-payment-action .card {
+    margin: 0;
+    cursor: pointer;
+}
+.choose-saved-payment-action .card-content {
+    padding: 5px;
+}
+.choose-saved-payment-action .card-content span {
+    padding: 0 1em;
+}
+
+.credit-card-types-wrapper {
+    margin-bottom: 10px;
+}
+.credit-card-types {
+    margin: 0 auto auto;
+    float: left;
+    padding: 0;
+}
+.credit-card-types li {
+    display: inline-block;
+    float: left;
+    padding-right: 5px;
+}
+
+.choose-shipping-address ul,
+.choose-billing-address ul{
+    list-style: none;
+    padding: 0;
+}
+.choose-shipping-address ul li,
+.choose-billing-address ul li {
+    padding: 5px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    cursor: pointer;
+    position: relative;
+}
+.choose-shipping-address ul li:hover,
+.choose-billing-address ul li:hover {
+    box-shadow: 0 14px 26px -12px rgba(153, 153, 153, 0.42), 0 4px 23px 0 rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(153, 153, 153, 0.2);
+}
+.choose-shipping-address ul li.active,
+.choose-billing-address ul li.active {
+    margin: -1px -1px 9px;
+    border: 2px solid #E40037;
+}
+.choose-shipping-address ul li.active:hover,
+.choose-billing-address ul li.active:hover {
+    box-shadow: 0 14px 26px -12px rgba(228, 0, 55, 0.42), 0 4px 23px 0 rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(228, 0, 55, 0.2);
+}
+.choose-shipping-address ul li .btn,
+.choose-billing-address ul li .btn {
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin: 0;
+}
+
+.custom-address {
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    box-shadow: 0 14px 26px -12px rgba(153, 153, 153, 0.42), 0 4px 23px 0 rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(153, 153, 153, 0.2);
+    border-radius: 3px;
+}
+
+.checkout-stage .read-only-cod-payment-method {
+    margin: 15px 0;
+}
+
+.read-only-credit-card {
+    display: inline-flex;
+    align-items: center;
+}
+.read-only-credit-card .credit-card-number {
+    display: inline-block;
+}
+
+.read-only-payment-info-stage .read-only-credit-card {
+    margin: 1em 0 1em 0;
+}
+
+/* *************************************************** */
+/* Order Confirmation Styles */
+/* *************************************************** */
+
+.confirmation-card {
+    padding: 0 2em 1em 2em;
+}
+.confirmation-card h2,
+.confirmation-card h3,
+.confirmation-card .confirmation-note {
+    text-align: center;
+}
+.confirmation-card h2 span,
+.confirmation-card h3 span,
+.confirmation-card .confirmation-note span {
+    display: inline-block;
+}
+.confirmation-card h3 {
+    margin-top: 0;
+}
+.confirmation-card .confirmation-note {
+    font-size: large;
+}
+
+.confirmation-order-payment {
+    padding: 1em 0;
+}
+
+/* *************************************************** */

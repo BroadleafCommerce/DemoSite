@@ -1,0 +1,96 @@
+.login, .register {
+    padding: 20px;
+}
+
+@media (max-width: 768px) {
+    .login, .register {
+        width: 100%;
+    }
+}
+.login p, .register p {
+    margin-bottom: 0;
+    margin-right: 5%;
+}
+
+.login .input-group-addon, .register .input-group-addon {
+    padding-left: 0;
+    vertical-align: bottom;
+}
+
+.login .input-group, .register .input-group, .register-input-no-icon {
+    margin-right: 5%;
+}
+
+.login .form-group, .registration-form .form-group {
+    padding-bottom: 0;
+    margin-bottom: 0;
+}
+
+.login .form-control, .registration-form .form-control {
+    margin-bottom: 0;
+}
+
+.loginRegisterResponsiveCard {
+    margin-top: 40px;
+}
+
+.login-register-alt-links {
+    margin-top: 28px;
+}
+
+.login-register-alt-links, .register-input-no-icon, .login p, .register p  {
+    margin-left: 39px;
+}
+
+.registration-form .text-danger {
+    font-size: small;
+}
+
+.col-centered {
+    display: inline-block;
+    float: none;
+    text-align: left;
+    margin-right: -4px;
+    vertical-align: top;
+}
+
+.col-centered-separator {
+    border-right: 1px solid #CCCCCC;
+    width: 1px;
+    height: 300px;
+    margin: 50px auto 0 auto;
+}
+.col-centered-separator:after {
+    content: "or";
+    position: absolute;
+    top: 50%;
+    font-size: 18px;
+    width: 20px;
+    margin-left: -18px;
+    background: white;
+    font-weight: bold;
+    padding: 10px;
+}
+
+.row-centered {
+    text-align: center;
+}
+
+.row-centered-separator {
+    border-bottom: 1px solid #CCCCCC;
+    height: 1px;
+    width: 100%;
+    margin: auto 50px auto 0;
+}
+.row-centered-separator:after {
+    content: "or";
+    position: absolute;
+    left: 50%;
+    font-size: 18px;
+    width: 40px;
+    margin-top: -20px;
+    margin-left: -20px;
+    background: white;
+    font-weight: bold;
+    padding: 10px;
+}

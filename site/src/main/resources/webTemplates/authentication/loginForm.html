@@ -1,0 +1,43 @@
+<div class="text-center">
+    <h3 class="card-title">Login</h3>
+</div>
+
+<blc:form th:action="@{/login_post.htm}" method="post">
+    <input type="hidden" name="successUrl" th:if="${successUrl}" th:value="${successUrl}"/>
+
+    <div class="input-group">
+        <span class="input-group-addon"><i class="material-icons">email</i></span>
+        <div class="label-floating form-group">
+            <label for="username" class="control-label"><span th:utext="#{login.email}">Email</span></label>
+            <input id="username" type="email" name="username" class="form-control"/>
+        </div>
+    </div>
+    <div class="input-group">
+        <span class="input-group-addon"><i class="material-icons">lock</i></span>
+        <div class="label-floating form-group">
+            <label for="password" class="control-label"><span
+                    th:utext="#{login.password}">Password</span></label>
+            <input id="password" type="password" name="password" class="form-control"/>
+        </div>
+    </div>
+
+    <p class="text-danger" th:if="${param.error}" th:utext="#{login.noMatchTryAgain}">
+        The e-mail address and/or password entered do not match our records. Please try again.
+    </p>
+    <p th:unless="${param.error}">&nbsp;</p>
+
+    <div class="checkbox">
+        <label for="remember-me-check">
+            <input type="hidden" value="false" name="remember-me">
+            <input id="remember-me-check" type="checkbox" name="remember-me-check" class="js-clearable">
+            Remember me
+        </label>
+    </div>
+
+    <button class="btn btn-primary pull-right" type="submit" th:utext="#{login.login}"></button>
+
+    <div class="login-register-alt-links">
+        <a class="account" th:href="@{/login/forgotPassword}"><span
+                th:utext="#{login.forgotPassword}">Forgot Password</span></a>
+    </div>
+</blc:form>

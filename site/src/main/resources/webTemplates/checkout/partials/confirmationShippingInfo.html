@@ -1,0 +1,55 @@
+<div class="card checkout-card"
+     th:object="${shippingInfoForm}">
+    <div class="checkout-stage-title">
+        <h4>
+            <th:block th:utext="#{checkout.stages.shipping}">Shipping</th:block>
+        </h4>
+    </div>
+
+    <div class="checkout-stage">
+        <th:block th:if="${#lists.size(order.fulfillmentGroups) > 1}">
+            <div th:each="fg : ${order.fulfillmentGroups}" th:object="${fg}" class="multishipGroupRow">
+                <h4>
+                    <span th:classappend="*{address == null}? 'error'"
+                          th:utext="*{address == null ? 'Missing Address' : address.firstName + ' at ' + address.addressLine1}"></span>
+                    <span>&nbsp;-&nbsp;</span>
+                    <span th:classappend="*{fulfillmentOption == null}? 'error'"
+                          th:utext="*{fulfillmentOption == null ? 'Missing Fulfillment Option' : fulfillmentOption.name + ' (' + fulfillmentOption.longDescription + ')'}"></span>
+                    <span blc:price="*{shippingPrice}" class="multishipGroupShippingCharge"></span>
+                </h4>
+
+                <table class="multiship_summary">
+                    <tbody>
+                    <tr th:each="item : *{fulfillmentGroupItems}" th:object="${item.orderItem}" th:id="${'productRow' + item.id}">
+                        <td align="center" th:utext="${item.quantity}"></td>
+                        <td align="left">
+                            <span th:utext="*{sku.name}"></span>
+                            <blc:product_option_display orderItem="${item.orderItem}" >
+                                <ul th:unless="${#lists.isEmpty(productOptionDisplayValues)}" class="js-productOptions productOptions">
+                                    <li th:each="entry: ${productOptionDisplayValues}">
+                                        <span  th:utext="${entry.key} + ': ' + ${entry.value}"></span>
+                                    </li>
+                                </ul>
+                            </blc:product_option_display>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </th:block>
+
+        <th:block th:unless="${#lists.size(order.fulfillmentGroups) > 1}">
+            <div class="fulfillment_option" th:object="${order.fulfillmentGroups[0]}" th:inline="text">
+                <div class="col-sm-6">
+                    <h4><span th:utext="#{cart.shippingInformation}">Shipping Information</span></h4>
+
+                    <th:block th:include="~{partials/simpleAddress :: read-only}" th:with="address=*{address}"/>
+                </div>
+                <div class="col-sm-6">
+                    <h4 th:utext="#{cart.shippingMethod}">Shipping Method</h4>
+                    <b>[[*{fulfillmentOption.name}]]</b><br /> ([[*{fulfillmentOption.longDescription}]])
+                </div>
+            </div>
+        </th:block>
+    </div>
+</div>

@@ -1,0 +1,38 @@
+<div xmlns:blc="http://www.w3.org/1999/html" xmlns:th="http://www.thymeleaf.org"
+     class="card card-blog card-less-raised related-product">
+
+    <a th:href="@{*{url}}">
+        <div class="card-image">
+            <img th:if="*{media['primary']}" blc:src="@{*{media['primary'].url} + '?browse'}" alt="Sauce Image"/>
+        </div>
+    </a>
+
+    <h4 class="card-title"><a th:href="@{*{url}}" th:utext="*{name}"></a></h4>
+
+    <div class="card-content">
+
+        <p class="card-description js-dotdotdot" th:utext="*{longDescription}"></p>
+
+
+        <div class="footer">
+            <div class="price-container card-title">
+                <div class="price"
+                     th:if="${#object instanceof T(org.broadleafcommerce.core.catalog.domain.ProductBundle)}">
+                    <div blc:price="*{salePrice}" th:if="*{onSale}" th:classappend="*{onSale}? 'price-new'"></div>
+                    <div blc:price="*{retailPrice}" th:classappend="*{onSale}? 'related-price-old small'"></div>
+                </div>
+
+                <div class="price"
+                     th:unless="${#object instanceof T(org.broadleafcommerce.core.catalog.domain.ProductBundle)}">
+                    <div blc:price="*{salePrice}" th:if="*{onSale}" th:classappend="*{onSale}? ' price-new'"></div>
+                    <div blc:price="*{retailPrice}" th:classappend="*{onSale}? 'related-price-old small'"></div>
+                </div>
+            </div>
+
+            <div class="button-container">
+                <a th:href="@{*{url}}" class="btn btn-sm btn-round" th:utext="#{product.more}">More</a>
+            </div>
+        </div>
+    </div>
+
+</div>

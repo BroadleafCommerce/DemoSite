@@ -1,0 +1,46 @@
+<div class="col-sm-4 payment-method-card" th:classappend="${isCheckoutContext}? 'card-plain' : 'rotating-card-container manual-flip'">
+    <div class="card"
+         th:classappend="|${isCheckoutContext != null ? 'js-chooseSavedPayment' : 'card-rotate'}
+                        ${((paymentInfoForm.customerPaymentId == null) ? payment.isDefault() : paymentInfoForm.customerPaymentId == payment.id) ? 'active' : ''}|"
+         th:attr="data-customerpaymentid=${payment.id}">
+        <div th:classappend="!${isCheckoutContext}? 'front'">
+            <div class="card-content">
+                <div class="card-title">
+                    <span th:utext="${payment.getAdditionalFields().get('PAYMENT_NAME')}"></span>
+                    <span th:if="${payment.isDefault()}" th:utext="'(' + #{account.payments.default} + ')'">(Default)</span>
+
+                    <button class="pull-right btn btn-simple btn-rotate card-flip-action" th:unless="${isCheckoutContext}">
+                        <i class="material-icons">more_horiz</i>
+                    </button>
+                </div>
+
+                <th:block th:include="~{partials/creditCard :: read-only}"
+                          th:with="cardType=${payment.getAdditionalFields().get('CARD_TYPE')},
+                                   lastFour=${payment.getAdditionalFields().get('LAST_FOUR')},
+                                   expDate=${payment.getAdditionalFields().get('EXP_DATE')}" />
+            </div>
+        </div>
+
+        <div class="back" th:unless="${isCheckoutContext}">
+            <div class="card-content">
+                <div class="card-title">
+                    <button class="btn btn-simple btn-rotate card-flip-action">
+                        <i class="material-icons">refresh</i>
+                    </button>
+                </div>
+
+                <div class="payment-method-action-wrapper">
+                    <a th:unless="${payment.isDefault()}" class="btn btn-sm btn-primary js-makePaymentDefault" th:href="@{'payments/default/' + ${payment.id}}">
+                        <span th:utext="#{account.payments.makeDefault}">Make Default</span>
+                    </a>
+
+                    <br/>
+
+                    <a class="btn btn-sm btn-primary js-deletePayment" th:href="@{'payments/remove/' + ${payment.id}} ">
+                        <span th:utext="#{account.payments.delete}">Delete</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,24 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head></head>
+
+<body>
+  <label th:fragment="facet-value-display">
+      <input type="checkbox"
+          th:name="${facetDto.facet.field.abbreviation + '=' + facetValue.valueKey}"
+          th:id="${facetDto.facet.field.abbreviation + '-' + facetValue.valueKey}"
+          th:checked="${facetValue.active}" />
+      <th:block th:if="${facetValue.value != null}" th:inline="text">
+          <small>[[${facetValue.value}]] ([[${facetValue.quantity}]])</small>
+      </th:block>
+      <th:block th:unless="${facetValue.value != null}">
+          <th:block blc:price="${facetValue.minValue}"/>
+          <th:block th:utext="${facetValue.maxValue == null ? ' __#{facet.orMore}__ ' : ' - '}"/>
+          <th:block th:if="${facetValue.maxValue != null}" blc:price="${facetValue.maxValue}"/>
+
+          <small>(<th:block th:utext="${facetValue.quantity}" />)</small>
+      </th:block>
+  </label>
+</body>
+</html>

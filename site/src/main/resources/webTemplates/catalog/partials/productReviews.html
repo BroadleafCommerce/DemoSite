@@ -1,0 +1,132 @@
+<div class="col-md-12">
+    <div id="customer-reviews-container">
+        <blc:ratings itemId="${product.id}"></blc:ratings>
+        <div th:if="${ratingSummary}" th:object="${ratingSummary}">
+
+            <!-- Community rating section -->
+            <h3 th:utext="#{product.communityRating}">Community Rating</h3>
+            <div id="community-rating-container">
+                <blc:form id="community-rating" class="star-rating" th:attr="data-community-rating=*{averageRating}">
+                    <input type="radio" class="star {split:4}"/>
+                    <input type="radio" class="star {split:4}"/>
+                    <input type="radio" class="star {split:4}"/>
+                    <input type="radio" class="star {split:4}"/>
+                    <input type="radio" class="star {split:4}"/>
+                    <input type="radio" class="star {split:4}"/>
+                    <input type="radio" class="star {split:4}"/>
+                    <input type="radio" class="star {split:4}"/>
+                    <input type="radio" class="star {split:4}"/>
+                    <input type="radio" class="star {split:4}"/>
+                    <input type="radio" class="star {split:4}"/>
+                    <input type="radio" class="star {split:4}"/>
+                    <input type="radio" class="star {split:4}"/>
+                    <input type="radio" class="star {split:4}"/>
+                    <input type="radio" class="star {split:4}"/>
+                    <input type="radio" class="star {split:4}"/>
+                    <input type="radio" class="star {split:4}"/>
+                    <input type="radio" class="star {split:4}"/>
+                    <input type="radio" class="star {split:4}"/>
+                    <input type="radio" class="star {split:4}"/>
+                </blc:form>
+                <div class="total-reviews">
+                    &nbsp;&nbsp;&nbsp;(<span th:utext="*{numberOfReviews}"></span> <span
+                        th:if="*{numberOfReviews} == 1" th:utext="#{product.review}">review</span><span
+                        th:if="*{numberOfReviews} > 1" th:utext="#{product.reviews}">reviews</span>)
+                </div>
+            </div>
+            <blc:ratings itemId="${product.id}"></blc:ratings>
+
+            <!-- Current customer's review section -->
+            <div th:if="${currentCustomerReview}" th:object="${currentCustomerReview}">
+
+                <h4 th:utext="#{product.yourReview}">Your Review</h4>
+
+                <div class="your-review-body">
+                    <p class="voting-summary" th:if="*{notHelpfulCount()} + *{helpfulCount()} > 0"
+                       th:text="#{product.reviewHelpful(${helpfulCount()}, ${notHelpfulCount() + helpfulCount()})}">
+                    </p>
+                    <blc:form class="customer-rating"
+                              th:attr="data-customer-rating=*{ratingDetail.rating}">
+                        <input type="radio" class="star"/>
+                        <input type="radio" class="star"/>
+                        <input type="radio" class="star"/>
+                        <input type="radio" class="star"/>
+                        <input type="radio" class="star"/>
+                    </blc:form>
+                    <br />
+                    <blockquote class="reviewer-info">
+                        <p th:if="!*{#strings.isEmpty(reviewText)}" th:utext="*{reviewText}"></p>
+                        <small>
+                            <span th:utext="#{product.on}">on</span>
+                            <span th:utext="*{#dates.format(reviewSubmittedDate, 'MMMM d, yyyy')}"></span>
+                        </small>
+                    </blockquote>
+                    <br/>
+                </div>
+            </div>
+
+            <!-- Normal reviews section -->
+            <div class="helpful-reviews">
+                <h4 th:utext="#{product.customerReviews}">Customer Reviews</h4>
+                <ul class="customer-reviews">
+                    <li th:each="review, iterStat : *{reviews}" th:object="${review}" th:if="${iterStat.count} lt 5">
+                        <p class="voting-summary"
+                           th:if="*{notHelpfulCount()} + *{helpfulCount()} > 0"
+                           th:text="#{product.reviewHelpful(${helpfulCount()}, ${notHelpfulCount() + helpfulCount()})}">
+                        </p>
+                        <blc:form class="customer-rating" th:attr="data-customer-rating=*{ratingDetail.rating}">
+                            <input type="radio" class="star"/>
+                            <input type="radio" class="star"/>
+                            <input type="radio" class="star"/>
+                            <input type="radio" class="star"/>
+                            <input type="radio" class="star"/>
+                        </blc:form>
+                        <br />
+                        <blockquote class="reviewer-info">
+                            <p th:if="!*{#strings.isEmpty(reviewText)}" th:utext="*{reviewText}"></p>
+                            <small>
+                                &nbsp;<span th:utext="#{product.by}"></span>&nbsp;<span class="penname" th:utext="${review.customer.firstName}"></span>
+                                <span th:utext="#{product.on}">on</span>
+                                <span th:utext="*{#dates.format(reviewSubmittedDate, 'MMMM d, yyyy')}"></span>
+                            </small>
+                        </blockquote>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Create a review links -->
+        <div th:if="${customer.loggedIn}" class="text-center-mobile margin-top-mobile">
+            <div th:if="${ratingSummary}">
+                <div th:unless="${currentCustomerReview}">
+                    <a class="js-createReview btn btn-sm" th:utext="#{product.createReview}">
+                        Create a review
+                    </a>
+                </div>
+            </div>
+            <div th:unless="${ratingSummary}">
+                <a class="js-createReview btn btn-sm" th:utext="#{product.createFirstReview}">
+                    Be the first to write a review!
+                </a>
+            </div>
+        </div>
+        <div th:unless="${customer.loggedIn}" class="text-center-mobile margin-top-mobile">
+            <a th:if="${ratingSummary}" href="#" th:href="@{/login}"
+               th:utext="#{product.loginReview}" class="btn btn-sm">
+                Login to create a review
+            </a>
+            <a th:unless="${ratingSummary}" th:href="@{/login}"
+               th:utext="#{product.loginFirstReview}" class="btn btn-sm">
+                Login and be the first to write a review!
+            </a>
+        </div>
+    </div>
+
+    <span class="review-status-top"></span>
+
+    <!-- New review form -->
+    <div th:if="${customer.loggedIn and currentCustomerReview == null}" id="review-form"
+         style="display: none">
+        <div th:replace="catalog/partials/review"></div>
+    </div>
+</div>

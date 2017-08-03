@@ -1,29 +1,105 @@
-<nav>
-    <div th:remove="all">
-        <!--
-             This template displays the navigation of the site by looking up the menu named "headerNav"
-             and building a list of the categories sub-categories menu items.
-        -->
-    </div>
-    <blc:menu resultVar="menuItems" menuName="Header Nav" ></blc:menu>
-    <ul th:if="${not #lists.isEmpty(menuItems)}">
-        <li th:each="menuItem : ${menuItems}">
+<nav class="navbar navbar-default navbar-top navbar-fixed-top" id="sectionsNav" xmlns:th="http://www.w3.org/1999/xhtml"
+     xmlns:blc="http://www.w3.org/1999/xhtml">
+    <div class="container-fluid">
+        <div class="collapse navbar-collapse nav-wrapper">
+            <!-- Search Bar -->
+            <ul class="nav navbar-nav navbar-left">
+                <li>
+                    <blc:form class="js-searchForm navbar-form search-form" th:action="@{/search}" method="GET">
+                        <div class="input-group">
+                            <div class="form-group is-empty">
+                                <input type="search" class="js-search form-control" name="q" autocomplete="off"
+                                    th:attr="placeholder=#{nav.search}, value=${param.q == null ? '' : param.q}">
+                                <span class="material-input"></span>
+                            </div>
+                            <span class="input-group-button">
+                                <button class="btn btn-primary btn-simple" type="submit"><i class="material-icons">search</i></button>
+                            </span>
+                        </div>
+                    </blc:form>
+                    <ul class="nav navbar-nav type-ahead" id="typeAhead">
+                        <li class="ta-dropdown dropdown">
+                            <ul class="ta-dropdown-menu dropdown-menu">
+                                <li class="col-sm-3 ta-column">
+                                    <ul class="js-typeahead--keyword"></ul>
+                                </li>
+                                <li class="col-sm-4 ta-column">
+                                    <h4>Category</h4>
+                                    <ul class="js-typeahead--category"></ul>
 
-            <a th:href="@{${menuItem.url}}" th:class="${menuItemStat.first}? 'home'">
-                <span th:utext="${menuItem.label}"></span>
-            </a>
-            <ul th:if="${not #lists.isEmpty(menuItem.submenu)}" class="sub-menu">
-                <li th:each="submenuItem : ${menuItem.submenu}">
-                    <a th:href="@{${submenuItem.url}}" th:utext="${submenuItem.label}"  class="sub-menu"></a>
-
-                    <ul th:if="${not #lists.isEmpty(submenuItem.submenu)}" class="secondary-sub-menu">
-                        <li th:each="submenuItem1 : ${submenuItem.submenu}">
-                            <a th:href="@{${submenuItem1.url}}" th:utext="${submenuItem1.label}"></a>
+                                    <h4>Manufacturer</h4>
+                                    <ul class="js-typeahead--mfg"></ul>
+                                </li>
+                                <li class="col-sm-5 ta-column">
+                                    <h4>Products</h4>
+                                    <ul class="js-typeahead--product"></ul>
+                                </li>
+                            </ul>
                         </li>
                     </ul>
                 </li>
             </ul>
 
-        </li>
-    </ul>
+            <!-- Account -->
+            <ul class="nav navbar-nav navbar-right">
+
+                <!-- Anonymous Customer Actions -->
+                <th:block th:if="${customer.anonymous}">
+                    <li>
+                        <a th:href="@{/login}" th:utext="#{home.login}">Login</a>
+                    </li>
+                </th:block>
+
+                <!-- Registered Customer Actions -->
+                <th:block th:if="${!customer.anonymous}">
+                    <th:block th:replace="@{layout/partials/registeredCustomerActions}" />
+                </th:block>
+
+                <!-- Mobile Main Navigation Menu -->
+                <li class="visible-xs">
+                    <th:block th:replace="@{layout/partials/navMenu}" />
+                </li>
+
+                <!-- Locale options -->
+                <li th:replace="layout/partials/navLocaleSelector"></li>
+
+                <!-- Mini Cart -->
+                <th:block th:replace="checkout/partials/miniCart" />
+            </ul>
+        </div>
+
+        <!-- Logo -->
+        <div class="header-logo">
+            <a class="navbar-brand withoutripple" th:href="@{/}">
+                <img class="brand-logo" th:src="@{../img/the-heat-clinic-logo-internal.png}" alt="The Heat Clinic Home">
+            </a>
+        </div>
+
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#right-nav">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar top-bar"></span>
+                <span class="icon-bar middle-bar"></span>
+                <span class="icon-bar bottom-bar"></span>
+            </button>
+
+            <ul class="visible-xs nav navbar-nav">
+                <th:block th:replace="checkout/partials/miniCart" />
+            </ul>
+        </div>
+
+        <div id="left-nav" class="left-nav hidden-xs collapse main-menu-wrapper">
+            <!-- Main Navigation Menu -->
+            <th:block th:replace="@{layout/partials/navMenu}" />
+        </div>
+    </div>
 </nav>
+<th:block th:if="${#props.get('google.website.translator.contentKey') != null}">
+    <div id="google_translate_element"></div>
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({pageLanguage: 'en', layout: google.translate.TranslateElement.InlineLayout.SIMPLE}, 'google_translate_element');
+        }
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</th:block>

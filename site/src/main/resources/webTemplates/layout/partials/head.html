@@ -1,26 +1,67 @@
 <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 
-<title th:unless="${pageTitle == 'TEMPLATE'}" th:utext="${#strings.isEmpty(pageTitle) ? 'Broadleaf Demo - Heat Clinic' : pageTitle}"></title>
-
-<title th:if="${pageTitle == 'TEMPLATE'}" th:remove="tag">
-    <title th:inline="text" th:include="~{${templateName} :: title}" ></title>
-</title>
-
-<meta name="description" content="Broadleaf Demo Store" />
+<meta name="description" content="Broadleaf Demo Store" th:unless="${hasMetaDesc}"/>
 <meta name="author" content="Broadleaf Commerce" />
 
-<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />   
+<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
 <meta name="viewport" content="width=device-width" />
 
-<blc:bundle name="style.css" 
+<!-- Fonts and icons -->
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" />
+
+<!-- CSS Files -->
+<blc:bundle name="style.css"
             mapping-prefix="/css/"
-            files="style.css,
-                   jquery.rating.css" ></blc:bundle>
+            files="bootstrap.min.css,
+                   bootstrap-grid-flexbox.css,
+                   material-kit.css,
+                   toastr.css,
+                   jquery.rating.css,
+                   layout/header.css,
+                   layout/footer.css,
+                   cart/mini-cart-item-list.css,
+                   cart/mini-cart.css,
+                   checkout/checkout.css,
+                   catalog/productListItem.css,
+                   catalog/product.css,
+                   catalog/featuredProduct.css,
+                   catalog/categorySearch.css,
+                   catalog/productSortOptions.css,
+                   catalog/productPagingOption.css,
+                   account/account.css,
+                   account/loginAndRegister.css,
+                   style-v2.css" />
 
-<link rel="stylesheet" th:unless="${#strings.isEmpty(additionalCss)}" />
+<!-- Sandboxing CSS -->
+<th:block th:if="${#brc.sandboxMode}">
+    <blc:bundle name="sandbox.css"
+                mapping-prefix="/css/"
+                files="jquery-ui-1.10.2.custom.css,
+                       font-awesome.min.css,
+                       deepLink.css,
+                       sandbox-client.css" />
+</th:block>
 
+<!-- CSR Mode CSS -->
+<th:block th:if="${#brc.csrMode}">
+    <blc:bundle name="csr.css"
+                mapping-prefix="/css/"
+                files="csr-client.css" />
+    <th:block th:if="${#module.isPresent('OMS')}">
+        <blc:bundle name="oms-csr.css"
+                    mapping-prefix="/css/"
+                    files="omsClient.css" />
+    </th:block>
+</th:block>
 
-<script blc:src="@{/js/libs/modernizr-2.5.3.min.js}"></script>
+<script src="../../js/libs/modernizr-2.5.3.min.js" th:src="@{/js/libs/modernizr-2.5.3.min.js}"></script>
+
+<script src="//www.google-analytics.com/cx/api.js"></script>
+<blc:googleExperiments execute="true" ></blc:googleExperiments>
+<th:block th:utext="${experimentInfo}"></th:block>
 
 <blc:google_universal_analytics ordernumber="${order?.orderNumber}" ></blc:google_universal_analytics>
+
+<meta th:if="${#props.get('google.website.translator.contentKey') != null}" name="google-translate-customization" th:attr="content=${#props.get('google.website.translator.contentKey')}"></meta>

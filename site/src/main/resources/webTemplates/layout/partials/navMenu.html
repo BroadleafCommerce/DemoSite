@@ -1,0 +1,30 @@
+<blc:menu resultVar="menuItems" menuName="Header Nav"></blc:menu>
+<ul class="nav navbar-nav main-menu" th:if="${not #lists.isEmpty(menuItems)}">
+    <th:block th:each="menuItem : ${menuItems}">
+        <!-- Normal Menu Item -->
+        <li th:if="${#lists.isEmpty(menuItem.submenu)}">
+            <a th:href="@{${menuItem.url}}">
+                <span th:utext="${menuItem.label}"></span>
+            </a>
+        </li>
+
+        <th:block th:unless="${#lists.isEmpty(menuItem.submenu)}">
+            <!-- Category Dropdown -->
+            <li th:unless="${#strings.isEmpty(menuItem.categoryId)}" class="dropdown">
+                <a th:href="@{${menuItem.url}}">
+                    <span th:utext="${menuItem.label}"></span>
+                </a>
+                <ul class="dropdown-menu dropdown-with-icons">
+                    <li th:each="submenuItem : ${menuItem.submenu}">
+                        <a th:href="@{${submenuItem.url}}" th:utext="${submenuItem.label}"></a>
+                    </li>
+                </ul>
+            </li>
+
+            <!-- Mega-Menu Dropdown -->
+            <li th:if="${#strings.isEmpty(menuItem.categoryId)}" class="mega-dropdown dropdown">
+                <th:block th:replace="@{layout/partials/navMegaMenu}" />
+            </li>
+        </th:block>
+    </th:block>
+</ul>

@@ -1,0 +1,70 @@
+<div class="modal fade" id="img-gallery-modal" tabindex="-1" role="dialog" aria-hidden="true"
+     th:if="${product}" th:object="${product}">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    <i class="material-icons">clear</i>
+                </button>
+                <h3 class="modal-title" th:utext="${product.name}"></h3>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-9">
+                        <div class="primary-img js-primary-img">
+                            <!-- populated by JS -->
+                            <img/>
+                        </div>
+                        <p class="zoom-text">
+                            <i class="material-icons">zoom_in</i>
+                            <span th:utext="#{product.dragZoom}">Drag to zoom</span>
+                        </p>
+                    </div>
+
+                    <div class="col-sm-3">
+                        <div id="myCarousel" class="carousel slide">
+
+                            <!-- Carousel items -->
+                            <div class="carousel-inner">
+
+                                <!-- Pass off media information to JS -->
+                                <div class="js-media" style="display: none">
+                                    <img th:each="m : *{media}" blc:src="@{${m.value.url}}"
+                                         th:alt="${m.value.altText}" th:if="${m.key == 'primary'}"/>
+                                    <img th:each="m : *{media}" blc:src="@{${m.value.url}}"
+                                         th:alt="${m.value.altText}" th:unless="${m.key == 'primary'}"/>
+                                </div>
+
+                                <div th:each="med, iterStat : *{media}" th:if="${iterStat.index % 3 eq 0}"
+                                     class="item js-thumbnails"
+                                     th:classappend="${iterStat.first}?'active'">
+                                    <div class="row-fluid">
+                                        <div th:each="m,iter : *{media}"
+                                             th:if="${iter.index ge iterStat.index and iter.index lt iterStat.index + 3}">
+                                            <a href="#" class="thumbnail js-thumbnail">
+                                                <!-- Populated by JS -->
+                                                <img style="max-width: 100%" class="img-rounded"/>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div><!--/carousel-inner-->
+
+                            <ol class="carousel-indicators" th:unless="*{media.size() lt 4}">
+                                <li th:each="media, iterStat : *{media}" th:if="${iterStat.index % 3 eq 0}"
+                                    th:class="${iterStat.first}?'active'" th:attr="data-slide-to=${iterStat.index / 3}"
+                                    data-target="#myCarousel"></li>
+                            </ol>
+
+                        </div><!--/myCarousel-->
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>

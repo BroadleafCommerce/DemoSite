@@ -1,27 +1,23 @@
-<div th:fragment="shipping-info-form">
+<div id="shipping_info_stage" th:fragment="read-only-shipping-info-form">
 
-    <div class="cart_title">
-        <span th:utext="#{cart.shippingInformation}">Shipping Information</span>
-        <a th:if="${'SAVED' == sectionDTO.state.type
-                        and cart.fulfillmentGroups != null and numShippableFulfillmentGroups == 1}"
-           th:href="@{/checkout(edit-shipping='true')}">
-            <span th:utext="#{cart.edit}">Edit</span>
-        </a>
-    </div>
+    <th:block th:if="${#fulfillment.getNumShippableFulfillmentGroups() > 1}">
+        <table th:replace="~{checkout/partials/multiShipInfoForm :: read-only-multiship-info-form}"></table>
+    </th:block>
 
-    <div class="clearfix"></div>
+    <th:block th:unless="${#fulfillment.getNumShippableFulfillmentGroups() > 1}">
+        <div th:replace="~{checkout/partials/singleShipInfoForm :: read-only-singleship-info-form}"></div>
+    </th:block>
 
-    <div class="checkout_warning"
-         th:if="${'INACTIVE' == sectionDTO.state.type}">
-        <span th:utext="${sectionDTO.helpMessage}"></span>
-    </div>
+</div>
 
-    <div th:if="${cart.fulfillmentGroups != null and numShippableFulfillmentGroups > 1}">
-        <table th:replace="~{checkout/partials/multishipInfo :: multiship-info}"></table>
-    </div>
+<div id="shipping_info_stage" th:fragment="shipping-info-form">
 
-    <div th:unless="${cart.fulfillmentGroups != null and numShippableFulfillmentGroups > 1}">
-        <div th:replace="~{checkout/partials/singleShipInfo :: singleship-info}"></div>
-    </div>
+    <th:block th:if="${#fulfillment.getNumShippableFulfillmentGroups() > 1}">
+        <table th:replace="~{checkout/partials/multiShipInfoForm :: multiship-info-form}"></table>
+    </th:block>
+
+    <th:block th:unless="${#fulfillment.getNumShippableFulfillmentGroups() > 1}">
+        <div th:replace="~{checkout/partials/singleShipInfoForm :: singleship-info-form}"></div>
+    </th:block>
 
 </div>

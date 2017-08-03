@@ -1,0 +1,38 @@
+<a class="menu-title" th:href="@{${menuItem.url}}">
+    <span th:utext="${menuItem.label}"></span>
+</a>
+<ul class="dropdown-menu mega-dropdown-menu row">
+    <th:block th:each="submenu : ${menuItem.submenu}"
+              th:with="numSections=${#lists.size(menuItem.submenu)}">
+
+        <!-- Category -->
+        <li th:unless="${#strings.isEmpty(submenu.categoryId)}" th:class="${'col-sm-' + (12 / numSections)}">
+            <ul>
+                <li class="menu-title">
+                    <a th:href="@{${submenu.url}}" th:utext="${submenu.label}"></a>
+                </li>
+                <li th:each="submenuItem : ${submenu.submenu}">
+                    <a th:href="@{${submenuItem.url}}" th:utext="${submenuItem.label}"></a>
+                </li>
+            </ul>
+        </li>
+
+        <!-- Submenu -->
+        <li th:if="${#strings.isEmpty(submenu.categoryId)}" th:class="${'col-sm-' + (12 / numSections)}">
+            <ul>
+                <li class="menu-title" th:utext="${submenu.label}"></li>
+                <th:block th:each="subSubMenu : ${submenu.submenu}">
+                    <li>
+                        <a class="menu-title" th:href="@{${subSubMenu.url}}" th:utext="${subSubMenu.label}"></a>
+                        <ul th:unless="${#arrays.isEmpty(subSubMenu.submenu)}">
+                            <li th:each="subSubMenuItem : ${subSubMenu.submenu}">
+                                <a th:href="@{${subSubMenuItem.url}}" th:utext="${subSubMenuItem.label}"></a>
+                            </li>
+                        </ul>
+                    </li>
+                </th:block>
+            </ul>
+        </li>
+
+    </th:block>
+</ul>

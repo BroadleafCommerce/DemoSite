@@ -1,0 +1,17 @@
+<div class="card checkout-card cart-summary-row">
+    <div class="row">
+        <div class="cart-item-summary-title">
+            <th:block th:unless="${isConfirmationContext}">
+                <h4 th:utext="#{cart.itemSummary}">In Your Cart</h4>
+                <a class="btn btn-primary btn-simple btn-lg pull-right"
+                   th:href="@{/cart}" th:utext="#{cart.edit}">Edit</a>
+            </th:block>
+            <th:block th:if="${isConfirmationContext}">
+                <h4 th:utext="#{confirmation.itemSummary}">In Your Order</h4>
+            </th:block>
+        </div>
+    </div>
+    <ul class="cart-item-summary">
+        <th:block th:include="checkout/partials/miniCartItemList" th:with="excludeOrderItemActions=${true}" />
+    </ul>
+</div>

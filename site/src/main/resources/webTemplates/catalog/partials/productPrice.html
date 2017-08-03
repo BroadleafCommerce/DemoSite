@@ -1,0 +1,6 @@
+<div id="price" th:unless="${#object instanceof T(org.broadleafcommerce.core.catalog.domain.ProductBundle)}">
+    <h3 class="main-price">
+        <span blc:price="*{salePrice}" th:if="*{onSale}" th:classappend="*{onSale}? 'price-new'"></span>
+        <span blc:price="*{retailPrice}" th:classappend="*{onSale}? 'price-old small'"></span>
+    </h3>
+</div>

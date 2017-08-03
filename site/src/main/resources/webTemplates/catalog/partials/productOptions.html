@@ -1,37 +1,82 @@
-<div class="product-options hidden" th:fragment="productOptions">
-    <blc:product_options productId="*{id}" ></blc:product_options>
-    <div id="product-option-data" hidden="hidden" th:attr="data-product-option-pricing=${skuPricing}, data-product-options=${allProductOptions}"></div>
-    <ul>
-        <li th:each="productOption : *{productOptions}" th:object="${productOption}" class="product-option-group cf" th:classappend="*{type.type == 'COLOR'}? 'colors'">
-            <label th:utext="*{label}"></label>:
-             <span th:id="*{attributeName}" class="option-value" th:attr="data-optiontype=*{type.type}"></span>
-             <ul class="cf" th:switch="*{type.type}">
-                <li th:case="'TEXT'">                     
-                    <input th:name="${'itemAttributes[' + productOption.attributeName + ']'}" value="" th:type="*{type}" th:required="*{required}" maxlength="255" />                               
-                </li>
-                <li th:case="'SELECT'">
-                    <select th:name="${'itemAttributes[' + productOption.attributeName + ']'}">
-                        <option th:each="optionValue : *{allowedValues}" th:object="${optionValue}" th:utext="*{attributeValue}"></option>
-                    </select> 
-                </li>                             
-                <li th:case="'TEXTAREA'">
-                    <textarea th:name="${'itemAttributes[' + productOption.attributeName + ']'}" value="" th:type="*{type}" th:required="*{required}" ></textarea>
-                </li>
-                <li th:case="'DECIMAL'">
-                    <input th:name="${'itemAttributes[' + productOption.attributeName + ']'}" value="" th:type="*{type}" th:required="*{required}" maxlength="10" />
-                </li>
-                <th:block th:case="*" th:remove="tag">
-                    <li th:each="optionValue : *{allowedValues}" blc:product_option_value="${optionValue}" th:object="${optionValue}" th:classappend="${productOption.type.type == 'COLOR'}? ${optionValue.attributeValue}" >
-                        <div>
-                            <a href="#" class="option-label" th:utext="*{attributeValue}"  ></a>
-                        </div>
-                    </li>
-                </th:block>
-            </ul>       
-        </li>
-    </ul>
-    
-    <span class="productOptionsSpan centered" style="display: none;"><span th:utext="#{product.productOptionValidationError}">Product Option Validation Failed</span></span>
-    <span class="error centered" style="display: none;"><span th:utext="#{product.allOptionsRequired}">All options are required</span></span>
-    <span class="error errorMessage" style="display: none;"></span>
+<div class="js-productOptions" th:fragment="productOptions">
+
+    <blc:product_options productId="*{id}"></blc:product_options>
+
+    <div class="js-productOptionData row pick-size" hidden="hidden"
+         th:attr="data-product-option-pricing=${skuPricing}, data-product-options=${allProductOptions}"></div>
+
+    <div th:each="productOption : *{productOptions}" th:object="${productOption}" class="js-productOptionGroup product-options">
+
+        <!-- Product option label - excluded for inputs that have label combined with input -->
+        <!--<label th:utext="*{label}" th:unless="*{type.type == 'TEXT' || type.type == 'TEXTAREA' || type.type == 'DECIMAL'}"></label>-->
+
+        <!-- Shows the currently selected option - hidden since our inputs already display what's been selected -->
+        <span th:id="*{attributeName}" class="js-optionValue hidden" th:attr="data-option-type=*{type.type}"></span>
+
+        <!-- Switch for different input types -->
+        <th:block th:switch="*{type.type}">
+
+            <!-- Text inputs -->
+            <div th:case="'TEXT'" class="form-group label-floating">
+                <label class="control-label" th:utext="*{label}"></label>
+                <input class="form-control" th:name="${'itemAttributes[' + attributeName + ']'}"
+                       th:type="*{type}"
+                       th:required="*{required}" maxlength="255"/>
+            </div>
+
+            <!-- Text area inputs -->
+            <div th:case="'TEXTAREA'" class="form-group label-floating">
+                <label class="control-label" th:utext="*{label}"></label>
+                <textarea class="form-control" rows="3" th:name="${'itemAttributes[' + attributeName + ']'}"
+                          th:type="*{type}"
+                          th:required="*{required}"></textarea>
+            </div>
+
+            <!-- Number inputs -->
+            <div th:case="'DECIMAL'" class="form-group label-floating">
+                <label class="control-label" th:utext="*{label}"></label>
+                <input class="form-control" th:name="${'itemAttributes[' + attributeName + ']'}" th:type="*{type}"
+                       th:required="*{required}" maxlength="10"/>
+            </div>
+
+            <!-- Color inputs -->
+            <div th:case="'COLOR'" class="color-product-options">
+                <a th:each="optionValue : *{allowedValues}" blc:product_option_value="${optionValue}"
+                   href="#"
+                   class="js-productOption color-option"
+                   rel="tooltip"
+                   th:data-original-title="${optionValue.attributeValue}"
+                   th:object="${optionValue}"
+                   th:classappend="${optionValue.attributeValue}">
+                    <div class="color-inner" th:classappend="${optionValue.attributeValue}" th:utext="*{attributeValue}"></div>
+                </a>
+            </div>
+
+            <!-- Other inputs can be inserted here -->
+
+            <!-- Other types are put in as a select box -->
+            <th:block th:case="*">
+                <select class="selectpicker" data-style="btn">
+                    <option disabled selected th:text="*{label}">Pick your option</option>
+                    <option th:each="optionValue,iterStat : *{allowedValues}" blc:product_option_value="${optionValue}"
+                            th:value="${optionValue.attributeValue}"
+                            th:object="${optionValue}"
+                            th:classappend="${productOption.type.type == 'COLOR'}? ${optionValue.attributeValue}"
+                            th:utext="*{attributeValue}"></option>
+                </select>
+            </th:block>
+        </th:block>
+    </div>
+
+    <span class="js-productOptionsSpan text-danger" style="display: none;">
+        <span th:utext="#{product.productOptionValidationError}">Product Option Validation Failed</span>
+    </span>
+    <span class="error text-danger" style="display: none;">
+        <span th:utext="#{product.allOptionsRequired}">All options are required</span>
+    </span>
+
+    <!-- Existing item attributes if any -->
+    <div th:if="${isUpdateRequest}" class="item-attributes">
+        <input th:each="entry : ${orderItem.getOrderItemAttributes()}" type="hidden" th:name="${entry.key}" th:value="${entry.value}" />
+    </div>
 </div>

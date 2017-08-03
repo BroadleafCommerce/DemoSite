@@ -1,0 +1,70 @@
+<div class="card checkout-card">
+    <div class="checkout-stage-title">
+        <h4>
+            <th:block th:utext="#{checkout.stages.payment}">Payment</th:block>
+        </h4>
+    </div>
+
+    <div class="checkout-stage">
+        <div class="row" th:if="${#paymentMethod.orderContainsCreditCardPayment(order)}">
+            <div class="col-sm-6">
+                <h4><span th:utext="#{cart.billingInformation}">Billing Information</span></h4>
+
+                <th:block th:with="payment=${order.payments[0]}">
+                    <th:block th:if="${payment.isActive()}">
+                        <th:block th:include="~{partials/simpleAddress :: read-only}" th:with="address=${payment.billingAddress}"/>
+                        <address th:utext="${order.emailAddress}"></address>
+                    </th:block>
+                </th:block>
+            </div>
+
+            <div class="col-sm-6">
+                <h4><span th:utext="#{account.payments.paymentFormTitle}">Payment Information</span></h4>
+
+                <th:block class="payment_method" th:each="payment : ${order.payments}" th:object="${payment}" th:inline="text">
+                    <div th:if="${payment.isActive()}" class="confirmation-order-payment">
+                        <th:block th:if="${payment.initialTransaction != null} and !*{#strings.isEmpty(initialTransaction.additionalFields['CARD_TYPE'])}">
+                            <th:block th:include="~{partials/creditCard :: read-only}"
+                                      th:with="cardType=*{initialTransaction.additionalFields['CARD_TYPE']},
+                                                lastFour=*{initialTransaction.additionalFields['LAST_FOUR']},
+                                                expDate=*{initialTransaction.additionalFields['EXP_DATE']}" />
+
+                            <div class="amount-paid">
+                                Amount paid: <span blc:price="*{amount}" ></span>
+                            </div>
+                        </th:block>
+
+                        <th:block th:if="${payment.authorizeTransaction != null} and !*{#strings.isEmpty(authorizeTransaction.additionalFields['CARD_TYPE'])}"
+                                  th:unless="${payment.initialTransaction != null} and !*{#strings.isEmpty(initialTransaction.additionalFields['CARD_TYPE'])}">
+                            <th:block th:include="~{partials/creditCard :: read-only}"
+                                      th:with="cardType=*{authorizeTransaction.additionalFields['CARD_TYPE']},
+                                                lastFour=*{authorizeTransaction.additionalFields['LAST_FOUR']},
+                                                expDate=*{authorizeTransaction.additionalFields['EXP_DATE']}" />
+
+                            <div class="amount-paid">
+                                Amount paid: <span blc:price="*{amount}" ></span>
+                            </div>
+                        </th:block>
+
+                        <th:block th:if="${payment.initialTransaction != null}">
+                            <th:block th:if="!*{#strings.isEmpty(initialTransaction.additionalFields['ACCOUNT_CREDIT_NUM'])}">
+                                <span th:utext="#{cart.accountCredit.accounts}">Accounts</span><br/>
+                                <b th:utext="*{initialTransaction.additionalFields['ACCOUNT_CREDIT_NUM']}"></b><br/>
+                            </th:block>
+                            <th:block th:if="!*{#strings.isEmpty(initialTransaction.additionalFields['GIFT_CARD_NUM'])}">
+                                <span th:utext="#{cart.giftCardNumber}">Gift Card Number</span><br/>
+                                <b th:utext="*{initialTransaction.additionalFields['GIFT_CARD_NUM']}"></b><br/>
+                            </th:block>
+                        </th:block>
+                    </div>
+                </th:block>
+            </div>
+        </div>
+
+        <div class="row" th:if="${#paymentMethod.orderContainsCODPayment(order)}">
+            <div class="col-sm-12">
+                <th:block th:replace="~{checkout/payment/codPaymentMethodForm :: read-only}" />
+            </div>
+        </div>
+    </div>
+</div>

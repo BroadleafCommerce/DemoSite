@@ -1,24 +1,31 @@
 <th:block layout:decorate="~{layout/accountLayout}" layout:fragment="content">
-    <div>
-        <ul id="order-history" th:unless="${#lists.isEmpty(orders)}">
-            <li>
-                <span class="order-number">Order Number</span>
-                <span class="submit-date">Date</span>
-                <span class="status">Status</span>
-                <span class="total">Total</span>
-            </li>
-            <li class="order" th:each="order : ${orders}" th:object="${order}" th:attr="data-order-number=*{orderNumber}">
-                <div class="order-info-row">
-                 <span class="order-number"><a th:href="@{/account/orders/} + *{orderNumber}" class="view-order-details" th:utext="*{orderNumber}"></a></span>
-                 <span class="submit-date" th:utext="*{#dates.format(submitDate, 'MM-dd-yyyy')}"></span>
-                 <span class="status" th:utext="*{status.friendlyType}">Processing</span>
-                 <span class="total" blc:price="*{total}"></span>
-             </div>
-                <div class="order-details"></div>
-            </li>
+    <div class="card manage-account-form-wrapper js-manageAccountFormWrapper">
+        <h3 th:utext="#{account.orders.title}">Order History</h3>
+        <hr />
+
+        <ul id="order-history" class="order-history" th:unless="${#lists.isEmpty(orders)}">
+            <div>
+                <li class="order-info-row">
+                    <span class="order-number" th:utext="#{account.orders.orderNumber}">Order Number</span>
+                    <span class="order-submit-date" th:utext="#{account.orders.date}">Date</span>
+                    <span class="order-status" th:utext="#{account.orders.status}">Status</span>
+                    <span class="order-total" th:utext="#{account.orders.total}">Total</span>
+                </li>
+            </div>
+            <div th:each="order : ${orders}" th:object="${order}">
+                <li class="js-order order-info-row" th:attr="data-order-number=*{orderNumber}">
+            <span class="order-number"><a th:href="@{/account/orders/} + *{orderNumber}" class="js-viewOrderDetails"
+                                          th:utext="*{orderNumber}"></a></span>
+                    <span class="order-submit-date" th:utext="*{#dates.format(submitDate, 'MM-dd-yyyy')}"></span>
+                    <span class="order-status" th:utext="*{status.friendlyType}">Processing</span>
+                    <span class="order-total" blc:price="*{total}"></span>
+                </li>
+
+                <div class="js-orderDetails order-details-row" style="display: none;"></div>
+            </div>
         </ul>
-        
-        <h3 th:if="${#lists.isEmpty(orders)}">You have not placed any orders.</h3>
-    
+
+        <p th:if="${#lists.isEmpty(orders)}" th:utext="#{account.orders.noOrders}">You have not placed any orders.</p>
+
     </div>
 </th:block>

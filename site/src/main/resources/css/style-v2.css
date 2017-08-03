@@ -1,0 +1,128 @@
+#toast-container {
+    z-index: 100;
+}
+.card-light-shadow {
+    box-shadow: 0 12px 34px -12px rgba(0, 0, 0, 0.3), 0 4px 20px 0 rgba(0, 0, 0, 0.2), 0 8px 10px -5px rgba(0, 0, 0, 0.3);
+}
+
+.main {
+    margin-top: 146px;
+    min-height: 650px;
+}
+
+.section {
+    padding: 35px 0;
+}
+
+.is-hidden { display: none !important; visibility: hidden; }
+
+.card, .nav-pills:not(.nav-pills-icons) > li > a  {
+    border-radius: 3px;
+}
+
+.form-group.label-static label.control-label, .form-group.label-floating.is-focused label.control-label, .form-group.label-floating:not(.is-empty) label.control-label {
+    top: -22px;
+}
+
+.title, .card-title, .info-title, .footer-brand, .footer-big h5, .footer-big h4, .media .media-heading {
+    font-weight: 500;
+    font-family: inherit;
+}
+
+.breadcrumb-container {
+    padding-top: 2em;
+    margin-bottom: -1em;
+    margin-left: -1em;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.no-right-padding {
+    padding-right: 0;
+}
+.no-left-padding {
+    padding-left: 0;
+}
+
+@media (max-width: 768px) {
+    .main {
+        margin-top: 50px;
+    }
+
+    .card-product {
+        margin-bottom: 0;
+    }
+
+    /* Force table to not be like tables anymore */
+    .mobile-table table,
+    .mobile-table thead,
+    .mobile-table tbody,
+    .mobile-table-tables th,
+    .mobile-table td,
+    .mobile-table tr {
+        display: block;
+    }
+
+    /* Hide table headers (but not display: none;, for accessibility) */
+    .mobile-table thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+
+    .mobile-table tr { border: 1px solid #ccc; }
+
+    .mobile-table td {
+        position: relative;
+        text-align: left;
+        overflow: hidden;
+        padding: 20px 5px 5px 10px !important;
+    }
+
+    .mobile-table td:before {
+        /* Now like a table header */
+        position: absolute;
+        /* Top/left values mimic padding */
+        top: 0;
+        left: 6px;
+        width: 45%;
+        padding-right: 10px;
+        white-space: nowrap;
+        text-align:left;
+        font-weight: bold;
+    }
+
+    /*
+    Label the data
+    */
+    .mobile-table td:before { content: attr(data-title); }
+}
+
+/* Makes an element position: absolute and centers it */
+.cntr-abs {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.cntr-abs-horz {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.cntr-abs-vert {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.img-fit-parent,
+.nav > li > a > .img-fit-parent {
+    max-width: 100%;
+}
+
+.full-width {
+    width: 100%;
+}

@@ -6,10 +6,23 @@
              th:unless="${fg.type?.type == 'GIFT_CARD' or fg.type?.type == 'DIGITAL' or fg.type?.type == 'PHYSICAL_PICKUP'}">
             <h4>
                 <span th:classappend="*{address == null}? 'error'"
-                      th:utext="*{address == null ? 'Missing Address' : address.firstName + ' at ' + address.addressLine1}"></span>
+                      th:utext="*{address == null ? 'Missing Address' : address.fullName + ' at ' + address.addressLine1}"></span>
                 <span>&nbsp;-&nbsp;</span>
                 <span th:classappend="*{fulfillmentOption == null}? 'error'"
                       th:utext="*{fulfillmentOption == null ? 'Missing Fulfillment Option' : fulfillmentOption.name + ' (' + fulfillmentOption.longDescription + ')'}"></span>
+
+                <a th:href="@{${'/csrtools/override-shipping/' + fg.id}}" 
+                    th:if="${#brc.csrMode and cart.id != null}"
+                    th:utext="${fg.shippingOverride} ? #{csr_changeOverride} : #{csr_overrideShipping}"
+                    class="csr-override-shipping"
+                    style="float: right; font-weight: normal; margin-left: 7px;" ></a>
+                
+                <a th:href="@{${'/csrtools/clear-shipping-override/' + fg.id}}" 
+                    th:if="${#brc.csrMode and cart.id != null and fg.shippingOverride}"
+                    th:utext="#{csr_clearOverride}"
+                    class="csr-clear-override"
+                    style="float: right; font-weight: normal; margin-left: 7px;" ></a>
+
                 <span blc:price="*{shippingPrice}" class="multishipGroupShippingCharge"></span>
             </h4>
             
@@ -20,7 +33,7 @@
                         <td align="left">
                             <span th:utext="*{sku.name}"></span>
                                   <blc:product_option_display orderItem="${item.orderItem}" >
-                                           <ul th:unless="${#lists.isEmpty(productOptionDisplayValues)}" class="productOptions">
+                                           <ul th:unless="${#lists.isEmpty(productOptionDisplayValues)}" class="js-productOptions productOptions">
                                                <li th:each="entry: ${productOptionDisplayValues}">
                                                  <span  th:utext="${entry.key} + ': ' + ${entry.value}"></span>
                                                </li>
@@ -39,7 +52,7 @@
             <a th:href="@{/checkout/singleship}">Ship to Single Address</a>
         </p>
         <p>
-            <a id="multiship" th:href="@{/checkout/multiship}">Edit Multiple Address Shipping</a>
+            <a id="multiship" class="js-multiship" th:href="@{/checkout/multiship}">Edit Multiple Address Shipping</a>
         </p>
     </div>
 </div>

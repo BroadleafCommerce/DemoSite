@@ -1,58 +1,162 @@
-<div id="multiship-add-address">
+<div id="multishipAddAddress" class="js-multishipAddAddress">
     <div id="addAddressContainer">
         <div id="addAddressTitle">Add a new address</div>
         <div id="addAddress">
-            <blc:form th:object="${addressForm}" th:action="@{/checkout/add-address}" method="post" id="shipping_address">
-                <input type="hidden" name="address.isoCountryAlpha2" value="US" />
-                
-                <div class="form30">
-                    <label for="firstName">First Name</label> 
-                    <span class="error" th:if="${#fields.hasErrors('address.firstName')}" th:errors="*{address.firstName}"></span>
-                    <input type="text" th:field="*{address.firstName}" class="field30 required" th:classappend="${#fields.hasErrors('address.firstName')}? 'fieldError'"/>
-                </div>
-                <div class="form30 margin20">
-                    <label for="lastName">Last Name</label> 
-                    <span class="error" th:if="${#fields.hasErrors('address.lastName')}" th:errors="*{address.lastName}"></span>
-                    <input type="text" th:field="*{address.lastName}" class="field30 required" th:classappend="${#fields.hasErrors('address.lastName')}? 'fieldError'"/>
-                </div>
-    
-                <div class="form66">
-                    <label for="address1">Address</label> 
-                    <span class="error" th:if="${#fields.hasErrors('address.addressLine1')}" th:errors="*{address.addressLine1}"></span>
-                    <input type="text" th:field="*{address.addressLine1}" class="field66 required" th:classappend="${#fields.hasErrors('address.addressLine1')}? 'fieldError'"/>
-                </div>
-                <div class="form66">
-                    <label for="address2">Address 2</label> 
-                    <span class="error_spacer" th:if="${#fields.hasErrors('address.addressLine1')}">error</span>
-                    <input type="text" th:field="*{address.addressLine2}" class="field66"/>
-                </div>
-    
-                <div class="form30">
-                    <label for="city">City / State</label>
-                    <span class="error" th:if="${#fields.hasErrors('address.city')}" th:errors="*{address.city}"></span>
-                    <br th:if="${#fields.hasErrors('address.city')} and ${#fields.hasErrors('address.stateProvinceRegion')}"/>
-                    <span class="error" th:if="${#fields.hasErrors('address.stateProvinceRegion')}" th:errors="*{address.stateProvinceRegion}"></span>
-                    
-                    <input type="text" th:field="*{address.city}" class="field25 required" th:classappend="${#fields.hasErrors('address.city')}? 'fieldError'" />
-                    <select id="state" th:field="*{address.stateProvinceRegion}" size="1" style="width: 48px;" class="required" th:classappend="${#fields.hasErrors('address.stateProvinceRegion')}? 'fieldError'">
-                        <option value="">--</option>
-                        <option th:each="state : ${states}" th:value="${state.abbreviation}" th:utext="${state.abbreviation}"></option>
+
+            <th:block th:if="${#module.isPresent('i18n Enterprise')}">
+                <blc:dynamic_regional_form th:object="${addressForm}"
+                                       th:action="@{/checkout/add-address}"
+                                       th:country="${addressForm.address.isoCountryAlpha2?.alpha2}"
+                                       name="SHIPPING_FORM"
+                                       method="post" id="multi_shipping_address">
+
+                <div class="form50">
+                    <select id="multiShippingInfoCountry"
+                            class="js-multiShippingInfoCountry js-dynamicAddressCountry js-cloneable js-clearable dynamicAddressCountry required"
+                            name="address.isoCountryAlpha2"
+                            th:classappend="${#fields.hasErrors('address.isoCountryAlpha2')}? 'fieldError'">
+                        <option value="" th:attr="data-href=@{/checkout}">- Please Select a Country -</option>
+                        <option th:each="country : ${countries}"
+                                th:if="${country.name}"
+                                th:value="${country.alpha2}"
+                                th:attr="data-href=@{/checkout/multi-shipping-country(blDynamicFormCountryCode=${country.alpha2})}"
+                                th:selected="${country.alpha2.equals(blDynamicCountry)}"
+                                th:utext="${country.name + ' (' + country.alpha2 + ')'}">
+                        </option>
                     </select>
                 </div>
-                <div class="form25 margin20">
-                    <label for="postal_code">Postal Code</label>
-                    <span class="error" th:if="${#fields.hasErrors('address.postalCode')}" th:errors="*{address.postalCode}"></span>
-                    <input type="text" th:field="*{address.postalCode}" class="field30" th:classappend="${#fields.hasErrors('address.postalCode')}? 'fieldError'" />
+
+                <div th:if="${blDynamicRegionalForm}" id="dynamicMultiShippingForm" class="js-dynamicMultiShippingForm">
+                    <span class="error" th:if="${#fields.hasErrors('*')}" th:errors="*"></span>
+                    <div th:each="fieldGroup : ${blFieldGroups}">
+
+                        <div th:if="${#lists.size(fieldGroup.value)} &gt;1">
+                            <div class="clearfix"></div>
+                            <div class="form50">
+                                <span th:each="fieldItem : ${fieldGroup.value}">
+                                    <span th:if="${#strings.isEmpty(fieldItem.type.lookupCategory) == false}">
+                                        <select class="js-cloneable js-clearable dynamic_address_country_sub_small required"
+                                                th:field="*{__${fieldItem.type.modelAttributeName}__}">
+                                            <option th:if="${#strings.isEmpty(__${fieldItem.type.lookupCategory}__)}" value="">--</option>
+                                            <option th:each="subdivision : ${__${fieldItem.type.lookupCategory}__}"
+                                                    th:value="${subdivision.alternateAbbreviation}"
+                                                    th:utext="${subdivision.name}">
+                                            </option>
+                                        </select>
+                                    </span>
+                                    <span th:if="${#strings.isEmpty(fieldItem.type.lookupCategory) == true}">
+                                            <input type="text"
+                                                   class="js-clearable field15"
+                                                   th:classappend="${#fields.hasErrors('__${fieldItem.type.modelAttributeName}__')}? fieldError"
+                                                   th:placeholder="${fieldItem.placeHolder}"
+                                                   th:field="*{__${fieldItem.type.modelAttributeName}__}"/>
+<!--                                                    th:name="${fieldItem.type.modelAttributeName}"/> -->
+                                     </span>
+                                </span>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+
+                        <div th:if="${#lists.size(fieldGroup.value)}&lt;2">
+                            <div class="clearfix"></div>
+                            <div class="form50">
+                                <span th:each="fieldItem : ${fieldGroup.value}">
+                                    <span th:unless="${#strings.isEmpty(__${fieldItem.type.lookupCategory}__)}">
+                                        <select class="js-cloneable js-clearable dynamic_address_country_sub_small required"
+                                                th:field="*{__${fieldItem.type.modelAttributeName}__}">
+                                            <option th:if="${#strings.isEmpty(__${fieldItem.type.lookupCategory}__)}" value="">--</option>
+                                            <option th:each="subdivision : ${__${fieldItem.type.lookupCategory}__}"
+                                                    th:value="${subdivision.alternateAbbreviation}"
+                                                    th:utext="${subdivision.name}">
+                                            </option>
+                                        </select>
+                                    </span>
+                                    <span th:if="${#strings.isEmpty(__${fieldItem.type.lookupCategory}__)}">
+                                        <input type="text"
+                                               th:unless="${fieldItem.type.modelAttributeName} == ${blPrimaryPhoneType.modelAttributeName} or ${fieldItem.type.modelAttributeName} == ${blSecondaryPhoneType.modelAttributeName} or ${fieldItem.type.modelAttributeName} == ${blFaxPhoneType.modelAttributeName}"
+                                               class="js-clearable field50"
+                                               th:classappend="${#fields.hasErrors('__${fieldItem.type.modelAttributeName}__')}? fieldError"
+                                               th:placeholder="${fieldItem.placeHolder}"
+                                               th:field="*{__${fieldItem.type.modelAttributeName}__}"/>
+                                        <input
+                                               th:if="${fieldItem.type.modelAttributeName} == ${blPrimaryPhoneType.modelAttributeName} or ${fieldItem.type.modelAttributeName} == ${blSecondaryPhoneType.modelAttributeName} or ${fieldItem.type.modelAttributeName} == ${blFaxPhoneType.modelAttributeName}"
+                                               type="text"
+                                               class="js-cloneable js-clearable field50"
+                                               th:classappend="${#fields.hasErrors('__${fieldItem.type.modelAttributeName}__')}? fieldError"
+                                               th:placeholder="#{${fieldItem.type.friendlyType}}"
+                                               th:name="${fieldItem.type.modelAttributeName + '.phoneNumber'}"
+                                               />
+                                    </span>
+
+                                </span>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+
+                    </div>
                 </div>
-                <div class="form30 margin20">
-                <label for="phone"><span th:utext="#{cart.phone}">Phone</span></label> <span class="error_spacer" th:if="${#fields.hasErrors('address.firstName') or #fields.hasErrors('address.lastName')}">error</span>
-                <input type="tel" id="address.phonePrimary" name="address.phonePrimary" th:if="*{address.phonePrimary != null}" th:value="*{address.phonePrimary.phoneNumber}" class="field30 cloneable" />
-                <input type="tel" id="address.phonePrimary" name="address.phonePrimary" th:if="*{address.phonePrimary == null}" value="" class="field30 cloneable" />
-                </div>
-                
-                <input type="submit" class="save medium red" value="Save" />
-                <a th:href="@{/checkout/multiship}" class="cancel small-button gray-button" style="margin-top: 16px;">Cancel</a>
-            </blc:form>
+
+                <div class="clearfix"></div>
+
+                <input type="submit" class="js-save save medium red" value="Save" />
+                <a th:href="@{/checkout/multiship}" class="js-cancel cancel small-button gray-button" style="margin-top: 16px;">Cancel</a>
+
+            </blc:dynamic_regional_form>
+            </th:block>
+
+            <th:block th:unless="${#module.isPresent('i18n Enterprise')}">
+                <blc:form th:object="${addressForm}" th:action="@{/checkout/add-address}" method="post" id="shipping_address">
+                    <input type="hidden" name="address.isoCountryAlpha2" value="US" />
+
+                    <div class="form30">
+                        <label for="firstName">First Name</label>
+                        <span class="error" th:if="${#fields.hasErrors('address.firstName')}" th:errors="*{address.firstName}"></span>
+                        <input type="text" th:field="*{address.firstName}" class="field30 required" th:classappend="${#fields.hasErrors('address.firstName')}? 'fieldError'"/>
+                    </div>
+                    <div class="form30 margin20">
+                        <label for="lastName">Last Name</label>
+                        <span class="error" th:if="${#fields.hasErrors('address.lastName')}" th:errors="*{address.lastName}"></span>
+                        <input type="text" th:field="*{address.lastName}" class="field30 required" th:classappend="${#fields.hasErrors('address.lastName')}? 'fieldError'"/>
+                    </div>
+
+                    <div class="form66">
+                        <label for="address1">Address</label>
+                        <span class="error" th:if="${#fields.hasErrors('address.addressLine1')}" th:errors="*{address.addressLine1}"></span>
+                        <input type="text" th:field="*{address.addressLine1}" class="field66 required" th:classappend="${#fields.hasErrors('address.addressLine1')}? 'fieldError'"/>
+                    </div>
+                    <div class="form66">
+                        <label for="address2">Address 2</label>
+                        <span class="error_spacer" th:if="${#fields.hasErrors('address.addressLine1')}">error</span>
+                        <input type="text" th:field="*{address.addressLine2}" class="field66"/>
+                    </div>
+
+                    <div class="form30">
+                        <label for="city">City / State</label>
+                        <span class="error" th:if="${#fields.hasErrors('address.city')}" th:errors="*{address.city}"></span>
+                        <br th:if="${#fields.hasErrors('address.city')} and ${#fields.hasErrors('address.stateProvinceRegion')}"/>
+                        <span class="error" th:if="${#fields.hasErrors('address.stateProvinceRegion')}" th:errors="*{address.stateProvinceRegion}"></span>
+
+                        <input type="text" th:field="*{address.city}" class="field25 required" th:classappend="${#fields.hasErrors('address.city')}? 'fieldError'" />
+                        <select id="state" th:field="*{address.stateProvinceRegion}" size="1" style="width: 48px;" class="required" th:classappend="${#fields.hasErrors('address.stateProvinceRegion')}? 'fieldError'">
+                            <option value="">--</option>
+                            <option th:each="state : ${#address.getStateOptions()}" th:value="${state.abbreviation}" th:utext="${state.abbreviation}"></option>
+                        </select>
+                    </div>
+                    <div class="form25 margin20">
+                        <label for="postal_code">Postal Code</label>
+                        <span class="error" th:if="${#fields.hasErrors('address.postalCode')}" th:errors="*{address.postalCode}"></span>
+                        <input type="text" th:field="*{address.postalCode}" class="field30" th:classappend="${#fields.hasErrors('address.postalCode')}? 'fieldError'" />
+                    </div>
+                    <div class="form30 margin20">
+                        <label for="phone"><span th:utext="#{cart.phone}">Phone</span></label> <span class="error_spacer" th:if="${#fields.hasErrors('address.firstName') or #fields.hasErrors('address.lastName')}">error</span>
+                        <input type="tel" id="address.phonePrimary" name="address.phonePrimary" th:if="*{address.phonePrimary != null}" th:value="*{address.phonePrimary.phoneNumber}" class="field30 cloneable" />
+                        <input type="tel" id="address.phonePrimary" name="address.phonePrimary" th:if="*{address.phonePrimary == null}" value="" class="field30 cloneable" />
+                    </div>
+
+                    <input type="submit" class="save medium red" value="Save" />
+                    <a th:href="@{/checkout/multiship}" class="cancel small-button gray-button" style="margin-top: 16px;">Cancel</a>
+                </blc:form>
+            </th:block>
         </div>
     </div>
 </div>

@@ -1,8 +1,17 @@
-<div class="pager" th:unless="${#lists.isEmpty(products)} and ${#lists.isEmpty(skus)}">
-    <span class="heading"><span th:utext="#{productPagingOptions.page}">Page:</span></span>
-    <ul>
-        <li th:each="num : ${#numbers.sequence(1, result.totalPages)}">
-            <a blc:paginationpagelink="${num}" th:utext="${num}" th:class="${result.page == num}? 'active'"></a>
-        </li>
-    </ul>
-</div>
+<th:block th:if="${result.totalPages > 1}">
+    <div class="pager" th:unless="(${#lists.isEmpty(products)} and ${#lists.isEmpty(skus)})">
+        <ul class="pagination pagination-primary">
+            <li class="inactive pagination-arrow">
+                <a th:if="${result.page > 1}" blc:paginationpagelink="${result.page - 1}"><span>&lt;</span></a>
+                <a th:unless="${result.page > 1}" class="disabled" href="javascript:void(0);"><span>&lt;</span></a>
+            </li>
+            <li th:each="num : ${#numbers.sequence(1, result.totalPages)}" th:class="${result.page == num}? 'active' : 'inactive'">
+                <a blc:paginationpagelink="${num}"><span th:utext="${num}"></span></a>
+            </li>
+            <li class="inactive pagination-arrow">
+                <a th:if="${result.page < result.totalPages}" blc:paginationpagelink="${result.page + 1}"><span>&gt;</span></a>
+                <a th:unless="${result.page < result.totalPages}" class="disabled" href="javascript:void(0);"><span>&gt;</span></a>
+            </li>
+        </ul>
+    </div>
+</th:block>

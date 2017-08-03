@@ -1,58 +1,82 @@
-
 <th:block layout:decorate="~{layout/fullPageLayout}">
-	<head>
-        <title th:utext="${category.name}"></title>
+
+    <head layout:fragment="custom-head">
+        <th:block th:include="seo/partials/seoMetaProperties" th:with="metaProperties=${#seo.getMetaProperties(category)}" />
+
+        <th:block th:include="layout/partials/head" th:with="hasMetaDesc=${true}"></th:block>
     </head>
-    
-	<div layout:fragment="content">
-	    
-        <section id="left_column">
-    
-            <header>
-                <h1 th:inline="text">
-                    <span th:utext="#{category.viewing}">Viewing</span> [[${category.name}]] ([[${result.startResult}]] - [[${result.endResult}]] <span th:utext="#{category.of}">of</span> [[${result.totalResults}]])
-                </h1>
-                <div th:replace="catalog/partials/productSortOptions"></div>
-            </header>
-            
-            <ul th:if="${products}" id="products" class="group">
-                <li th:each="product : ${products}" th:object="${product}" th:include="catalog/partials/productListItem" class="product_container"></li>
-            </ul>
-            
-            <ul th:if="${skus}" id="products" class="group">
-                <li th:each="sku : ${skus}" th:object="${sku}" th:include="catalog/partials/skuListItem" class="product_container"></li>
-            </ul>
-            
-            <div th:replace="catalog/partials/productPagingOptions" ></div>
-            
-        </section>
-    
-        <section id="right_column">
-            <header><span th:utext="#{category.filterResults}">Filter your results</span></header>
-            <div id="options">
-                
-                <div th:replace="catalog/partials/facetFilter" ></div>
-                
-                <div th:replace="catalog/partials/rightHandBannerAds" ></div>
-                
-                <section id="right_column">
-                    <header><span th:utext="#{category.featuredProducts}">Featured Products</span></header>
-                    <div id="options">
-                        <div class="section" th:object="${category}">
-                             <blc:related_products categoryId="*{id}" quantity="3"></blc:related_products>
-     
-                             <ul th:unless="${skus}" id="featured_products" class="group">
-                                <li th:each="product : ${products}" th:object="${product}" th:include="catalog/partials/productListItem" class="product_container"></li>
-                             </ul>
-                             <ul th:if="${skus}" id="featured_products" class="group">
-                                <li th:each="relatedSku : ${relatedSkus}" th:object="${relatedSku}" th:include="catalog/partials/skuListItem" class="product_container"></li>
-                             </ul>
-                        </div>                                  
-                    </div>
-                </section>  
-                
+
+    <div layout:fragment="content" id="category" class="ecommerce-page" th:fragment="ajax">
+
+        <!--Product title-->
+        <div class="row">
+
+            <div id="category-search-title" class="container show-bottom-border">
+
+                <h2 class="section-title" th:inline="text">
+                    <span th:utext="${category.name}"></span>
+                </h2>
+                <span class="pull-right small-text page-results-counter">
+                    ([[${result.startResult}]] - [[${result.endResult}]]
+                    <span th:utext="#{category.of}">of</span>
+                    [[${result.totalResults}]])
+                </span>
             </div>
-        </section>
-            
+        </div>
+        <!--End Product Title-->
+
+        <div id="category-search-content" class="category-search-content row">
+
+            <!--Filter Products-->
+            <div id="left_column" class="left-column col-md-3">
+                <div blc:cache="true" cacheCategory="true">
+                    <div id="options" class="ecommerce-page">
+                        <div th:include="catalog/partials/facetFilter"></div>
+                        <div class="js-rightHandBannerAdsPlaceholder"></div>
+                    </div>
+                </div>
+            </div>
+            <!--End Filter Products-->
+
+            <!--List of Products-->
+            <div class="col-md-9" id="right_column" blc:cache="true" cacheCategory="true">
+                <div th:if="${products}" id="products" class="products row">
+                    <div th:each="product : ${products}" th:object="${product}"
+                         th:include="catalog/partials/productListItem" class="col-md-4"></div>
+                </div>
+
+                <ul th:if="${skus}" id="products" class="products js-products group">
+                    <li th:each="sku : ${skus}" th:object="${sku}" th:include="catalog/partials/skuListItem"
+                        class="js-productContainer productContainer"></li>
+                </ul>
+
+                <div th:include="catalog/partials/productPagingOptions"></div>
+
+            </div>
+            <!--End of List of Products-->
+
+        </div>
+
+        <!--Featured Products-->
+        <div class="row">
+            <div class="container">
+              <!--   Call RelatedProductsVariableExpression#findByCategory(categoryId, maxQuantiy). -->
+                <div class="related-products show-top-border" th:object="${category}"
+                     th:with="relatedProducts=${#related_products.findByCategory(category.id, 99)}">
+                    <h3 class="title text-center" th:text="#{category.featuredProducts}"></h3>
+                    <div class="row row-centered">
+                        <div class="col-sm-6 col-md-3 col-centered" th:each="product : ${relatedProducts}" th:object="${product}"
+                             th:include="catalog/partials/relatedProduct"
+                             th:if="${product.isActive()}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--End Featured Products-->
+
     </div>
+
+    <div layout:fragment="post-content" th:replace="catalog/partials/rightHandBannerAds"></div>
+
 </th:block>

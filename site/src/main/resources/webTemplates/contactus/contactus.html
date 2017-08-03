@@ -1,26 +1,33 @@
-<div id="account" layout:decorate="~{layout/fullPageLayout}" layout:fragment="content">
+<div layout:decorate="~{layout/fullPageLayout}" layout:fragment="content">
     <head>
         <title>Contact Us</title>
     </head>
-    
-    <div id="contactus">
-        <h3>Leave Us A Message</h3>
-        
-        <div class="clearfix">
-	<blc:form id="contactUsForm" th:action="@{/contactus/success}" method="post">
-	  <div class="form50">
-	    <label for="name">Name</label> <input type="text" name="name" class="field50" />
-	  </div>
-	  <div class="form50">
-	    <label for="emailAddress">Email</label> <input type="email" name="emailAddress" class="field50" />
-	  </div>
-	  <div class="form50">
-	    <label for="comments">What should we know?</label> <textarea type="text" name="comments" class="field50" ></textarea>
-	  </div>
-	  <div class="login_register">
-	    <input class="submit big red" type="submit" value="Submit" />
-	  </div>
-	  </blc:form>
+
+    <div class="section">
+        <div class="col-md-6 col-md-offset-3">
+            <h3 class="header header-primary card-title text-center" th:utext="#{contactus.title}">Contact Us</h3>
+
+            <blc:form id="contact-us-form" th:action="@{/contactus/success}" method="post">
+                <div class="label-floating form-group">
+                    <label class="control-label" for="name" th:utext="#{contactus.name}">Name</label>
+                    <input class="form-control" type="text" name="name"/>
+                </div>
+                <div class="label-floating form-group">
+                    <label class="control-label" for="emailAddress" th:utext="#{contactus.email}">Email</label>
+                    <input class="form-control" type="email" name="emailAddress"/>
+                </div>
+                <div class="label-floating form-group">
+                    <label class="control-label" for="comments" th:utext="#{contactus.info}">What should we know?
+                    </label>
+                    <textarea class="form-control" rows="4" type="text" name="comments"></textarea>
+                </div>
+
+                <div class="text-center">
+                    <button class="btn btn-primary btn-lg" type="submit" th:utext="#{contactus.submit}">Submit
+                    </button>
+                </div>
+            </blc:form>
         </div>
     </div>
 </div>
+

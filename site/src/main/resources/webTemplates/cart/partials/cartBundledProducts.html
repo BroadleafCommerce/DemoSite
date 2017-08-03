@@ -1,0 +1,14 @@
+<!-- Summary of child order items -->
+<li class="parent-item" th:if="${item.parentOrderItem == null and #lists.size(item.childOrderItems) > 0}" th:classappend="'summaryRow' + ${item.id}">
+    Bundled Products:
+</li>
+<li class="child-item" th:each="child,stat : ${item.childOrderItems}"
+    th:object="${child}"
+    th:classappend="${'summaryRow' + item.id}">
+
+    <span th:utext="*{quantity}"></span>
+    <span>x</span>
+    <span class="child-name" th:utext="*{name}"></span>
+    <span>@</span>
+    <span blc:price="*{getPriceBeforeAdjustments(true)}"></span>
+</li>

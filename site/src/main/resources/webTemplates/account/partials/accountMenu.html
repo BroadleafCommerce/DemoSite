@@ -1,8 +1,40 @@
-<ul id="account-menu">
-    <li><a th:href="@{/account}">Account Information</a></li>
-    <li><a th:href="@{/account/orders}">View Orders</a></li>
-    <li><a th:href="@{/account/password}">Change Password</a></li>
-    <li><a th:href="@{/account/addresses}">Manage Addresses</a></li>
-    <li><a th:href="@{/account/wishlist}">Manage Wishlist</a></li>
-    <li><a th:href="@{/contactus}">Contact Us</a></li>
-</ul>
+<div id="account-menu-col" class="account-menu-col col-sm-3">
+    <div id="account-menu" class="account-menu card card-nav-tabs">
+        <h4 class="text-center">
+            <span th:utext="#{account.menu.accountOptions}">Account Options</span>
+            <a id="account-menu-dropdown" class="account-menu-dropdown"><i class="material-icons">arrow_drop_down_circle</i></a>
+        </h4>
+        <div id="account-menu-collapsable" class="account-menu-collapsible">
+            <hr />
+            <ul class="nav nav-pills nav-primary nav-stacked">
+                <li th:classappend="${#httpServletRequest.getRequestURI() == '/account'
+                    or #httpServletRequest.getRequestURI() == '/account/' ? 'active' : ''}">
+                    <a th:href="@{/account}" th:utext="#{account.menu.accountInfo}">Account Info</a>
+                </li>
+                <li th:classappend="${#httpServletRequest.getRequestURI().startsWith('/account/password') ? 'active' : ''}">
+                    <a th:href="@{/account/password}" th:utext="#{account.menu.changePassword}">Change Password</a>
+                </li>
+                <li th:classappend="${#httpServletRequest.getRequestURI().startsWith('/account/orders') ? 'active' : ''}">
+                    <a th:href="@{/account/orders}" th:utext="#{account.menu.viewOrders}">View Orders</a>
+                </li>
+                <li th:classappend="${#httpServletRequest.getRequestURI().startsWith('/account/wishlist') ? 'active' : ''}">
+                    <a th:href="@{/account/wishlist}" th:utext="#{account.menu.manageWishlist}">Manage Wishlist</a>
+                </li>
+                <li th:classappend="${#httpServletRequest.getRequestURI().startsWith('/account/addresses') ? 'active' : ''}">
+                    <a th:href="@{/account/addresses}" th:utext="#{account.menu.manageAddresses}">Manage Addresses</a>
+                </li>
+                <li th:classappend="${#httpServletRequest.getRequestURI().startsWith('/account/payments') ? 'active' : ''}">
+                    <a th:href="@{/account/payments}" th:utext="#{account.menu.managePayments}">Manage Payments</a>
+                </li>
+                <th:block th:if="${#module.isPresent('Gift Cards and Customer Credit (AccountCredit)')}">
+                    <li th:classappend="${#httpServletRequest.getRequestURI().startsWith('/account/credit') ? 'active' : ''}">
+                        <a  th:href="@{/account/credit}" th:utext="#{account.menu.giftcardCredit}">Gift Card Credit</a>
+                    </li>
+                    <li th:classappend="${#httpServletRequest.getRequestURI().startsWith('/account/giftcard/redeem') ? 'active' : ''}">
+                        <a  th:href="@{/account/giftcard/redeem}" th:utext="#{account.menu.redeemGiftCard}">Redeem Gift Card</a>
+                    </li>
+                </th:block>
+            </ul>
+        </div>
+    </div>
+</div>

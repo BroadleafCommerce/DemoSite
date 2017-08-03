@@ -1,0 +1,32 @@
+<div class="card checkout-card"
+     th:object="${shippingInfoForm}"
+     th:with="isPreviousStage=${#checkoutStage.isPreviousStage('SHIPPING_INFO', activeStage)},
+              isActiveStage=${#checkoutStage.isActiveStage('SHIPPING_INFO', activeStage)}">
+    <div class="checkout-stage-title">
+        <h4>
+            <i th:if="${isPreviousStage}" class="material-icons text-success">check</i>
+            <th:block th:utext="#{checkout.stages.shipping}">Shipping</th:block>
+        </h4>
+
+        <th:block th:if="${isPreviousStage and #fulfillment.getNumShippableFulfillmentGroups() == 1}">
+            <a class="btn btn-primary btn-simple btn-lg pull-right js-editCheckoutStage"
+               th:data-requested-checkout-stage="SHIPPING_INFO"
+               th:utext="#{checkout.stages.edit}">Edit</a>
+        </th:block>
+    </div>
+
+    <div class="checkout-stage js-checkoutStage">
+        <th:block th:if="${isPreviousStage}">
+            <th:block th:replace="~{checkout/partials/shippingInfoForm :: read-only-shipping-info-form}" />
+        </th:block>
+        <th:block th:if="${isActiveStage}">
+            <th:block th:replace="~{checkout/partials/shippingInfoForm :: shipping-info-form}" />
+
+            <div class="checkout-stage-action">
+                <a href="#" class="btn btn-primary pull-right js-submitCheckoutStage">
+                    <span th:utext="#{checkout.stages.nextStage}">Continue</span> <i class="material-icons">keyboard_arrow_right</i>
+                </a>
+            </div>
+        </th:block>
+    </div>
+</div>

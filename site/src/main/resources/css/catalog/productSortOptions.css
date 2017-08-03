@@ -1,0 +1,8 @@
+.sort > * {
+    display: inline-block;
+    padding: 3px;
+}
+
+.sort .dropdown {
+    font-size: 16px;
+}

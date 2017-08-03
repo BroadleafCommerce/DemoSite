@@ -6,20 +6,27 @@
 
 <head>
     <title layout:title-pattern="$LAYOUT_TITLE - $CONTENT_TITLE">Broadleaf Commerce Demo Store - Heat Clinic</title>
-    <th:block th:replace="/layout/partials/head"></th:block>
+    <th:block th:replace="layout/partials/head"></th:block>
 </head>
 
 <body th:class="${'locale-' + session.blLocale.localeCode}">
     <div id="notification_bar"></div>
-    <header th:replace="layout/partials/header" ></header>
-    
-    <div id="content" class="width_setter group" role="main">
-    
-        <div layout:fragment="content" ></div>
-            
+
+    <div class="wrapper">
+        <div class="header">
+            <header th:replace="layout/partials/header"></header>
+        </div>
+        <!-- you can use the class main-raised if you want the main area to be as a page with shadows -->
+        <div class="main main-raised">
+            <div class="container">
+                <div layout:fragment="content" ></div>
+            </div>
+        </div>
     </div>
-    
-    <footer th:replace="layout/partials/footer" ></footer>
-    
+
+    <th:block layout:fragment="post-content" />
+
+    <footer th:replace="layout/partials/footer"></footer>
+
 </body>
 </html>

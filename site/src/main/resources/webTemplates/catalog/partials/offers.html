@@ -1,20 +1,24 @@
-<div class="productOptions" th:fragment="offers">
-             <ul th:if="*{#lists.size(orderItemPriceDetails)>=1}" class="promotion" >
-                  <div th:remove="tag" th:each="orderItemPriceDetail : *{orderItemPriceDetails}" th:object="${orderItemPriceDetail}">
-                   <li  class="promotion" th:each="orderItemPriceDetailAdjustment : ${orderItemPriceDetail.orderItemPriceDetailAdjustments}" th:object="${orderItemPriceDetailAdjustment}" >                   
-                    <span th:utext="*{offerName}"></span>
-                    </li>
-                    </div>
-                </ul>
-</div>
+<th:block th:fragment="offers">
+    <th:block th:with="appliedOffers=${#promotion_messages.getItemPromotionMessages(item)}">
+        <ul class="promotion">
+            <li th:each="offer : ${appliedOffers}">
+                <span class="promotion-applied">Promotion Applied: </span>
+                <span th:utext="${offer}"></span>
+            </li>
+        </ul>
+    </th:block>
+</th:block>
 
-<div class="productOptions" th:fragment="orderDetails">
-             <ul th:if="${#lists.size(orderItem.orderItemPriceDetails)>=1}" class="promotion" >
-                  <div th:remove="tag" th:each="orderItemPriceDetail : ${orderItem.orderItemPriceDetails}" th:object="${orderItemPriceDetail}">
-                   <li  class="promotion" th:each="orderItemPriceDetailAdjustment : ${orderItemPriceDetail.orderItemPriceDetailAdjustments}" th:object="${orderItemPriceDetailAdjustment}" >                   
-                    <span th:utext="'Promotion Applied: ' + *{offerName}"></span>
-                    </li>
-                    </div>
-                </ul>
+<div th:fragment="orderDetails">
+    <ul th:if="${#lists.size(orderItem.orderItemPriceDetails)>=1}" class="promotion">
+        <th:block th:each="orderItemPriceDetail : ${orderItem.orderItemPriceDetails}"
+                  th:object="${orderItemPriceDetail}">
+            <li class="promotion"
+                th:each="orderItemPriceDetailAdjustment : ${orderItemPriceDetail.orderItemPriceDetailAdjustments}"
+                th:object="${orderItemPriceDetailAdjustment}">
+                <span th:utext="'Promotion Applied: ' + *{offerName}"></span>
+            </li>
+        </th:block>
+    </ul>
 </div>
  

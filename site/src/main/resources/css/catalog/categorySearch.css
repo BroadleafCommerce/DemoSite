@@ -1,0 +1,45 @@
+/* This file contains the CSS for both the category.html and search.html pages */
+
+.show-bottom-border {
+    border-bottom: 1px solid #ccc;
+}
+
+.show-top-border {
+    border-top:  1px solid #ccc;
+}
+
+.small-text {
+    font-size: small;
+}
+
+.category-search-content .card-title {
+    margin: initial;
+    padding: initial;
+}
+
+.category-search-content .card-content {
+    padding-bottom: initial;
+}
+
+.section-title {
+    margin-bottom: initial;
+    display: inline-block;
+}
+
+.page-results-counter {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    margin-bottom: 10px;
+    margin-right: 10px;
+}
+.category-search-content .left-column .override-top-padding {
+    padding-top: .7em;
+}
+
+.category-search-content .left-column .sort {
+    padding-bottom: .5em;
+}
+.filter-panel .checkbox {
+     margin-top: 0;
+}

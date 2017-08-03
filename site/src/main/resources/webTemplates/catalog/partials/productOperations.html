@@ -1,0 +1,48 @@
+<blc:form method="POST" th:action="@{/cart/add}">
+    <div class="col-sm-10">
+        <div id="product-main-button-panel" th:classappend="*{'js-productActions' + id}">
+            <!-- Add to cart button -->
+            <div class="js-addToCartContainer">
+                <th:block th:if="${isUpdateRequest}">
+                    <input type="hidden" name="isUpdateRequest" value="true" />
+                    <input type="hidden" name="originalOrderItem" th:value="${orderItem.id}" />
+                    <!-- The order item's additional attributes -->
+                    <th:block th:each="entry : ${orderItem.additionalAttributes}">
+                        <input type="hidden" th:name="${'additionalAttributes[' + entry.key + ']'}" th:value="${entry.value}" />
+                    </th:block>
+                </th:block>
+                <input type="hidden" name="productId" th:value="*{id}"/>
+                <input type="hidden" name="quantity" value="1"/>
+                <button type="submit" class="btn btn-primary js-addToCart" th:classappend="${isUpdateRequest}? 'js-updateRequest'">
+                    <span th:unless="${isUpdateRequest}" th:utext="#{product.buyNow}"></span>
+                    <span th:if="${isUpdateRequest}" th:utext="#{product.update}"></span>
+                </button>
+            </div>
+            <!-- Out of stock buttons -->
+            <div class="js-outOfStock is-hidden">
+                <button disabled="disabled" class="btn" th:utext="#{product.outOfStock}">
+                    Out of Stock
+                </button>
+            </div>
+            <!-- In cart button -->
+            <div class="js-inCartLinkContainer is-hidden">
+                <a class="btn btn-secondary" th:href="@{/cart}" th:utext="#{product.viewInCart}">
+                    View in Cart
+                </a>
+            </div>
+            <!-- Receive inventory notifications button -->
+            <div class="js-outOfStock is-hidden">
+                <a th:href="@{*{'/inventory/notification/' + defaultSku.id}}"
+                   class="js-inventoryNotification btn btn-sm"
+                   th:utext="#{product.inventoryNotifications}">
+                    Receive Inventory Notifications
+                </a>
+            </div>
+        </div>
+        <p class="text-danger" th:if="${param.errorMessage}" th:utext="${param.errorMessage[0]}"></p>
+    </div>
+</blc:form>
+<!-- Add to wishlist button -->
+<div class="col-lg-2 text-center-mobile">
+    <th:block th:include="catalog/partials/wishlistButton" />
+</div>

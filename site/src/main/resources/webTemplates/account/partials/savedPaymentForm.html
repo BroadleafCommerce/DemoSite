@@ -1,0 +1,38 @@
+<div class="row">
+    <blc:form th:action="@{'/account/payments'}" class="js-creditCardPaymentForm" th:object="${paymentInfoForm}" method="POST">
+        <div class="col-sm-6">
+            <h4><span th:utext="#{cart.billingInformation}">Billing Information</span></h4>
+
+            <th:block th:replace="~{checkout/partials/billingAddress :: form-inputs}" />
+        </div>
+
+        <div class="col-sm-6">
+            <h4><span th:utext="#{account.payments.paymentFormTitle}">Payment Information</span></h4>
+
+            <th:block th:replace="~{partials/creditCardTypes}" />
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group label-floating" th:classappend="${#fields.hasErrors('paymentName')}? 'has-error'">
+                        <label class="control-label" th:utext="#{account.payments.paymentName}">Payment Name</label>
+                        <input type="text" class="form-control" th:field="*{paymentName}"/>
+                        <span class="text-danger" th:if="${#fields.hasErrors('paymentName')}" th:errors="*{paymentName}"></span>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="isDefault" th:checked="${#lists.isEmpty(#customer.getCustomerPayments())}"/>
+                            <span th:utext="#{account.payments.isDefault}">Default method</span>
+                        </label>
+                    </div>
+                </div>
+
+                <input type="text" th:field="*{paymentToken}" class="js-paymentToken is-hidden"/>
+            </div>
+        </div>
+    </blc:form>
+    <div class="col-sm-6 pull-right">
+        <th:block th:replace="~{partials/creditCard :: form-inputs}" />
+    </div>
+</div>

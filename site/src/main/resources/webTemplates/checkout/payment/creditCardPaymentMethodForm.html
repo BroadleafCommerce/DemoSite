@@ -1,0 +1,91 @@
+<div id="read_only_credit_card_payment_method" th:fragment="read-only">
+    <div class="row">
+        <div class="col-sm-6">
+            <h4><span th:utext="#{cart.billingInformation}">Billing Information</span></h4>
+
+            <th:block th:include="~{partials/simpleAddress :: read-only}" th:with="address=${paymentInfoForm.address}"/>
+            <address th:utext="${paymentInfoForm.emailAddress}"></address>
+
+        </div>
+
+        <div class="col-sm-6">
+            <h4><span th:utext="#{account.payments.paymentFormTitle}">Payment Information</span></h4>
+
+            <th:block th:if="${paymentInfoForm.shouldUseCustomerPayment}">
+                <th:block th:include="~{partials/creditCard :: read-only}"
+                          th:with="cardType=${#paymentMethod.getCreditCardTypeFromCart()},
+                                    lastFour=${#paymentMethod.getCreditCardLastFourFromCart()},
+                                    expDate=${#paymentMethod.getCreditCardExpDateFromCart()}" />
+            </th:block>
+
+            <th:block th:unless="${paymentInfoForm.shouldUseCustomerPayment}">
+                <th:block th:include="~{partials/creditCard :: hidden-read-only}" />
+            </th:block>
+        </div>
+    </div>
+</div>
+
+<div id="credit_card_payment_method" th:object="${paymentInfoForm}" th:fragment="form">
+    <div class="row">
+        <div class="col-sm-12" >
+            <div class="row js-savedPaymentsContainer"
+                 th:classappend="${not paymentInfoForm.shouldUseCustomerPayment or #lists.isEmpty(#customer.getCustomerPayments())}? 'is-hidden'">
+                <div class="col-sm-12 choose-saved-payment">
+                    <th:block th:each="payment : ${#customer.getCustomerPayments()}">
+                        <th:block th:replace="~{partials/savedPaymentCard}" />
+                    </th:block>
+
+                    <div class="col-sm-4 card-plain payment-method-card">
+                        <div class="card define-new-credit-card js-defineNewCreditCard">
+                            <div class="card-content">
+                                <i class="material-icons">add</i>
+                                <div th:utext="#{checkout.paymentMethod.creditCard.defineNewCard}">Use a different card</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row js-creditCardPaymentFormContainer"
+                 th:classappend="${paymentInfoForm.shouldUseCustomerPayment and not #lists.isEmpty(#customer.getCustomerPayments())}? 'is-hidden'">
+                <blc:form th:action="@{'/checkout/payment'}" class="js-creditCardPaymentForm" method="POST">
+                    <input type="hidden" th:field="*{paymentToken}" class="js-paymentToken"/>
+                    <input th:unless="${customer.anonymous}" type="hidden" th:field="*{customerPaymentId}" class="js-customerPaymentId"/>
+                    <input th:unless="${customer.anonymous}" type="hidden" th:field="*{shouldUseCustomerPayment}" class="js-shouldUseCustomerPayment is-hidden" />
+                    <input th:unless="${customer.anonymous}" type="hidden" th:field="*{shouldSaveNewPayment}" class="is-hidden" />
+
+                    <div class="col-sm-12" th:unless="${customer.anonymous}">
+                        <div class="row">
+                            <div class="col-sm-6 card-plain choose-saved-payment-action js-chooseSavedPaymentAction">
+                                <div class="card">
+                                    <div class="card-content">
+                                        <span th:utext="#{checkout.paymentMethod.creditCard.chooseSavedPayment}">Choose a saved card</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <h4><span th:utext="#{cart.billingInformation}">Billing Information</span></h4>
+
+                        <th:block th:replace="~{checkout/partials/billingAddress :: form-inputs}" />
+                    </div>
+                </blc:form>
+
+                <div class="col-sm-6">
+                    <h4><span th:utext="#{account.payments.paymentFormTitle}">Payment Information</span></h4>
+
+                    <th:block th:replace="~{partials/creditCardTypes}" />
+                    <th:block th:replace="~{partials/creditCard :: form-inputs}" />
+
+                    <div class="checkbox" th:unless="${customer.anonymous}">
+                        <label>
+                            <input type="checkbox" name="shouldSaveNewPayment-check" th:checked="*{shouldSaveNewPayment}" />
+                            <span th:utext="#{checkout.paymentMethod.save}">Save this card for future purchases</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

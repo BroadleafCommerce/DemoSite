@@ -1,0 +1,21 @@
+<th:block th:each="metaProperty : ${metaProperties}" th:with="key=${metaProperty.key}, value=${metaProperty.value}">
+    <th:block th:if="${value != null}">
+        <title th:if="${key == 'title'} and ${#strings.contains(value,'#seoElement')}" th:utext="${__${value}__}"></title>
+        <title th:if="${key == 'title'} and not ${#strings.contains(value,'#seoElement')}" th:utext="${value}"></title>
+
+        <link th:if="${key == 'canonicalUrl'}" rel="canonical" th:attr="href=${value}"/>
+
+        <meta th:if="${key == 'metaDescription'} and ${#strings.contains(value,'#seoElement')}" name="description" th:attr="content=${__${value}__}"/>
+        <meta th:if="${key == 'metaDescription'} and not ${#strings.contains(value,'#seoElement')}" name="description" th:attr="content=${value}"/>
+
+        <th:block th:if="${#strings.startsWith(key, 'og:')}">
+            <meta th:if="${#strings.contains(value,'#seoElement')}" th:attr="property=${key}, content=${__${value}__}"/>
+            <meta th:unless="${#strings.contains(value,'#seoElement')}" th:attr="property=${key}, content=${value}"/>
+        </th:block>
+
+        <th:block th:if="${#strings.startsWith(key, 'twitter:')}">
+            <meta th:if="${#strings.contains(value,'#seoElement')}" th:attr="name=${key}, content=${__${value}__}"/>
+            <meta th:unless="${#strings.contains(value,'#seoElement')}" th:attr="name=${key}, content=${value}"/>
+        </th:block>
+    </th:block>
+</th:block>

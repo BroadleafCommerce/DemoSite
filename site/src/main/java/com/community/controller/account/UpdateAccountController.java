@@ -43,5 +43,4 @@ public class UpdateAccountController extends BroadleafUpdateAccountController {
         return super.processUpdateAccount(request, model, form, result, redirectAttributes);
     }
 
-
 }

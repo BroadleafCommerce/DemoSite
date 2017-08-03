@@ -1,0 +1,12 @@
+<div id="notification">
+    <blc:form th:object="${reviewForm}" th:action="@{'/inventory/notification'}" method="POST">
+        <div class="form30">
+            <label for="email">Email:</label>
+            <input class="field30" type="text" name="email" />
+            <input type="hidden" name="skuId" th:value="${skuId}" />
+        </div>
+        <div class="button_container">
+            <input class="js-subscribeButton subscribeButton big red" type="submit" value="Subscribe"/>
+        </div>
+    </blc:form>
+</div>

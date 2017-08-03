@@ -1,188 +1,28 @@
-<div layout:decorate="~{layout/fullPageNoNavLayout}" layout:fragment="content">
+<th:block layout:decorate="~{layout/checkoutPageLayout}" th:with="isConfirmationContext=${true}">
     <head>
         <title th:utext="|Order Confirmation ${order.orderNumber}|"></title>
     </head>
 
-    <div id="order_confirmation">
-        <h2><span th:utext="#{confirmation.success}">Success!</span></h2>
-        <h3><span th:utext="#{confirmation.orderNum}">Order Confirmation #</span> - <span th:utext="${order.orderNumber}"></span>
-</h3>
-        <p class="confirmation-note"><span th:utext="#{confirmation.confirmEmail.toBeSent}">A confirmation email will be sent to</span> <span th:utext="${order.emailAddress}"></span>.</p>
-    </div>
-
-    <div id="cart">
-
-        <div class="cart_title"><span th:utext="#{confirmation.orderSummary}">Order Summary</span></div>
-
-        <table id="cart_products">
-            <thead>
-            <tr>
-                <th>&nbsp;</th>
-                <th align="left"><span th:utext="#{cart.item}">Item</span></th>
-                <th><span th:utext="#{cart.quantity}">Quantity</span></th>
-                <th> <span th:utext="#{cart.price}">Price</span> <span class="small" th:utext="#{cart.each}">(each)</span></th>
-                <th> <span th:utext="#{cart.totalSavings}">Total Savings</span></th>
-                <th><span th:utext="#{cart.total}">Total</span></th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="item : ${order.discreteOrderItems}" th:object="${item}" th:id="${'productRow' + item.id}">
-                <td>
-                    <th:block th:unless="*{#lists.isEmpty(sku.productOptionValues)}" th:each="optionValue : *{sku.productOptionValues}">
-                        <img th:if="${optionValue.attributeValue == item.sku.skuMedia['primary']?.tags}" blc:src="@{*{sku.skuMedia['primary'].url} + '?thumbnail'}" width="60" th:alt="*{sku.name}" />
-                        <img th:if="${optionValue.attributeValue == item.sku.skuMedia['alt1']?.tags}" blc:src="@{*{sku.skuMedia['alt1'].url} + '?thumbnail'}" width="60" th:alt="*{sku.name}" />
-                        <img th:if="${optionValue.attributeValue == item.sku.skuMedia['alt2']?.tags}" blc:src="@{*{sku.skuMedia['alt2'].url} + '?thumbnail'}" width="60" th:alt="*{sku.name}" />
-                    </th:block>
-                    <img th:if="*{#lists.isEmpty(sku.productOptionValues) and sku.skuMedia['primary'] != null}" blc:src="@{*{sku.skuMedia['primary'].url} + '?thumbnail'}" width="60" th:alt="*{sku.name}" />
-                </td>
-                <td align="left">
-                    <a th:unless="${@blSystemPropertiesService.resolveBooleanSystemProperty('solr.index.use.sku')}" th:href="@{*{product.url}}" th:utext="*{product.name}"></a>
-                    <a th:if="${@blSystemPropertiesService.resolveBooleanSystemProperty('solr.index.use.sku')} and *{sku.urlKey}" th:href="@{*{product.url} + *{sku.urlKey}}" th:inline="text">
-                       [[*{sku.name}]] <span th:each="optionValue : *{sku.productOptionValues}" th:utext="${optionValue.attributeValue}"></span>
-                    </a>
-                    <a th:if="${@blSystemPropertiesService.resolveBooleanSystemProperty('solr.index.use.sku')} and !*{sku.urlKey}" th:href="@{*{product.url}}" th:inline="text">
-                       [[*{sku.name}]] <span th:each="optionValue : *{sku.productOptionValues}" th:utext="${optionValue.attributeValue}"></span>
-                    </a>
-                    <br/>
-                <blc:product_option_display orderItem="${item}" >
-                     <ul th:unless="${#lists.isEmpty(productOptionDisplayValues)}" class="productOptions">
-                         <li th:each="entry: ${productOptionDisplayValues}">
-                           <span  th:utext="${entry.key} + ': ' + ${entry.value}"></span>
-                         </li>
-                     </ul>
-                </blc:product_option_display>
-                </td>
-                <td align="center" th:utext="*{quantity}"></td>
-                <td align="center" blc:price="*{price}"></td>
-                <td align="center" th:if="*{adjustmentValue.zero}">---</td>
-                <td align="center" class="discount" th:unless="*{adjustmentValue.zero}" >
-                  <span  align="center"  blc:price="*{totalAdjustmentValue}" class="promotion" ></span>
-                     <div class="productOptions" th:replace="~{catalog/partials/offers :: offers}"></div>
-                </td>
-                <td align="center" class="value" blc:price="*{totalPrice}"></td>
-            </tr>
-            </tbody>
-        </table>
-
-        <div id="cart_total" class="group">
-            <h3><span th:utext="#{confirmation.orderTotal}">Order Total</span></h3>
-            <div id="subtotal" blc:price="${order.total}"></div>
-            <table width="100%" id="total_table" border="0">
-                <tr>
-                    <td><span th:utext="#{confirmation.orderSubTotal}">Subtotal</span></td>
-                    <td blc:price="${order.subTotal}"></td>
-                </tr>
-                <tr>
-                    <td><span th:utext="#{confirmation.promotions}">Promotions</span></td>
-                    <td class="discount" th:if="${order.orderAdjustmentsValue.zero}">---</td>
-                    <td class="discount" th:unless="*{order.orderAdjustmentsValue.zero}" blc:price="${order.orderAdjustmentsValue}"></td>
-                </tr>
-                <tr>
-                    <td><span th:utext="#{confirmation.taxes}">Taxes</span></td>
-                    <td blc:price="${order.totalTax}"></td>
-                </tr>
-                <tr>
-                    <td><span th:utext="#{confirmation.shipping}">Shipping</span></td>
-                    <td blc:price="${order.totalShipping}"></td>
-                </tr>
-            </table>
-        </div>
-
-        <div class="cart_title"><span th:utext="#{confirmation.shipping.info}">Shipping Information</span></div>
-
-        <div class="clearfix"></div>
-
-        <div th:object="${order.fulfillmentGroups[0]}" th:if="${#lists.size(order.fulfillmentGroups) > 1}">
-            <div th:each="fg : ${order.fulfillmentGroups}" th:object="${fg}" class="multishipGroupRow" th:unless="${fg.type?.type == 'GIFT_CARD' or fg.type?.type == 'DIGITAL' or fg.type?.type == 'PHYSICAL_PICKUP'}">
-                <h4>
-                    <span th:classappend="*{address == null}? 'error'"
-                          th:utext="*{address == null ? 'Missing Address' : address.firstName + ' at ' + address.addressLine1}"></span>
-                    <span>&nbsp;-&nbsp;</span>
-                    <span th:classappend="*{fulfillmentOption == null}? 'error'"
-                          th:utext="*{fulfillmentOption == null ? 'Missing Fulfillment Option' : fulfillmentOption.name + ' (' + fulfillmentOption.longDescription + ')'}"></span>
-                    <span blc:price="*{shippingPrice}" class="multishipGroupShippingCharge"></span>
-                </h4>
-                
-                <table class="multiship_summary">
-                    <tbody>
-                        <tr th:each="item : *{fulfillmentGroupItems}" th:object="${item.orderItem}" th:id="${'productRow' + item.id}">
-                            <td align="center" th:utext="${item.quantity}"></td>
-                            <td align="left">
-                                <span th:utext="*{sku.name}"></span>
-                                       <blc:product_option_display orderItem="${item.orderItem}" >
-                                           <ul th:unless="${#lists.isEmpty(productOptionDisplayValues)}" class="productOptions">
-                                               <li th:each="entry: ${productOptionDisplayValues}">
-                                                 <span  th:utext="${entry.key} + ': ' + ${entry.value}"></span>
-                                               </li>
-                                           </ul>
-                                      </blc:product_option_display>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        
-        <div class="fulfillment_option" th:object="${order.fulfillmentGroups[0]}" th:inline="text" th:unless="${#lists.size(order.fulfillmentGroups) > 1}">
-           <div th:unless="*{type?.type == 'GIFT_CARD' or type?.type == 'DIGITAL' or type?.type == 'PHYSICAL_PICKUP'}"> 
-               <div class="left_content">
-                    <address>
-                        [[*{address.firstName == null ? '' : address.firstName}]]&nbsp;[[*{address.lastName == null ? '' : address.lastName}]]<br/>
-                        [[*{address.phonePrimary?.phoneNumber == null ? '' : address.phonePrimary?.phoneNumber}]]<br/>
-                        [[*{address.addressLine1 == null ? '' : address.addressLine1}]]<br/>
-                        [[*{address.addressLine2 == null ? '' : address.addressLine2}]]<br th:if="!*{#strings.isEmpty(address.addressLine2)}"/>
-                        [[*{address.city == null ? '' : address.city}]],&nbsp;[[*{address.stateProvinceRegion == null ? '' : address.stateProvinceRegion}]]&nbsp;[[*{address.postalCode == null ? '' : address.postalCode}]]<br/>
-                        [[*{address.isoCountryAlpha2.name == null ? '' : address.isoCountryAlpha2.name}]]<br/>
-                    </address>
-                </div>
-                <div class="right_content">
-                    <h3><span th:utext="#{confirmation.shipping.method}">Shipping Method</span></h3>
-                    <b>[[*{fulfillmentOption.name}]]</b><br/>
-                    ([[*{fulfillmentOption.longDescription}]])
-                </div>
-                <div class="clearfix"></div>
+    <div id="order_confirmation" class="order-confirmation row" layout:fragment="content">
+        <div class="col-lg-12">
+            <div class="card confirmation-card">
+                <th:block th:replace="checkout/partials/confirmationMessages" />
             </div>
         </div>
 
-        <div class="cart_title"><span th:utext="#{confirmation.billing.info}">Billing Information</span></div>
+        <div class="col-lg-8">
+            <th:block th:unless="*{type?.type == 'GIFT_CARD' or type?.type == 'DIGITAL' or type?.type == 'PHYSICAL_PICKUP'}">
+                <th:block th:replace="~{checkout/partials/confirmationShippingInfo}" />
+            </th:block>
 
-        <div class="clearfix"></div>
+            <th:block th:replace="~{checkout/partials/confirmationPaymentInfo}" />
+        </div>
 
-        <div class="payment_method" th:each="payment : ${order.payments}" th:object="${payment}" th:inline="text">
-            <div th:if="${payment.active}" class="left_content">
-                <h3><span th:utext="#{confirmation.payment.method}">Payment Method</span></h3>
-                Payment type: [[*{type.friendlyType}]]<br/>
-                Amount paid: <span blc:price="*{amount}" ></span>
-                <div th:if="${payment.initialTransaction != null}">
-                    <div th:if="!*{#strings.isEmpty(initialTransaction.additionalFields['CARD_TYPE'])}">
-                        <b th:utext="*{initialTransaction.additionalFields['CARD_TYPE']}"></b>
-<br/>
-                        ****<span th:utext="*{initialTransaction.additionalFields['LAST_FOUR']}"></span>
-<br/>
-                        <span th:utext="#{confirmation.exp}">exp.</span> <span th:utext="*{initialTransaction.additionalFields['EXP_DATE']}"></span>
-                        <address>
-                            [[*{billingAddress.firstName == null ? '' : billingAddress.firstName}]]&nbsp;[[*{billingAddress.lastName == null ? '' : billingAddress.lastName}]]<br/>
-                            [[*{billingAddress.phonePrimary?.phoneNumber == null ? '' : billingAddress.phonePrimary?.phoneNumber}]]<br/>
-                            [[*{billingAddress.addressLine1 == null ? '' : billingAddress.addressLine1}]]<br/>
-                            [[*{billingAddress.addressLine2 == null ? '' : billingAddress.addressLine2}]]<br th:if="!*{#strings.isEmpty(billingAddress.addressLine2)}"/>
-                            [[*{billingAddress.city == null ? '' : billingAddress.city}]],&nbsp;[[*{billingAddress.stateProvinceRegion == null ? '' : billingAddress.stateProvinceRegion}]]&nbsp;[[*{billingAddress.postalCode == null ? '' : billingAddress.postalCode}]]<br/>
-                            [[*{billingAddress.isoCountryAlpha2.name == null ? '' : billingAddress.isoCountryAlpha2.name}]]<br/>
-                        </address>
-                    </div>
-                    <div th:if="!*{#strings.isEmpty(initialTransaction.additionalFields['ACCOUNT_CREDIT_NUM'])}">
-                        <span th:utext="#{cart.accountCredit.accounts}">Accounts</span><br/>
-                        <b th:utext="*{initialTransaction.additionalFields['ACCOUNT_CREDIT_NUM']}"></b>
-<br/>
-                    </div>
-                    <div th:if="!*{#strings.isEmpty(initialTransaction.additionalFields['GIFT_CARD_NUM'])}">
-                        <span th:utext="#{cart.giftCardNumber}">Gift Card Number</span><br/>
-                        <b th:utext="*{initialTransaction.additionalFields['GIFT_CARD_NUM']}"></b>
-<br/>
-                    </div>
-                </div>
-            </div>
-            <div class="clearfix"></div>
+        <div class="col-lg-4" th:with="cart=${order}">
+            <th:block th:replace="cart/partials/cartPricingSummary" />
+
+            <th:block th:replace="cart/partials/cartItemSummary" />
         </div>
     </div>
 
-</div>
+</th:block>

@@ -1,0 +1,5 @@
+.product-main-image  {
+    display: inline-flex;
+    justify-content:center;
+    margin-bottom: 2em;
+}

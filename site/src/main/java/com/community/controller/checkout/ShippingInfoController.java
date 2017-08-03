@@ -17,13 +17,15 @@
 package com.community.controller.checkout;
 
 import org.broadleafcommerce.common.exception.ServiceException;
+import org.broadleafcommerce.core.order.domain.Order;
 import org.broadleafcommerce.core.pricing.service.exception.PricingException;
-import org.broadleafcommerce.core.web.checkout.model.BillingInfoForm;
-import org.broadleafcommerce.core.web.checkout.model.GiftCardInfoForm;
-import org.broadleafcommerce.core.web.checkout.model.OrderInfoForm;
 import org.broadleafcommerce.core.web.checkout.model.OrderMultishipOptionForm;
+import org.broadleafcommerce.core.web.checkout.model.PaymentInfoForm;
 import org.broadleafcommerce.core.web.checkout.model.ShippingInfoForm;
+import org.broadleafcommerce.core.web.checkout.service.CheckoutFormService;
+import org.broadleafcommerce.core.web.checkout.stage.CheckoutStageType;
 import org.broadleafcommerce.core.web.controller.checkout.BroadleafShippingInfoController;
+import org.broadleafcommerce.core.web.order.CartState;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -33,11 +35,15 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @Controller
 public class ShippingInfoController extends BroadleafShippingInfoController {
+
+    @Resource(name = "blCheckoutFormService")
+    protected CheckoutFormService checkoutFormService;
 
     @RequestMapping(value="/checkout/singleship", method = RequestMethod.GET)
     public String convertToSingleship(HttpServletRequest request, HttpServletResponse response, Model model) throws PricingException {
@@ -46,13 +52,26 @@ public class ShippingInfoController extends BroadleafShippingInfoController {
 
     @RequestMapping(value="/checkout/singleship", method = RequestMethod.POST)
     public String saveSingleShip(HttpServletRequest request, HttpServletResponse response, Model model,
-                                 @ModelAttribute("orderInfoForm") OrderInfoForm orderInfoForm,
-                                 @ModelAttribute("billingInfoForm") BillingInfoForm billingForm,
-                                 @ModelAttribute("giftCardInfoForm") GiftCardInfoForm giftCardInfoForm,
-                                 @ModelAttribute("shippingInfoForm") ShippingInfoForm shippingForm,
+                                 @ModelAttribute("shippingInfoForm") ShippingInfoForm shippingInfoForm,
                                  BindingResult result)
             throws PricingException, ServiceException {
-        return super.saveSingleShip(request, response, model, shippingForm, result);
+        super.saveSingleShip(request, response, model, shippingInfoForm, result);
+
+        Order cart = CartState.getCart();
+        PaymentInfoForm paymentInfoForm = new PaymentInfoForm();
+        model.addAttribute("paymentInfoForm", paymentInfoForm);
+
+        checkoutFormService.prePopulatePaymentInfoForm(paymentInfoForm, shippingInfoForm, cart);
+
+        if (!result.hasErrors()) {
+            checkoutFormService.prePopulateShippingInfoForm(shippingInfoForm, cart);
+            checkoutFormService.determineIfSavedAddressIsSelected(model, shippingInfoForm, paymentInfoForm);
+        }
+
+        String nextActiveStage = result.hasErrors() ?
+                CheckoutStageType.SHIPPING_INFO.getType() : CheckoutStageType.PAYMENT_INFO.getType();
+        model.addAttribute(ACTIVE_STAGE, nextActiveStage);
+        return getCheckoutStagesPartial();
     }
 
     @RequestMapping(value = "/checkout/multiship", method = RequestMethod.GET)

@@ -1,0 +1,34 @@
+<div class="card checkout-card js-paymentStageCard"
+     th:with="isPreviousStage=${#checkoutStage.isPreviousStage('PAYMENT_INFO', activeStage)},
+                isActiveStage=${#checkoutStage.isActiveStage('PAYMENT_INFO', activeStage)},
+                isLaterStage=${#checkoutStage.isLaterStage('PAYMENT_INFO', activeStage)}">
+    <div class="checkout-stage-title">
+        <h4>
+            <i class="material-icons text-success js-checkoutStageCompleteIcon" th:classappend="${not isPreviousStage}? 'is-hidden'">check</i>
+            <th:block th:utext="#{checkout.stages.payment}">Payment</th:block>
+        </h4>
+
+        <a class="btn btn-primary btn-simple btn-lg pull-right js-editCheckoutStage"
+           th:classappend="${not isPreviousStage}? 'is-hidden'"
+           th:data-requested-checkout-stage="PAYMENT_INFO"
+           th:utext="#{checkout.stages.edit}">Edit</a>
+    </div>
+
+    <div class="checkout-stage js-checkoutStage" th:classappend="${isLaterStage}? 'is-hidden'">
+        <th:block th:replace="~{checkout/partials/demoDisclaimer}"/>
+
+        <div class="js-readOnlyPaymentStageContent" th:classappend="${!isPreviousStage}? 'is-hidden'">
+            <th:block th:replace="~{checkout/partials/paymentMethods :: read-only-payment-methods}" />
+        </div>
+
+        <div class="payment-stage-content js-paymentStageContent" th:classappend="${isPreviousStage}? 'is-hidden'">
+            <th:block th:replace="~{checkout/partials/paymentMethods :: payment-methods}" />
+
+            <div th:if="${isActiveStage}" class="checkout-stage-action">
+                <a href="#" class="btn btn-primary pull-right js-submitPaymentCheckoutStage">
+                    <span th:utext="#{checkout.stages.nextStage}">Continue</span> <i class="material-icons">keyboard_arrow_right</i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

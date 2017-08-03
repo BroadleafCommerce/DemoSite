@@ -1,48 +1,50 @@
 <th:block layout:decorate="~{layout/accountLayout}" layout:fragment="content">
-    <div th:unless="${responseEvent}" class="manage-account-form-wrapper">
-    
-        <h2><span th:utext="#{account.giftCard.title}">Enter Gift Card Number:</span></h2>
-        <div th:unless="${validGiftCardNumber}" th:inline="text" >
-            <p><span class="error_long" style="width: auto; margin: 20px 10px;" th:utext="#{account.giftCard.invalid.number}">Gift Card Number not found.</span></p>
-        </div>
-        <div th:if="${alreadyRedeemedGiftCard}" th:inline="text" >
-            <p><span class="error_long" style="width: auto; margin: 20px 10px;" th:utext="#{account.giftCard.already.redeemed}">Gift Card already redeemed</span></p>
-        </div>
-    
-        <blc:form class="manage-account" th:object="${giftCardInfoForm}" th:action="@{/account/giftcard/redeem}" method="post" id="redeem_giftCard_info">
-            <div>
-                <div class="form50">
-                    <label for="giftCardNumber" class="prompt"><span th:utext="#{cart.giftCardNumber}">Gift Card Number</span></label>
-                    <span class="error_long" th:if="${#fields.hasErrors('giftCardNumber')}" th:errors="*{giftCardNumber}"></span>
-                    <div class="form100">
-                        <input type="text" th:field="*{giftCardNumber}" id="giftCardNumber" class="field35" th:classappend="${#fields.hasErrors('giftCardNumber')}? 'fieldError'"/>
+
+    <div th:unless="${responseEvent}" class="card manage-account-form-wrapper js-manageAccountFormWrapper">
+        <h3 th:utext="#{account.giftCard.title}">Enter your Gift Card Number</h3>
+        <hr />
+        <div class="col-sm-9 col-md-6">
+            <div th:unless="${validGiftCardNumber}" th:inline="text" >
+                <p><span class="text-danger" style="width: auto; margin: 20px 10px;" th:utext="#{account.giftCard.invalid.number}">Gift Card Number not found.</span></p>
+            </div>
+            <div th:if="${alreadyRedeemedGiftCard}" th:inline="text" >
+                <p><span class="text-danger" style="width: auto; margin: 20px 10px;" th:utext="#{account.giftCard.already.redeemed}">Gift Card already redeemed</span></p>
+            </div>
+
+            <blc:form id="redeem_giftCard_info" class="manage-account"
+                      th:object="${giftCardInfoForm}"
+                      th:action="@{/account/giftcard/redeem}"
+                      method="post">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group label-floating" th:classappend="${#fields.hasErrors('giftCardNumber')}? 'has-error'">
+                            <label class="control-label" for="giftCardNumber" th:utext="#{cart.giftCardNumber}">Gift Card Number</label>
+                            <input id="giftCardNumber" type="text" th:field="*{giftCardNumber}" class="form-control" />
+                            <span class="text-danger" th:if="${#fields.hasErrors('giftCardNumber')}" th:errors="*{giftCardNumber}"></span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <input type="submit" class="btn btn-primary" th:value="#{cart.giftCard.apply}" />
                     </div>
                 </div>
-    
-                <div>
-                    <input type="submit" class="medium red" th:value="#{cart.giftCard.apply}" />
+            </blc:form>
+        </div>
+
+        <ul id="redeem-giftcard" th:if="${responseEvent}" th:object="${giftCardAccount}" th:inline="text">
+            <li>
+                <span class="giftcard-number" th:utext="#{account.giftCard.giftcard.number}">Gift Card Number</span>
+                <span class="submit-date" th:utext="#{account.giftCard.date}">Date</span>
+                <span class="status" th:utext="#{account.giftCard.status}">Status</span>
+                <span class="balance" th:utext="#{account.giftCard.amountApplied}">Amount Applied</span>
+            </li>
+            <li class="giftcard">
+                <div class="giftcard-info-row">
+                    <span class="giftcard-number" th:utext="*{accountNumber}"></span>
+                    <span class="submit-date" th:utext="${#dates.format(responseEvent.eventDate, 'MM-dd-yyyy')}"></span>
+                    <span class="status" th:utext="${responseEvent.reasonDesc}">Pending</span>
+                    <span class="balance" blc:price="${responseEvent.amount}"></span>
                 </div>
-            </div>
-        </blc:form>
+            </li>
+        </ul>
     </div>
-    
-    
-    <ul id="redeem-giftcard" th:if="${responseEvent}" th:object="${giftCardAccount}" th:inline="text">
-        <li>
-            <span class="giftcard-number" th:utext="#{account.giftCard.giftcard.number}">Gift Card Number</span>
-            <span class="submit-date" th:utext="#{account.giftCard.date}">Date</span>
-            <span class="status" th:utext="#{account.giftCard.status}">Status</span>
-            <span class="balance" th:utext="#{account.giftCard.amountApplied}">Amount Applied</span>
-        </li>
-        <li class="giftcard">
-            <div class="giftcard-info-row">
-                <span class="giftcard-number" th:utext="*{accountNumber}"></span>
-                <span class="submit-date" th:utext="${#dates.format(responseEvent.eventDate, 'MM-dd-yyyy')}"></span>
-                <span class="status" th:utext="${responseEvent.reasonDesc}">Pending</span>
-                <span class="balance" blc:price="${responseEvent.amount}"></span>
-            </div>
-        </li>
-    </ul>
-    
-    <div class="clearfix"></div>
 </th:block>

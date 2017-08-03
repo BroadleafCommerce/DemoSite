@@ -1,0 +1,93 @@
+<div th:id="${'productRow' + item.id}"
+     class="row cart-product-row"
+     th:each="item : ${wishlist.orderItems}"
+     th:object="${item}"
+     th:if="${item.parentOrderItem == null}">
+
+    <!-- Product Image -->
+    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+        <div class="img-container">
+            <th:block th:unless="*{#lists.isEmpty(sku.productOptionValues)}" th:each="optionValue : *{sku.productOptionValues}">
+                <img th:if="${optionValue.attributeValue == item.sku.skuMedia['primary']?.tags}" th:src="@{*{sku.skuMedia['primary'].url}}" th:alt="*{sku.name}" />
+                <img th:if="${optionValue.attributeValue == item.sku.skuMedia['alt1']?.tags}" th:src="@{*{sku.skuMedia['alt1'].url}}" th:alt="*{sku.name}" />
+                <img th:if="${optionValue.attributeValue == item.sku.skuMedia['alt2']?.tags}" th:src="@{*{sku.skuMedia['alt2'].url}}" th:alt="*{sku.name}" />
+            </th:block>
+            <img th:if="*{#lists.isEmpty(sku.productOptionValues) and sku.skuMedia['primary'] != null}" th:src="@{*{sku.skuMedia['primary']?.url}}" th:alt="*{sku.name}" />
+        </div>
+    </div>
+
+    <!-- Product Description -->
+    <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+        <div class="row">
+
+            <!-- Product Name -->
+            <div class="col-lg-7">
+                <div class="cart-product-name text-uppercase">
+                    <a th:unless="${@blSystemPropertiesService.resolveBooleanSystemProperty('solr.index.use.sku')}" th:href="@{*{product.url}}" th:utext="*{name}"></a>
+                    <a th:if="${@blSystemPropertiesService.resolveBooleanSystemProperty('solr.index.use.sku')} and *{sku.urlKey}" th:href="@{*{product.url} + *{sku.urlKey}}" th:inline="text">
+                        [[*{sku.name}]] <span th:each="optionValue : *{sku.productOptionValues}" th:utext="${optionValue.attributeValue}"></span>
+                    </a>
+                    <a th:if="${@blSystemPropertiesService.resolveBooleanSystemProperty('solr.index.use.sku')} and !*{sku.urlKey}" th:href="@{*{product.url}}" th:inline="text">
+                        [[*{sku.name}]] <span th:each="optionValue : *{sku.productOptionValues}" th:utext="${optionValue.attributeValue}"></span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Product Pricing -->
+            <div class="col-lg-5 cart-product-pricing">
+                <div>
+                    <!-- Per Unit Price -->
+                    <th:block blc:price="*{getPriceBeforeAdjustments(true, true)}" />
+
+                    <span> x </span>
+
+                    <!-- Item Quantity -->
+                    <blc:form method="POST" th:action="@{/account/wishlist/updateQuantity}">
+                        <input type="hidden" name="productId" th:value="*{product.id}" />
+                        <input type="hidden" name="skuId" th:value="*{sku.id}" />
+                        <input type="hidden" name="orderItemId" th:value="*{id}" />
+                        <select name="quantity" th:value="*{quantity}" class="js-updateQuantity">
+                            <option th:each="i : ${#numbers.sequence(1, 99)}"
+                                    th:selected="${i} == *{quantity}"
+                                    th:value="${i}"
+                                    th:text="${i}">
+                            </option>
+                        </select>
+                    </blc:form>
+
+                    <!-- Line Item Total -->
+                    <span blc:price="*{getTotalPrice(true)}"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Item Details -->
+        <div class="row">
+            <div class="col-lg-12">
+                <blc:product_option_display orderItem="${item}">
+                    <ul>
+                        <!-- Product Options -->
+                        <li th:each="entry: ${productOptionDisplayValues}" th:unless="${#lists.isEmpty(productOptionDisplayValues)}">
+                            <span th:utext="${entry.key} + ': '"></span>
+                            <span class="text-uppercase" th:utext="${entry.value}"></span>
+                        </li>
+
+                        <!-- Bundled Products -->
+                        <li th:replace="cart/partials/cartBundledProducts"></li>
+
+                        <!-- Item Actions -->
+                        <li class="wishlist-product-actions">
+                            <blc:form method="POST" th:action="@{/account/wishlist/moveItemToCart}">
+                                <input type="hidden" name="itemId" th:value="*{id}"/>
+                                <button type="submit" class="btn btn-xs btn-simple btn-bordered btn-xs">Add To Cart
+                                </button>
+                            </blc:form>
+                            <th:block th:replace="checkout/partials/orderItemConfigureMessaging" />
+                            <a class="btn btn-simple btn-bordered btn-xs js-removeFromCart" th:href="@{/account/wishlist/remove(orderItemId=*{id})}">Remove</a>
+                        </li>
+                    </ul>
+                </blc:product_option_display>
+            </div>
+        </div>
+    </div>
+</div>

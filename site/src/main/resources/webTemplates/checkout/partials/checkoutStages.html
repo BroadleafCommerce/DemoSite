@@ -1,0 +1,9 @@
+<div class="js-checkoutStages" th:with="isCheckoutContext=${true}">
+    <th:block th:if="${#checkoutForm.shouldShowShippingInfoStage()}">
+        <th:block th:replace="checkout/stages/shippingStage" />
+    </th:block>
+
+    <th:block th:replace="checkout/stages/paymentStage" />
+
+    <th:block th:replace="checkout/stages/reviewStage" />
+</div>

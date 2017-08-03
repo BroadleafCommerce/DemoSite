@@ -4,43 +4,49 @@
 <!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
 
-<head>
-    <title layout:title-pattern="$LAYOUT_TITLE - $CONTENT_TITLE">Broadleaf Commerce Demo Store - Heat Clinic</title>
-    <th:block th:replace="/layout/partials/head"></th:block>
-</head>
+<head th:include="layout/partials/head (pageTitle='Broadleaf Commerce Demo Store - Heat Clinic')"></head>
 
 <body th:class="${'locale-' + session.blLocale.localeCode}">
-    <div id="notification_bar"></div>
-    <header th:replace="layout/partials/header" ></header>
-    
-    <div id="content" class="width_setter group" role="main">
-        <nav th:replace="layout/partials/nav" ></nav>
+    <th:block th:replace="layout/partials/nav" />
 
-        <div id="banners">
-            <a th:href="@{/merchandise}"><img blc:src="@{/cmsstatic/img/banners/shirt-special.jpg}" /></a>
-        </div>
-        
-        <a th:href="@{/register}" style="text-decoration:none">
-            <div id="home_feature">
-                <h2>HOT SAUCE AFICIONADO?</h2> Click to join our Heat Clinic Frequent Care Program. The place to get all the deals on burn treatment.
+    <div class="main">
+        <div class="container-fluid">
+
+            <div class="row">
+                <a th:href="@{/merchandise}">
+                    <img class="img-responsive full-width" blc:src="@{/cmsstatic/img/banners/shirt-special.jpg}" />
+                </a>
             </div>
-        </a>
 
-        
-        <div class="title_bar">
-            The Heat Clinic's Top Selling Sauces
+            <div class="container">
+
+                <div class="row text-center">
+                    <a th:href="@{/register}">
+                        <div id="home_feature">
+                            <h2>HOT SAUCE AFICIONADO?</h2> Click to join our Heat Clinic Frequent Care Program. The place to get all the deals on burn treatment.
+                        </div>
+                    </a>
+                </div>
+
+                <hr />
+
+                <div class="row">
+                    <h3 class="text-center">
+                        The Heat Clinic's Top Selling Sauces
+                    </h3>
+
+                    <th:block th:if="${products}" id="products" class="group" th:each="product : ${products}" th:object="${product}" >
+                        <div class="col-sm-6 col-md-3"  th:if="${product.isActive()}"
+                             th:include="catalog/partials/productListItem">
+                        </div>
+                    </th:block>
+                </div>
+            </div>
         </div>
-        
-        <ul th:if="${products}" id="products" class="group">
-            <li th:each="product : ${products}" th:object="${product}" th:include="catalog/partials/productListItem" class="product_container"></li>
-        </ul>
-        
-        <ul th:if="${skus}" id="products" class="group">
-            <li th:each="sku : ${skus}" th:object="${sku}" th:include="catalog/partials/skuListItem" class="product_container"></li>
-        </ul>
     </div>
-    
-    <footer th:replace="layout/partials/footer" ></footer>
-    
+
+    <th:block layout:fragment="post-content" />
+
+    <footer th:replace="layout/partials/footer"></footer>
 </body>
 </html>

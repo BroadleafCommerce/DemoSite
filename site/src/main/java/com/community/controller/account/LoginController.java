@@ -19,6 +19,8 @@ package com.community.controller.account;
 import org.broadleafcommerce.common.exception.ServiceException;
 import org.broadleafcommerce.core.web.controller.account.BroadleafLoginController;
 import org.broadleafcommerce.core.web.controller.account.ResetPasswordForm;
+import org.broadleafcommerce.profile.web.core.form.RegisterCustomerForm;
+import org.broadleafcommerce.profile.web.core.service.register.RegistrationService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -27,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -35,12 +38,27 @@ import javax.servlet.http.HttpServletResponse;
  */
 @Controller
 public class LoginController extends BroadleafLoginController {
-    
+
+    @Resource(name = "blRegistrationService")
+    RegistrationService registrationService;
+
     @RequestMapping("/login")
     public String login(HttpServletRequest request, HttpServletResponse response, Model model) {
-        return super.login(request, response, model);
+        String loginView = super.login(request, response, model);
+
+        RegisterCustomerForm registrationForm = buildRegistrationForm();
+        model.addAttribute("registrationForm", registrationForm);
+
+        return loginView;
     }
-    
+
+    protected RegisterCustomerForm buildRegistrationForm() {
+        RegisterCustomerForm registrationForm = registrationService.initCustomerRegistrationForm();
+        registrationService.addRedirectUrlToForm(registrationForm);
+
+        return registrationForm;
+    }
+
     @RequestMapping(value="/login/forgotPassword", method=RequestMethod.GET)
     public String forgotPassword(HttpServletRequest request, HttpServletResponse response, Model model) {
         return super.forgotPassword(request, response, model);

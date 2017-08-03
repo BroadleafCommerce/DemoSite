@@ -1,0 +1,32 @@
+<div id="account" layout:decorate="~{layout/fullPageLayout}" layout:fragment="content">
+    <head>
+        <title>Login</title>
+    </head>
+
+    <div class="section">
+        <div class="row row-centered">
+            <div id="login" class="login col-sm-5 col-centered">
+                <div th:replace="authentication/loginForm"></div>
+            </div>
+            <div class="col-sm-1 col-centered hidden-xs">
+                <div class="col-centered-separator"></div>
+            </div>
+            <div class="col-sm-1 col-centered visible-xs">
+                <div class="row-centered-separator"></div>
+            </div>
+            <div class="col-sm-5 col-centered checkout-guest-wrapper">
+                <div class="text-center">
+                    <h3 class="card-title">Guests</h3>
+                </div>
+                <p class="checkout-guest-text">
+                    Would you like to continue the checkout process as a guest?  That's fine by us!  Next time try registering an account to make the checkout process quicker.
+                </p>
+                <blc:form th:action="@{'/checkout'}" method="Get" class="text-right">
+                    <input type="hidden" name="guest-checkout" value="true" />
+                    <button type="submit" class="btn btn-primary">Checkout as Guest</button>
+                </blc:form>
+            </div>
+
+        </div>
+    </div>
+</div>

@@ -1,47 +1,46 @@
-<th:block layout:decorate="~{layout/fullPageLayout}">
+<th:block layout:decorate="~{layout/checkoutPageLayout}" th:with="isCartContext=${true}">
     <head>
         <title>Cart</title>
     </head>
 
-    <div id="cart" class="cart_modal" layout:fragment="content" th:fragment="ajax">
-        <table th:replace="cart/partials/cartProductsTable"></table>
-    
-        <div id="cart_total" class="group">
-            <h3><span th:utext="#{cart.currentSubtotal}">Your Current Subtotal</span></h3>
-            <div id="subtotal" th:unless="${cart.subTotal?.zero}" blc:price="${cart.subTotal?.subtract(cart.orderAdjustmentsValue)}"></div>
-            <div id="orderDiscounts" th:unless="${cart.orderAdjustmentsValue.zero}">
-                <span th:utext="#{cart.orderDiscount}">Order Discount</span>: <span blc:price="${cart.orderAdjustmentsValue}" ></span>
+    <div id="cart" class="cart js-cart row" layout:fragment="content" th:fragment="ajax">
+
+        <div class="col-lg-12" th:if="${#lists.isEmpty(cart.orderItems)}">
+            <div th:if="${#lists.isEmpty(cart.orderItems)}" class="cart-warning">
+                <h1 th:utext="#{cart.empty}">Your cart is currently empty.</h1>
+                <a th:href="@{/}" class="btn btn-primary btn-lg" th:utext="#{cart.continueShopping}">Continue Shopping</a>
             </div>
-            <p><span th:utext="#{cart.subtotalDisclaimer}">Subtotal does not yet include applicable tax or shipping and handling charges</span>.</p>
-            <div id="checkout">
-                <a th:href="@{/checkout}" target="_top" class="big-button red-button">
-                    <span th:utext="#{cart.checkout}">Checkout</span>
-                </a>
-            </div>
-            <p>
-                <form blc:sample_payment_hosted_action="${paymentRequestDTO}" complete_checkout="${false}" method="POST">
-                    <input type="hidden" name="TRANSACTION_AMT" th:value="${cart.total}"/>
-                    <input type="hidden" name="ORDER_ID" th:value="${cart.id}"/>
-                    <input type="hidden" name="COMPLETE_CHECKOUT_ON_CALLBACK" value="false"/>
-                    <input type="image" src="https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif" align="left" style="margin-right:7px;" alt="Submit Form" />
-                </form>
-                <div class="clearfix"></div>
-                <a th:href="@{/}" target="_top">&laquo; <span th:utext="#{cart.continueShopping}">Continue Shopping</span></a>
-            </p>
         </div>
-        <p class="error" th:if="${param.errorMessage}" th:utext="${param.errorMessage[0]}"></p>
-        <p class="error" th:if="${errorMessage}" th:utext="${errorMessage}"></p>
-        <blc:form id="cart_promo" method="POST" th:action="@{/cart/promo}">
-            <label for="promoCode"><span th:utext="#{cart.promoCode}">Promo Code</span>:</label>
-            <input id="promoCode" name="promoCode" type="text" th:value="*{promoCode}" value="" autocomplete="off"/>
-            <input type="submit" id="addPromo" name="addPromo" th:value="#{cart.applyDiscount}" class="small red" />
-            <div th:each="promo : ${cart.addedOfferCodes}" th:object="${promo}" th:remove="tag">
-                <div class="promo"><span th:utext="*{offerCode}" th:remove="tag"></span>
- <a class="remove_promo" th:href="@{/cart/promo/remove(offerCodeId=*{id})}"><i class="icon-remove"></i></a></div>
+
+        <div class="col-lg-12" th:unless="${#lists.isEmpty(cart.orderItems)}">
+            <!-- Content Zone for targeting the cart -->
+            <blc:content-zone name="Cart Banner Ad Zone" deepLinks="deepLinks" />
+
+            <h1 th:utext="#{cart.title}">Shopping Cart</h1>
+        </div>
+
+        <!-- Shopping Cart Items -->
+        <div class="col-lg-8" th:unless="${#lists.isEmpty(cart.orderItems)}">
+            <div class="card checkout-card cart-summary-row">
+                <div class="row">
+                    <div class="cart-summary-title">
+                        <h4 th:inline="text">[[#{cart.itemSummary}]] (<span th:utext="${cart.itemCount}"></span>)</h4>
+                    </div>
+                </div>
+                <div class="row" th:unless="${cart.itemCount == 0}">
+                    <th:block th:replace="cart/partials/cartProductRow" />
+                </div>
             </div>
-            <div id="cart_promo_error" style="display: none;"></div>
-        </blc:form>
-        
-        <div id="blc-extra-data" class="hidden" th:utext="${blcextradata}" th:if="${!#strings.isEmpty(blcextradata)}"></div>
+        </div>
+
+        <!-- Cart Summary -->
+        <div class="col-lg-4" th:unless="${#lists.isEmpty(cart.orderItems)}">
+            <th:block th:replace="cart/partials/cartPricingSummary" />
+
+            <!-- Promotion Codes -->
+            <th:block th:replace="checkout/partials/promoCodes" />
+        </div>
+
+        <div id="blc-extra-data" class="is-hidden" th:utext="${blcextradata}" th:if="${!#strings.isEmpty(blcextradata)}"></div>
     </div>
 </th:block>

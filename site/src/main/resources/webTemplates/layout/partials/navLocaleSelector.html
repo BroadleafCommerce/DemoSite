@@ -1,0 +1,39 @@
+<li class="dropdown languages" th:if="${(#module.isPresent('Theme') and (#theme.attr('showFlags') == null or #theme.attr('showFlags'))) or !#module.isPresent('Theme')}">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+        <span id="selectedLocale" th:utext="${session.blLocale.localeCode}" style="display: none" ></span>
+        <th:block th:switch="${session.blLocale.localeCode}">
+            <img th:case="en_US" th:src="@{/img/flags/United-States.png}" alt="United States" title="English" />
+            <img th:case="en_GB" th:src="@{/img/flags/United-Kingdom.png}" alt="United Kingdom" title="English (UK)"/>
+            <img th:case="es_MX" th:src="@{/img/flags/Mexico.png}" alt="Mexico" title="Spanish (Mexico)"/>
+            <img th:case="es_ES" th:src="@{/img/flags/Spain.png}" alt="Spain" title="Spanish (Spain)"/>
+            <img th:case="fr_FR" th:src="@{/img/flags/France.png}" alt="France" title="French (France)" />
+        </th:block>
+    </a>
+    <ul class="dropdown-menu">
+        <li>
+            <a href="javascript:;" onclick="BLC.addUrlParam(document.location.search, 'blLocaleCode', 'en_US')">
+                <img id="en_US" th:src="@{/img/flags/United-States.png}" alt="United States" title="English" /> English
+            </a>
+        </li>
+        <li>
+            <a href="javascript:;" onclick="BLC.addUrlParam(document.location.search, 'blLocaleCode', 'en_GB')">
+                <img id="en_GB" th:src="@{/img/flags/United-Kingdom.png}" alt="United Kingdom" title="English (UK)"/> English (UK)
+            </a>
+        </li>
+        <li>
+            <a href="javascript:;" onclick="BLC.addUrlParam(document.location.search, 'blLocaleCode', 'es_MX')">
+                <img id="es_MX" th:src="@{/img/flags/Mexico.png}" alt="Mexico" title="Spanish (Mexico)"/> Spanish (Mexico)
+            </a>
+        </li>
+        <li>
+            <a href="javascript:;" onclick="BLC.addUrlParam(document.location.search, 'blLocaleCode', 'es_ES')">
+                <img id="es_ES" th:src="@{/img/flags/Spain.png}" alt="Spain" title="Spanish (Spain)"/> Spanish (Spain)
+            </a>
+        </li>
+        <li>
+            <a href="javascript:;" onclick="BLC.addUrlParam(document.location.search, 'blLocaleCode', 'fr_FR')">
+                <img id="fr_FR" th:src="@{/img/flags/France.png}" alt="France" title="French (France)" /> French (France)
+            </a>
+        </li>
+    </ul>
+</li>

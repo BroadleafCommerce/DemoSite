@@ -1,0 +1,32 @@
+<li class="dropdown js-miniCart">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+        <i class="material-icons">shopping_cart</i>
+        <span class="cart-count-badge js-cartItemsCount" th:if="${cart.itemCount > 0}" th:utext="${cart.itemCount}"></span>
+    </a>
+    <ul class="dropdown-menu mini-cart-wrapper">
+        <th:block th:replace="checkout/partials/miniCartItemList" />
+
+        <th:block th:unless="${cart.itemCount == 0}">
+            <!-- Mini Cart Subtotal -->
+            <li class="mini-cart-subtotal">
+                <div>
+                    <span th:utext="#{cart.currentSubtotal}">Subtotal</span>:
+                    <span th:unless="${cart.subTotal?.zero}" blc:price="${cart.subTotal?.add(cart.itemAdjustmentsValue)}"></span>
+                </div>
+            </li>
+
+            <!-- Mini Cart Total -->
+            <li class="mini-cart-action">
+                <a class="btn btn-primary goto-full-cart" th:href="@{/cart}">View your cart</a>
+            </li>
+        </th:block>
+
+        <th:block th:if="${cart.itemCount == 0}">
+            <li class="mini-cart-empty">
+                <div>
+                    Your cart is empty
+                </div>
+            </li>
+        </th:block>
+    </ul>
+</li>

@@ -2,28 +2,23 @@
     <head>
         <title th:utext="${BLC_PAGE.description}"></title>
     </head>
-    
-    <section id="left_column">
+
+    <section id="left_column" class="left-column">
         <header>
             <h1 th:utext="${BLC_PAGE.pageFields[title]}"></h1>
         </header>
         <div class="clearfix"></div>
         <div th:utext="${BLC_PAGE.pageFields[body]}"></div>
     </section>
-    
+
     <section id="right_column">
         <header>Featured Products</header>
         <div id="options">
             <div class="section">
-                 <blc:related_products categoryId="2001" quantity="3"></blc:related_products>
-  
-                 <ul th:unless="${@blSystemPropertiesService.resolveBooleanSystemProperty('solr.index.use.sku')}" id="featured_products" class="group">
-                    <li th:each="product : ${products}" th:object="${product}" th:include="catalog/partials/productListItem" class="product_container"></li>
-                 </ul>
-                 <ul th:if="${@blSystemPropertiesService.resolveBooleanSystemProperty('solr.index.use.sku')}" id="featured_products" class="group">
-                    <li th:each="relatedSku : ${relatedSkus}" th:object="${relatedSku}" th:include="catalog/partials/skuListItem" class="product_container"></li>
-                 </ul>
-            </div>                                  
+                <ul id="featuredProducts" class="js-featuredProducts group" th:with="relatedProducts=${#related_products.findByCategory(2001, 3)}">
+                    <li th:each="product : ${relatedProducts}" th:object="${product}" th:include="catalog/partials/productListItem" class="js-productContainer productContainer"></li>
+                </ul>
+            </div>
         </div>
-    </section>  
+    </section>
 </th:block>

@@ -1,0 +1,62 @@
+<div id="multiship_info" th:fragment="read-only-multiship-info-form">
+    <!--TODO-->
+</div>
+
+<div id="multiship_info" th:fragment="multiship-info-form">
+
+    <div class="left_content wide">
+        <div th:each="fg : ${cart.fulfillmentGroups}" th:object="${fg}" class="multishipGroupRow"
+             th:unless="${fg.type?.type == 'GIFT_CARD' or fg.type?.type == 'DIGITAL' or fg.type?.type == 'PHYSICAL_PICKUP'}">
+            <h4>
+                <span th:classappend="*{address == null}? 'error'"
+                      th:utext="*{address == null ? 'Missing Address' : address.fullName + ' at ' + address.addressLine1}"></span>
+                <span>&nbsp;-&nbsp;</span>
+                <span th:classappend="*{fulfillmentOption == null}? 'error'"
+                      th:utext="*{fulfillmentOption == null ? 'Missing Fulfillment Option' : fulfillmentOption.name + ' (' + fulfillmentOption.longDescription + ')'}"></span>
+
+                <a th:href="@{${'/csrtools/override-shipping/' + fg.id}}" 
+                    th:if="${#brc.csrMode and cart.id != null}"
+                    th:utext="${fg.shippingOverride} ? #{csr_changeOverride} : #{csr_overrideShipping}"
+                    class="csr-override-shipping"
+                    style="float: right; font-weight: normal; margin-left: 7px;" ></a>
+                
+                <a th:href="@{${'/csrtools/clear-shipping-override/' + fg.id}}" 
+                    th:if="${#brc.csrMode and cart.id != null and fg.shippingOverride}"
+                    th:utext="#{csr_clearOverride}"
+                    class="csr-clear-override"
+                    style="float: right; font-weight: normal; margin-left: 7px;" ></a>
+
+                <span blc:price="*{shippingPrice}" class="multishipGroupShippingCharge"></span>
+            </h4>
+            
+            <table class="multiship_summary">
+                <tbody>
+                    <tr th:each="item : *{fulfillmentGroupItems}" th:object="${item.orderItem}" th:id="${'productRow' + item.id}">
+                        <td align="center" th:utext="${item.quantity}"></td>
+                        <td align="left">
+                            <span th:utext="*{sku.name}"></span>
+
+                            <blc:product_option_display orderItem="${item.orderItem}" >
+                                <ul th:unless="${#lists.isEmpty(productOptionDisplayValues)}" class="js-productOptions productOptions">
+                                    <li th:each="entry: ${productOptionDisplayValues}">
+                                        <span  th:utext="${entry.key} + ': ' + ${entry.value}"></span>
+                                    </li>
+                                </ul>
+                            </blc:product_option_display>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <div class="right_content">
+        <h3>Shipping Method</h3>
+        <p>
+            <a th:href="@{/checkout/singleship}">Ship to Single Address</a>
+        </p>
+        <p>
+            <a id="multiship" class="js-multiship" th:href="@{/checkout/multiship}">Edit Multiple Address Shipping</a>
+        </p>
+    </div>
+</div>

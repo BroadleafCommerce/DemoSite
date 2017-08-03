@@ -1,0 +1,36 @@
+<h4><span th:utext="#{account.giftCard.title}">Enter Gift Card:</span></h4>
+
+<blc:form class="manage-account" th:object="${giftCardInfoForm}" th:action="@{/checkout/giftcard/apply}" method="post" id="applyGiftcard_form">
+    <div>
+        <div class="form50">
+            <label for="giftCardNumber" class="prompt"><span th:utext="#{cart.giftCardNumber}">Gift Card Number</span></label>
+            <span class="error" th:if="${#fields.hasErrors('giftCardNumber')}" th:errors="*{giftCardNumber}"></span>
+            <div class="form100">
+                <input type="text" th:field="*{giftCardNumber}" id="giftCardNumber" class="field35" th:classappend="${#fields.hasErrors('giftCardNumber')}? 'fieldError'"/>
+            </div>
+        </div>
+
+        <div>
+            <input type="submit" class="medium red apply" th:value="#{cart.giftCard.apply}" />
+        </div>
+    </div>
+</blc:form>
+
+<div id="gift-card-display" th:unless="${#lists.isEmpty(appliedGiftCardAccounts)}" th:inline="text" class="clearfix">
+    <h4><span th:utext="#{cart.giftCard.applied}">Applied Gift Cards</span></h4>
+    <ul id="redeem-giftcard">
+        <li>
+            <span class="giftcard-number" th:utext="#{account.giftCard.giftcard.number}">Gift Card Number</span>
+            <span class="balance" th:utext="#{cart.giftCard.balance}">Balance</span>
+        </li>
+        <li class="giftcard">
+            <div class="giftcard-info-row clearfix" th:each="account : ${appliedGiftCardAccounts}" th:object="${account}">
+                <span class="giftcard-number" th:utext="*{accountNumber}"></span>
+                <span class="balance" blc:price="*{balance}"></span>
+                <a class="remove_from_giftCard_checkout" th:href="@{/checkout/giftcard/remove(giftCardNumber=*{accountNumber})}"><span th:utext="#{cart.remove}">Remove</span></a>
+            </div>
+        </li>
+    </ul>
+
+</div>
+

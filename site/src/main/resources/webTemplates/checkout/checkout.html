@@ -1,59 +1,60 @@
-<div layout:decorate="~{layout/checkoutLayout}" layout:fragment="content">
-    <blc:one_page_checkout orderInfoForm="${orderInfoForm}"
-                           shippingInfoForm="${shippingInfoForm}"
-                           billingInfoForm="${billingInfoForm}"
-                           orderInfoHelpMessage="#{cart.fillOutBasicOrder}"
-                           billingInfoHelpMessage="#{cart.fillOutBillingAddress}"
-                           shippingInfoHelpMessage="#{cart.fillOutShippingAddress}"
-                           th:remove="tag">
+<th:block layout:decorate="~{layout/checkoutPageLayout}" th:with="isCheckoutContext=${true}">
+    <head>
+        <title>Checkout</title>
+    </head>
 
-        <div id="cart">
+    <div id="checkout" class="checkout js-checkout row" layout:fragment="content" th:fragment="ajax">
+        <th:block th:if="${#lists.isEmpty(cart.orderItems)}">
+            <div class="col-lg-12">
+                <div class="cart-warning">
+                    <h1 th:utext="#{cart.empty}">Your cart is empty</h1>
+                    <a th:href="@{/}" class="btn btn-primary btn-lg" th:utext="#{cart.continueShopping}">Continue Shopping</a>
+                </div>
+            </div>
+        </th:block>
 
-            <div th:if="${#lists.isEmpty(cart.orderItems)}" class="checkout_warning">
-                <span th:utext="#{cart.empty}">Your cart is empty</span>
-                <br/>
-                <a th:href="@{/}"><span th:utext="#{cart.continueShopping}">Continue Shopping</span></a>
+        <th:block th:if="${cartRequiresLock != null}">
+            <div class="col-lg-12">
+                <div class="cart-warning">
+                    <h1 th:utext="#{csr_lockCartBeforeCheckout}"></h1>
+
+                    <a th:href="@{${'/csrtools/lock-cart/' + cart.id}}"
+                       th:unless="${customer.isAnonymous() or cart.id == null or cart.status.type == 'CSR_OWNED'}"
+                       th:text="#{csr_lockCart}"
+                       class="btn btn-primary btn-lg enterprise-csr-tools csr-action"
+                       id="csr-action-lock-cart"></a>
+                </div>
+            </div>
+        </th:block>
+
+        <th:block th:unless="${#lists.isEmpty(cart.orderItems) or cartRequiresLock != null}">
+            <div class="col-lg-12">
+                <h1 th:utext="#{cart.checkout}">Checkout</h1>
             </div>
 
-        <div th:if="${cartRequiresLock != null}" class="checkout_warning">
-            <span th:utext="#{csr_lockCartBeforeCheckout}" ></span>
-        </div>
-
-        <div th:unless="${#lists.isEmpty(cart.orderItems) or cartRequiresLock != null}">
-
-                <p th:if="${PAYMENT_PROCESSING_ERROR}" class="payment-error">
-                    <span th:utext="#{${PAYMENT_PROCESSING_ERROR}}" class="error">...</span>
-                </p>
-
-                <div class="clearfix"></div>
-
-                <div th:replace="~{checkout/partials/orderSummary :: order-summary}"></div>
-
-                <div class="clearfix"></div>
-
-            <div th:each="sectionDTO : ${checkoutSectionDTOs}" th:object="${sectionDTO}" th:remove="tag">
-                <div th:if="${'ORDER_INFO' == sectionDTO.view.type}" th:remove="tag">
-                    <div th:replace="~{checkout/partials/orderInfoForm :: order-info-form}"
-                            th:with="${sectionDTO}"></div>
-                    <div class="clearfix"></div>
-                </div>
-                <div th:if="${'BILLING_INFO' == sectionDTO.view.type}" th:remove="tag">
-                    <div th:replace="~{checkout/partials/billingInfoForm :: billing-info-form}"
-                            th:with="${sectionDTO}"></div>
-                </div>
-                <div th:if="${'SHIPPING_INFO' == sectionDTO.view.type}" th:remove="tag">
-                    <div th:replace="~{checkout/partials/shippingInfoForm :: shipping-info-form}"
-                            th:with="${sectionDTO}"></div>
-                </div>
-                <div th:if="${'PAYMENT_INFO' == sectionDTO.view.type}" th:remove="tag">
-                    <div class="clearfix"></div>
-                    <div th:replace="~{checkout/partials/paymentInfoForm :: payment-info-form}"
-                            th:with="${sectionDTO}"></div>
+            <div class="col-lg-8" th:if="${#paymentMethod.getPaymentProcessingError()}">
+                <div class="card checkout-card payment-processing-error" th:with="message=#{${#paymentMethod.getPaymentProcessingError()}}">
+                    <th:block th:replace="~{checkout/partials/checkoutAlert}"/>
                 </div>
             </div>
 
+            <div class="col-lg-8">
+                <th:block th:replace="checkout/partials/checkoutStages" />
             </div>
-        </div>
 
-    </blc:one_page_checkout>
-</div>
+            <div class="col-lg-4" th:unless="${#lists.isEmpty(cart.orderItems)}">
+                <th:block th:replace="cart/partials/cartPricingSummary" />
+
+                <th:block th:replace="cart/partials/cartItemSummary" />
+
+                <th:block th:replace="checkout/partials/promoCodes" />
+
+                <th:block th:if="${#module.isPresent('Gift Cards and Customer Credit (AccountCredit)')}">
+                    <th:block th:replace="checkout/partials/accountCreditForm" />
+                </th:block>
+            </div>
+        </th:block>
+
+        <div id="blc-extra-data" class="is-hidden" th:utext="${blcextradata}" th:if="${!#strings.isEmpty(blcextradata)}"></div>
+    </div>
+</th:block>

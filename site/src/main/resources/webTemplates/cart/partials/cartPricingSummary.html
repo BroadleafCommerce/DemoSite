@@ -1,0 +1,54 @@
+<div class="js-cart-summary card checkout-card cart-summary-row">
+    <div class="row">
+        <div class="cart-summary-title">
+            <h4 th:utext="#{cart.Summary}">Summary</h4>
+        </div>
+    </div>
+    <div class="row cart-summary-breakdown">
+        <!-- Subtotal -->
+        <div>
+            <span th:utext="#{cart.currentSubtotal}">SubTotal</span>
+            <span class="pull-right" th:if="${cart.itemAdjustmentsValue != null}" blc:price="${cart.subTotal?.add(cart.itemAdjustmentsValue)}"></span>
+            <span class="pull-right" th:unless="${cart.itemAdjustmentsValue != null}" blc:price="${cart.subTotal}"></span>
+        </div>
+
+        <!-- Total Savings -->
+        <div>
+            <span th:utext="#{cart.totalSavings}">Total Savings</span>
+            <span class="pull-right" th:if="${cart.totalAdjustmentsValue != null}" blc:price="${cart.totalAdjustmentsValue}"></span>
+            <span class="pull-right" th:unless="${cart.totalAdjustmentsValue != null}" blc:price="0"></span>
+        </div>
+
+        <!-- Taxes -->
+        <div th:unless="${isCartContext}">
+            <span th:utext="#{cart.taxes}">Taxes</span>
+            <span class="pull-right" th:if="${cart.totalTax != null}" blc:price="${cart.totalTax}"></span>
+            <span class="pull-right" th:unless="${cart.totalTax != null}" blc:price="0"></span>
+        </div>
+
+        <!-- Total Shipping -->
+        <div>
+            <span th:utext="#{cart.totalShipping}">Shipping</span>
+            <span class="pull-right" th:if="${cart.totalShipping != null}" blc:price="${cart.totalShipping}"></span>
+            <span class="pull-right" th:unless="${cart.totalShipping != null}" blc:price="0"></span>
+        </div>
+
+        <!-- Estimated Total -->
+        <div class="cart-estimated-total" th:if="${isCartContext}">
+            <span th:utext="#{cart.estimatedTotal}">Estimated Total</span>
+            <span class="pull-right" blc:price="${orderTotalAfterCredit}" th:if="${orderTotalAfterCredit}"></span>
+            <span class="pull-right" blc:price="${cart.total}" th:unless="${orderTotalAfterCredit}"></span>
+            <p th:utext="#{cart.subtotalDisclaimer}"></p>
+        </div>
+
+        <!-- Total -->
+        <div class="cart-total" th:unless="${isCartContext}">
+            <span th:utext="#{cart.total}">Total</span>
+            <span class="pull-right" blc:price="${orderTotalAfterCredit}" th:if="${orderTotalAfterCredit}"></span>
+            <span class="pull-right" blc:price="${cart.total}" th:unless="${orderTotalAfterCredit}"></span>
+        </div>
+
+        <!-- Cart related actions -->
+        <th:block th:replace="cart/partials/cartOperations" />
+    </div>
+</div>

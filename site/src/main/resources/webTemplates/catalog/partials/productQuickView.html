@@ -1,0 +1,70 @@
+<th:block lang="en" xmlns:blc="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" th:object="${product}">
+<div class="modal fade product-quickview js-productContainer" th:id="*{id + '-QuickView'}" tabindex="-1" role="dialog"
+     th:attr="aria-labelledby=*{id + '-QuickView'}, data-id=*{id}" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header row-flex top-sm center-sm">
+                <div class="col-flex-sm-6 row-flex card-blog product-image-wrapper">
+                    <div class="col-flex-sm-2 hidden-xs vertical-thumbnails">
+                        <ul class="nav flexi-nav js-productThumbs">
+                            <li th:each="media, iterStat : *{media}" th:if="${media.key == 'primary'}" class="active">
+                                <a th:href="'#product-page'+${iterStat.count}" role="tab" data-toggle="tab"
+                                   aria-expanded="true" class="quick-view-media"
+                                   th:attr="data-tags=${media.value.tags}">
+                                    <img blc:src="@{${media.value.url}}" class="img-raised img-fit-parent img-rounded" alt="Bottle Closeup"/>
+                                </a>
+                            </li>
+                            <li th:each="media, iterStat : *{media}" th:unless="${media.key == 'primary'}">
+                                <a th:href="'#product-page'+${iterStat.count}" role="tab" data-toggle="tab"
+                                   aria-expanded="false" class="quick-view-media"
+                                   th:attr="data-tags=${media.value.tags}">
+                                    <img blc:src="@{${media.value.url}}" class="img-raised img-fit-parent img-rounded" th:alt="${media.value.altText}"/>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-flex-sm-10 product-main-image">
+                        <div class="tab-content">
+                            <div th:each="media, iterStat : *{media}"
+                                 th:id="'product-page'+${iterStat.count}" class="tab-pane"
+                                 th:classappend="${media.key == 'primary'}? 'active'">
+                                <div class="product-card card card-plain">
+                                    <img blc:src="@{${media.value.url}}" class="img-raised img-rounded"
+                                         th:alt="${media.key == 'primary'}? 'Bottle Closeup' : ${media.value.altText}"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-flex-sm-6">
+                    <h3 class="modal-title" th:utext="*{name}"></h3>
+                    <p id="maker" th:utext="*{manufacturer}"></p>
+                    <!-- Item price -->
+                    <th:block th:include="catalog/partials/productPrice" />
+                    <!-- Promo Message -->
+                    <th:block th:with="promoMessages=${#promotion_messages.getProductPromotionMessages(product, 'PRODUCT_DETAIL')}">
+                        <div class="promotion-message" th:unless="${#lists.isEmpty(promoMessages)}">
+                            <span th:utext="${promoMessages[0].message}"></span>
+                        </div>
+                    </th:block>
+                    <!-- Insert product options -->
+                    <div class="js-productOptions productOptions" th:replace="catalog/partials/productOptions"></div>
+                    <!-- Social media buttons -->
+                    <th:block th:include="catalog/partials/socialMediaButtons" />
+                    <div class="row">
+                        <!-- Product Actions -->
+                        <th:block th:include="catalog/partials/productOperations" />
+                    </div>
+                </div>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    <i class="material-icons">clear</i>
+                </button>
+            </div>
+            <div class="modal-body"></div>
+            <div class="modal-footer text-center" th:inline="text">
+                <button type="button" class="btn btn-default btn-sm btn-detailsview" data-dismiss="modal" th:attr="data-url=@{*{url}}">View Details</button>
+            </div>
+        </div>
+    </div>
+</div>
+</th:block>

@@ -1,0 +1,105 @@
+<th:block th:fragment="read-only">
+
+    <address th:if="${address != null}" class="read-only-address" th:classappend="${additionalClasses}">
+        <th:block th:unless="${@blSystemPropertiesService.resolveBooleanSystemProperty('validator.address.fullNameOnly')}">
+            [[${address.firstName}]]&nbsp;[[${address.lastName}]]<br />
+        </th:block>
+        <th:block th:if="${@blSystemPropertiesService.resolveBooleanSystemProperty('validator.address.fullNameOnly')}">
+            [[${address.fullName}]]<br />
+        </th:block>
+        [[${address.addressLine1}]]<br /> [[${address.addressLine2}]]<br th:if="!${#strings.isEmpty(address.addressLine2)}" />
+        [[${address.city}]],&nbsp;[[${address.stateProvinceRegion}]]&nbsp;[[${address.postalCode}]]<br />
+        <th:block th:if="${address.phonePrimary != null and address.phonePrimary.phoneNumber != null}">
+            [[${address.phonePrimary.phoneNumber}]]<br />
+        </th:block>
+    </address>
+    
+</th:block>
+
+<th:block th:fragment="form-inputs">
+    <input type="hidden" name="address.isoCountryAlpha2" value="US" />
+
+    <div class="row" th:unless="${@blSystemPropertiesService.resolveBooleanSystemProperty('validator.address.fullNameOnly')}">
+        <div class="col-sm-6">
+            <div class="form-group label-floating" th:classappend="${#fields.hasErrors('address.firstName')}? 'has-error'">
+                <label class="control-label" for="firstName" th:utext="#{cart.firstName}"></label>
+                <input id="firstName" type="text" th:field="*{address.firstName}" class="js-clearable form-control" />
+                <span class="text-danger" th:if="${#fields.hasErrors('address.firstName')}" th:errors="*{address.firstName}"></span>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="form-group label-floating" th:classappend="${#fields.hasErrors('address.lastName')}? 'has-error'">
+                <label class="control-label" for="lastName" th:utext="#{cart.lastName}"></label>
+                <input id="lastName" type="text" th:field="*{address.lastName}" class="js-clearable form-control" />
+                <span class="text-danger" th:if="${#fields.hasErrors('address.lastName')}" th:errors="*{address.lastName}"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row" th:if="${@blSystemPropertiesService.resolveBooleanSystemProperty('validator.address.fullNameOnly')}">
+        <div class="col-sm-12">
+            <div class="form-group label-floating" th:classappend="${#fields.hasErrors('address.fullName')}? 'has-error'">
+                <label class="control-label" for="fullName" th:utext="#{cart.fullName}"></label>
+                <input id="fullName" type="text" th:field="*{address.fullName}" class="js-clearable form-control" />
+                <span class="text-danger" th:if="${#fields.hasErrors('address.fullName')}" th:errors="*{address.fullName}"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="form-group label-floating" th:classappend="${#fields.hasErrors('address.addressLine1')}? 'has-error'">
+                <label class="control-label" for="addressLine1" th:utext="#{cart.address}"></label>
+                <input id="addressLine1" type="text" th:field="*{address.addressLine1}" class="js-clearable form-control" />
+                <span class="text-danger" th:if="${#fields.hasErrors('address.addressLine1')}" th:errors="*{address.addressLine1}"></span>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="form-group label-floating" th:classappend="${#fields.hasErrors('address.addressLine2')}? 'has-error'">
+                <label class="control-label" for="addressLine2" th:utext="#{cart.address2}"></label>
+                <input id="addressLine2" type="text" th:field="*{address.addressLine2}" class="js-clearable form-control" />
+                <span class="text-danger" th:if="${#fields.hasErrors('address.addressLine2')}" th:errors="*{address.addressLine2}"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="form-group label-floating" th:classappend="${#fields.hasErrors('address.city')}? 'has-error'">
+                <label class="control-label" for="city" th:utext="#{cart.city}"></label>
+                <input id="city" type="text" th:field="*{address.city}" class="js-clearable form-control" />
+                <span class="text-danger" th:if="${#fields.hasErrors('address.city')}" th:errors="*{address.city}"></span>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="form-group label-floating" th:classappend="${#fields.hasErrors('address.stateProvinceRegion')}? 'has-error'">
+                <label class="control-label" for="stateProvinceRegion" th:utext="#{cart.state}"></label>
+                <select id="stateProvinceRegion" th:field="*{address.stateProvinceRegion}" class="js-clearable form-control">
+                    <option value=""></option>
+                    <option th:each="state : ${#address.getStateOptions()}"
+                            th:value="${state.abbreviation}"
+                            th:utext="${state.abbreviation}"></option>
+                </select>
+                <span class="text-danger" th:if="${#fields.hasErrors('address.stateProvinceRegion')}" th:errors="*{address.stateProvinceRegion}"></span>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="form-group label-floating" th:classappend="${#fields.hasErrors('address.postalCode')}? 'has-error'">
+                <label class="control-label" for="postalCode" th:utext="#{cart.postalCode}"></label>
+                <input type="text" id="postalCode" th:field="*{address.postalCode}" class="js-clearable form-control" />
+                <span class="text-danger" th:if="${#fields.hasErrors('address.postalCode')}" th:errors="*{address.postalCode}"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-8">
+            <div class="form-group label-floating" th:classappend="${#fields.hasErrors('address.phonePrimary')}? 'has-error'">
+                <label class="control-label" for="phonePrimary" th:utext="#{cart.phone}"></label>
+                <input type="tel" id="phonePrimary" name="address.phonePrimary" th:unless="*{address.phonePrimary == null}" th:value="*{address.phonePrimary.phoneNumber}" class="js-clearable form-control" />
+                <input type="tel" id="phonePrimary" name="address.phonePrimary" th:if="*{address.phonePrimary == null}" value="" class="js-clearable form-control" />
+                <span class="text-danger" th:if="${#fields.hasErrors('address.phonePrimary')}" th:errors="*{address.phonePrimary}"></span>
+            </div>
+        </div>
+    </div>
+
+</th:block>

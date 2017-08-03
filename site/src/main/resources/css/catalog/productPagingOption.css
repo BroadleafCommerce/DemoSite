@@ -1,0 +1,78 @@
+.pagination {
+    display: inline-flex;
+}
+
+.pagination > li > a,
+.pagination > li > span {
+    border: 0;
+    border-radius: 30px !important;
+    transition: all .3s;
+    padding: 0px 11px;
+    margin: 0 3px;
+    min-width: 30px;
+    height: 30px;
+    line-height: 30px;
+    color: #999999;
+    font-weight: 400;
+    font-size: 12px;
+    text-transform: uppercase;
+    background: transparent;
+}
+.pagination > li > a:hover, .pagination > li > a:focus,
+.pagination > li > span:hover,
+.pagination > li > span:focus {
+    color: #999999;
+}
+.pagination a.active ,
+.pagination  span.active {
+    color: #E40037;
+}
+
+.pager {
+    text-align: right;
+    margin: 0;
+}
+
+.pager > ul {
+    padding: 10px 10px 10px 20px;
+    border-radius: 0;
+    text-align: right;
+    margin: 0;
+}
+
+.pager .pagination a, .pager .pagination a:hover {
+    border: #000 1px solid;
+    border-radius: 5px !important;
+    box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+}
+
+.pager .pagination a span {
+    position: relative;
+    top: -1.0px;
+}
+
+.pager .pagination .active a {
+    background-color: black;
+}
+
+
+.pager .pagination .inactive a {
+    color: black;
+}
+
+.pager .pagination .inactive a.disabled {
+    box-shadow: none;
+}
+
+.pager .pagination .inactive a:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+    border: #000 1px solid;
+}
+
+.pager .pagination .inactive a.disabled {
+    border-color: #999999;
+}
+
+.pager .pagination .inactive a.disabled:hover, .pager .pagination .inactive a.disabled:focus {
+    background-color: transparent;
+}

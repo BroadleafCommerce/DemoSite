@@ -1,0 +1,28 @@
+<!DOCTYPE HTML>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+
+<head layout:fragment="custom-head">
+    <title layout:title-pattern="$DECORATOR_TITLE - $CONTENT_TITLE">
+        Broadleaf Commerce Demo Store - Heat Clinic
+    </title>
+    <th:block th:include="layout/partials/head" />
+</head>
+
+<body th:class="${'locale-' + session.blLocale.localeCode} + ' index-page'">
+    <div id="notification_bar"></div>
+    <div th:replace="layout/partials/nav"></div>
+    <div class="main checkout-page">
+        <div class="container">
+            <div layout:fragment="content" ></div>
+        </div>
+    </div>
+
+    <th:block layout:fragment="post-content" />
+
+    <footer th:replace="layout/partials/footer"></footer>
+
+</body>
+</html>

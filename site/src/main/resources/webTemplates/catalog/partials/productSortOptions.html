@@ -1,6 +1,39 @@
-<div id="sort">
-    <span class="heading"><span th:utext="#{productSortOptions.sortBy}">Sort by:</span></span>
-    <a blc:addsortlink="price"><span th:utext="#{productSortOptions.price}">Price</span></a>
-    | 
-    <a blc:addsortlink="name"><span th:utext="#{productSortOptions.name}">Name</span></a>
-</div>
+
+    <div id="sort" class="sort">
+        <span class="card-title" th:inline="text" >
+            <h4 class="title" th:utext="#{productSortOptions.sortBy}"></h4>
+        </span>
+        <div class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <span th:switch="${#strings.replace(param.sort, ' ', 'Z')}">
+                    <span th:case="priceZasc" th:utext="#{productSortOptions.priceAsc}">Price: Low to High</span>
+                    <span th:case="priceZdesc" th:utext="#{productSortOptions.priceDesc}">Price: High to Low</span>
+                    <span th:case="nameZasc" th:utext="#{productSortOptions.nameAsc}">Name: A to Z</span>
+                    <span th:case="nameZdesc" th:utext="#{productSortOptions.nameDesc}">Name: Z to A</span>
+                    <span th:case="*" th:utext="${#httpServletRequest.getRequestURI() == '/search'} ? #{productSortOptions.bestMatch} : #{productSortOptions.default}"></span>
+                </span>
+                <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu"
+                th:with="urlBuilder=${T(org.springframework.web.servlet.support.ServletUriComponentsBuilder).fromCurrentRequest()}">
+
+                <li><a th:href="${urlBuilder.replaceQueryParam('sort').toUriString()}"
+                       th:unless="${param.sort == null}"
+                       th:utext="${#httpServletRequest.getRequestURI() == '/search'} ? #{productSortOptions.bestMatch} : #{productSortOptions.default}"></a></li>
+                <li><a th:href="${urlBuilder.replaceQueryParam('sort', 'price asc').toUriString()}"
+                       th:unless="${#strings.replace(param.sort, ' ', 'Z') == 'priceZasc'}"
+                       th:utext="#{productSortOptions.priceAsc}">Price: Low to High</a></li>
+                <li><a th:href="${urlBuilder.replaceQueryParam('sort', 'price desc').toUriString()}"
+                       th:unless="${#strings.replace(param.sort, ' ', 'Z') == 'priceZdesc'}"
+                       th:utext="#{productSortOptions.priceDesc}">Price: High to Low</a></li>
+                <li><a th:href="${urlBuilder.replaceQueryParam('sort', 'name asc').toUriString()}"
+                       th:unless="${#strings.replace(param.sort, ' ', 'Z') == 'nameZasc'}"
+                       th:utext="#{productSortOptions.nameAsc}">Name: A to Z</a></li>
+                <li><a th:href="${urlBuilder.replaceQueryParam('sort', 'name desc').toUriString()}"
+                       th:unless="${#strings.replace(param.sort, ' ', 'Z') == 'nameZdesc'}"
+                       th:utext="#{productSortOptions.nameDesc}">Name: Z to A</a></li>
+            </ul>
+        </div>
+    </div>
+
+

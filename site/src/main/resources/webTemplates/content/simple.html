@@ -1,0 +1,27 @@
+<div layout:decorate="~{layout/fullPageLayout}">
+
+    <head layout:fragment="custom-head">
+        <title th:utext="${BLC_PAGE.description}"></title>
+        <th:block th:include="layout/partials/head" th:with="hasMetaDesc=${false}"></th:block>
+    </head>
+
+    <div layout:fragment="content" >
+        <!--Header Row-->
+        <div class="row">
+            <div class="container">
+                <h2 class="section-title" th:text="${BLC_PAGE.pageFields[header]}">
+                </h2>
+            </div>
+        </div>
+        <!--End Of Header-->
+        <!--Page Body-->
+        <div class="row">
+            <div class="container">
+                <div th:utext="${BLC_PAGE.pageFields[body]}"/>
+            </div>
+        </div>
+        <!--End of Page Body-->
+    </div>
+
+
+</div >

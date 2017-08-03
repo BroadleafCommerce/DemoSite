@@ -1,22 +1,48 @@
-<div th:fragment="promo-code-form">
-    <blc:form class="manage-promo" method="POST" th:action="@{/cart/promo}">
-        <div class="form50">
-            <label class="prompt" for="checkoutPromo"><span th:utext="#{cart.promoCode}">Promo Code</span>:</label>
-            <div class="form100">
-                <input id="checkoutPromo" name="promoCode" class="field35" type="text" value="" autocomplete="off"/>
-                <div th:each="promo : ${cart.addedOfferCodes}" th:object="${promo}" th:remove="tag">
-                    <div class="promo"><span th:utext="*{offerCode}" th:remove="tag"></span>
- <a class="remove_promo" th:href="@{/cart/promo/remove(offerCodeId=*{id})}"><i class="icon-remove"></i></a></div>
-                </div>
-                <div id="cart_promo_error" class="checkout_promo" style="display: none;"></div>
+<div id="accordion" class="panel-group cart-promotion-row card checkout-card accordion-checkout-card js-promoCodePartial"
+     role="tablist" aria-multiselectable="true">
+    <div class="panel panel-border panel-default">
+        <div class="panel-heading" role="tab" id="headingOne">
+            <a role="button" data-toggle="collapse" data-parent="#accordion"
+               href="#collapseOne" aria-controls="collapseOne"
+               th:attr="aria-expanded=${cart.addedOfferCodes != null and #arrays.length(cart.addedOfferCodes) > 0}">
+                <h4 class="panel-title cart-promotion-title">
+                    <span th:utext="#{cart.promoCodes}">Have a Promo Code?</span>
+                    <i class="material-icons">keyboard_arrow_down</i>
+                </h4>
+            </a>
+        </div>
+        <div id="collapseOne" role="tabpanel" class="panel-collapse collapse"
+             th:classappend="${cart.addedOfferCodes != null and #arrays.length(cart.addedOfferCodes) > 0}? 'in'"
+             aria-labelledby="headingOne">
+            <div class="panel-body">
+                <blc:form id="cart_promo" method="POST" th:action="@{/cart/promo}">
+                    <div class="form-group label-floating">
+                        <div class="input-group">
+                            <label class="control-label">Promotion Code</label>
+                            <input id="promoCode" class="form-control" name="promoCode" type="text" th:value="*{promoCode}" value="" autocomplete="off"/>
+                            <span class="material-input"></span>
+                            <span class="input-group-button">
+                                <button type="submit" id="addPromo" name="addPromo" th:text="#{cart.applyDiscount}" class="js-addPromo btn btn-simple btn-bordered btn-sm" ></button>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Promotion Code Error -->
+                    <div id="cartPromoError" class="cart-promo-error text-danger" style="display: none;"></div>
+
+                    <!-- Applied Promotion Codes -->
+                    <div th:if="${cart.addedOfferCodes != null and #arrays.length(cart.addedOfferCodes) > 0}" class="cart-applied-promo-codes">
+                        <th:block th:each="promo : ${cart.addedOfferCodes}" th:object="${promo}">
+                            <div class="label label-primary promo-code">
+                                <th:block th:utext="*{offerCode}" />
+                                <a class="js-removePromo" th:href="@{/cart/promo/remove(offerCodeId=*{id})}"><i class="material-icons">close</i></a>
+                            </div>
+                        </th:block>
+                    </div>
+                </blc:form>
             </div>
         </div>
+    </div>
 
-        <div>
-            <input type="submit" id="addPromo" name="addPromo" th:value="#{cart.applyDiscount}" class="medium red apply" />
-        </div>
-
-        <div class="clearfix"></div>
-
-    </blc:form>
+    <div id="blc-extra-data" class="is-hidden" th:utext="${blcextradata}" th:if="${includeExtraDataInPartial != null and !#strings.isEmpty(blcextradata)}"></div>
 </div>
