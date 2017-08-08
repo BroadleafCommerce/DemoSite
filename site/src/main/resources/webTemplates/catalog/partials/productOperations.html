@@ -30,14 +30,6 @@
                     View in Cart
                 </a>
             </div>
-            <!-- Receive inventory notifications button -->
-            <div class="js-outOfStock is-hidden">
-                <a th:href="@{*{'/inventory/notification/' + defaultSku.id}}"
-                   class="js-inventoryNotification btn btn-sm"
-                   th:utext="#{product.inventoryNotifications}">
-                    Receive Inventory Notifications
-                </a>
-            </div>
         </div>
         <p class="text-danger" th:if="${param.errorMessage}" th:utext="${param.errorMessage[0]}"></p>
     </div>
