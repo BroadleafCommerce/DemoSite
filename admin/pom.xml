@@ -15,7 +15,6 @@
     <description>Web Module For Customized Broadleaf Commerce Admin</description>
 
     <properties>
-        <thymeleaf.version>3.0.6.RELEASE</thymeleaf.version>
         <debug.port>8001</debug.port>
     </properties>
     
