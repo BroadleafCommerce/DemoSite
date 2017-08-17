@@ -68,5 +68,11 @@
                 <th:block th:replace="~{checkout/payment/codPaymentMethodForm :: read-only}" />
             </div>
         </div>
+
+        <div class="row" th:if="${#paymentMethod.orderContainsThirdPartyPayment(order)}">
+            <div class="col-sm-12">
+                <th:block th:replace="~{checkout/payment/payPalPaymentMethodForm :: read-only}" />
+            </div>
+        </div>
     </div>
 </div>
