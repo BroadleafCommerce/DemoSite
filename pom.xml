@@ -32,7 +32,8 @@
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        
+        <broadleaf-paypal.version>2.7.1-SNAPSHOT</broadleaf-paypal.version>
+
         <debug.args>-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=${debug.port}</debug.args>
         <boot.jvm.memory>-Xmx1536M</boot.jvm.memory>
         <boot.jvm.args>${boot.jvm.memory} ${debug.args}</boot.jvm.args>
@@ -86,6 +87,12 @@
                 <groupId>com.mycompany-community</groupId>
                 <artifactId>boot-community-demo-core</artifactId>
                 <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.broadleafcommerce</groupId>
+                <artifactId>broadleaf-paypal</artifactId>
+                <version>${broadleaf-paypal.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
