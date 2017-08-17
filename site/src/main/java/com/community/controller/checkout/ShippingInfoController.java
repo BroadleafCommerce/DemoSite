@@ -68,8 +68,13 @@ public class ShippingInfoController extends BroadleafShippingInfoController {
             checkoutFormService.determineIfSavedAddressIsSelected(model, shippingInfoForm, paymentInfoForm);
         }
 
-        String nextActiveStage = result.hasErrors() ?
-                CheckoutStageType.SHIPPING_INFO.getType() : CheckoutStageType.PAYMENT_INFO.getType();
+        String nextActiveStage = CheckoutStageType.PAYMENT_INFO.getType();
+        if (result.hasErrors()) {
+            nextActiveStage = CheckoutStageType.SHIPPING_INFO.getType();
+        } else if (cartStateService.cartHasThirdPartyPayment()) {
+            nextActiveStage = CheckoutStageType.REVIEW.getType();
+        }
+
         model.addAttribute(ACTIVE_STAGE, nextActiveStage);
         return getCheckoutStagesPartial();
     }
