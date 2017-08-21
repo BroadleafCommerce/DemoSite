@@ -15,20 +15,5 @@
                 <div th:utext="${BLC_PAGE.pageFields[body]}"></div>
             </div>
         </div>
-
-        <hr/>
-
-        <!-- Related products -->
-        <div class="related-products"
-             th:with="relatedProducts=${#related_products.findByCategory(2001, 3)}"
-             th:unless="${#arrays.isEmpty(relatedProducts)}">
-            <h3 class="text-center" th:text="#{category.featuredProducts}"></h3>
-            <div class="row">
-                <div class="col-sm-6 col-md-3" th:each="product : ${relatedProducts}" th:object="${product}"
-                     th:include="catalog/partials/productListItem"
-                     th:if="${product.isActive()}">
-                </div>
-            </div>
-        </div>
     </div>
 </th:block>
