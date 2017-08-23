@@ -1,7 +1,7 @@
 <div id="ready_only_pay_pal_payment_method" class="read-only-paypal-payment-method-container" th:fragment="read-only">
     <div class="row">
-        <div class="col-sm-3">
-            <img src="https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif" class="text-center-mobile"/>
+        <div class="col-sm-3 text-center-mobile">
+            <img src="https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif"/>
         </div>
         <div class="col-sm-9" th:utext="#{checkout.paymentMethod.payPal.readOnly.message}"></div>
     </div>
@@ -11,8 +11,8 @@
     <th:block th:if="${#paypal.hasConfigProperties()}">
         <th:block th:if="${#paymentMethod.cartContainsThirdPartyPayment()}">
             <div class="row">
-                <div class="col-sm-3">
-                    <img src="https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif" class="text-center-mobile"/>
+                <div class="col-sm-3 text-center-mobile">
+                    <img src="https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif"/>
                 </div>
                 <div class="col-sm-9" th:utext="#{checkout.paymentMethod.payPal.edit.message}"></div>
             </div>
@@ -21,8 +21,8 @@
         <th:block th:unless="${#paymentMethod.cartContainsThirdPartyPayment()}">
             <a th:href="@{/paypal-express/redirect?complete=false}" class="js-payPalPaymentMethodAction is-hidden"></a>
             <div class="row">
-                <div class="col-sm-3">
-                    <img src="https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif" class="text-center-mobile"/>
+                <div class="col-sm-3 text-center-mobile">
+                    <img src="https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif"/>
                 </div>
                 <div class="col-sm-9" th:utext="#{checkout.paymentMethod.payPal.message}"></div>
             </div>
