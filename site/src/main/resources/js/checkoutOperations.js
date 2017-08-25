@@ -83,7 +83,9 @@
             advanceFromPaymentToReviewStage();
             showReadOnlyPaymentMethod(paymentMethod);
         } else if ('PayPal' === paymentMethod) {
-            // TODO
+            if (isPayPalConfigComplete()) {
+                collectPaymentInfoViaPayPal();
+            }
         }
     };
 
@@ -390,6 +392,26 @@
             replaceCheckoutStages(data);
             showHiddenPerformCheckoutActions();
         });
+    };
+
+    function isPayPalConfigComplete() {
+        return $('.js-payPalConfigLink').length === 0;
+    }
+
+    /**
+     * Clicks a link that leads to a redirect into PayPal's ExpressCheckout using Broadleaf's PayPal integration module.
+     *
+     * Note: The link will not be present if there is already a third party payment associated with the order. If you wish
+     *  to change this behavior, you'll need to override the `payPalPaymentMethodForm.html` template partial.
+     */
+    function collectPaymentInfoViaPayPal() {
+        var $payPalPaymentMethodAction = $('.js-payPalPaymentMethodAction');
+
+        if ($payPalPaymentMethodAction.length) {
+            $payPalPaymentMethodAction[0].click();
+        } else {
+            Checkout.navigateToCheckoutStage('REVIEW');
+        }
     };
 
     /**

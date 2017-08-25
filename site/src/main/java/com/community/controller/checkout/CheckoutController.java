@@ -91,8 +91,9 @@ public class CheckoutController extends BroadleafCheckoutController {
         boolean customerHasEmptyCart = CollectionUtils.isEmpty(cart.getOrderItems());
         boolean isCustomerAnonymous = CustomerState.getCustomer().isAnonymous();
         boolean hasGuestCheckoutParam = request.getParameter(GUEST_CHECKOUT) != null;
+        boolean cartHasThirdPartyPayment = cartStateService.cartHasThirdPartyPayment();
 
-        return !customerHasEmptyCart && isCustomerAnonymous && !hasGuestCheckoutParam;
+        return !customerHasEmptyCart && isCustomerAnonymous && !hasGuestCheckoutParam && !cartHasThirdPartyPayment;
     }
 
     protected String getActiveCheckoutStage(HttpServletRequest request) {
@@ -101,8 +102,8 @@ public class CheckoutController extends BroadleafCheckoutController {
         if (activeStage == null) {
             if (!cartStateService.cartHasPopulatedShippingAddress()) {
                 activeStage = CheckoutStageType.SHIPPING_INFO.getType();
-            } else if (!cartStateService.cartHasPopulatedBillingAddress()
-                    || cartStateService.cartHasTemporaryCreditCard()) {
+            } else if ((!cartStateService.cartHasPopulatedBillingAddress() || cartStateService.cartHasTemporaryCreditCard())
+                    && !cartStateService.cartHasThirdPartyPayment()) {
                 activeStage = CheckoutStageType.PAYMENT_INFO.getType();
             } else {
                 activeStage = CheckoutStageType.REVIEW.getType();
