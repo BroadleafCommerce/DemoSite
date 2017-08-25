@@ -13,7 +13,6 @@
                     <th th:utext="#{account.orders.date}"></th>
                     <th th:utext="#{account.orders.status}"></th>
                     <th th:utext="#{account.orders.total}" class="numeric"></th>
-                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -29,9 +28,7 @@
                         <td th:data-title="#{account.orders.date}" th:utext="*{#dates.format(submitDate, 'MM-dd-yyyy')}"></td>
                         <td th:data-title="#{account.orders.status}" th:utext="*{status.friendlyType}"></td>
                         <td th:data-title="#{account.orders.total}" class="numeric" blc:price="*{total}"></td>
-                        <td th:data-title="Reorder">
-                            <a th:href="@{/account/orders/reorder/} + *{orderNumber}">Reorder</a>
-                        </td>
+
                     </tr>
 
                     <tr class="order-details-row js-orderDetailsRow is-hidden"><td colspan="6"></td></tr>
