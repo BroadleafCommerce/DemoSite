@@ -1,4 +1,4 @@
-<div id="read_only_credit_card_payment_method" th:fragment="read-only">
+<div id="read_only_credit_card_payment_method" class="read-only-credit-card-payment-method" th:fragment="read-only">
     <div class="row">
         <div class="col-sm-6">
             <h4><span th:utext="#{cart.billingInformation}">Billing Information</span></h4>
@@ -53,7 +53,7 @@
                     <input th:unless="${customer.anonymous}" type="hidden" th:field="*{shouldUseCustomerPayment}" class="js-shouldUseCustomerPayment is-hidden" />
                     <input th:unless="${customer.anonymous}" type="hidden" th:field="*{shouldSaveNewPayment}" class="is-hidden" />
 
-                    <div class="col-sm-12" th:unless="${customer.anonymous}">
+                    <div class="col-sm-12" th:unless="${customer.anonymous or not #customer.savedPaymentsAreEnabled()}">
                         <div class="row">
                             <div class="col-sm-6 card-plain choose-saved-payment-action js-chooseSavedPaymentAction">
                                 <div class="card">
@@ -78,7 +78,7 @@
                     <th:block th:replace="~{partials/creditCardTypes}" />
                     <th:block th:replace="~{partials/creditCard :: form-inputs}" />
 
-                    <div class="checkbox" th:unless="${customer.anonymous}">
+                    <div class="checkbox" th:unless="${customer.anonymous or not #customer.savedPaymentsAreEnabled()}">
                         <label>
                             <input type="checkbox" name="shouldSaveNewPayment-check" th:checked="*{shouldSaveNewPayment}" />
                             <span th:utext="#{checkout.paymentMethod.save}">Save this card for future purchases</span>

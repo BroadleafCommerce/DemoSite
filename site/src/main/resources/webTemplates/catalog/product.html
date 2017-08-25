@@ -10,7 +10,7 @@
 
     <div layout:fragment="content">
         <div class="product-page" th:object="${product}">
-            <div id="product_content" class="main-product js-productContainer card-product row">
+            <div id="product_content" class="main-product js-productContainer card-product row" th:data-id="*{id}">
                 <!--Product Media images-->
                 <div class="col-sm-7 product-image-wrapper">
                     <div class="col-sm-2 hidden-xs">
@@ -54,13 +54,16 @@
                                  th:id="'product-page'+${iterStat.count}" class="tab-pane"
                                  th:classappend="${media.key == 'primary'}? 'active'">
                                 <div class="product-card card card-blog card-plain">
-                                    <a class="js-openZoomGallery open-zoom-gallery">
-                                        <img blc:src="@{${media.value.url}}" class="img-raised img-rounded"
-                                             th:alt="${media.key == 'primary'}? 'Bottle Closeup' : ${media.value.altText}"/>
-                                    </a>
+                                    <img blc:src="@{${media.value.url}}" class="img-raised img-rounded js-main-product-img"
+                                         th:alt="${media.key == 'primary'}? 'Bottle Closeup' : ${media.value.altText}"/>
                                 </div>
                             </div>
+                            <p class="zoom-text">
+                                <i class="material-icons">zoom_in</i>
+                                <span th:utext="#{product.dragZoom}">Drag to zoom</span>
+                            </p>
                         </div>
+                        <div class="clearfix"></div>
                         <div class="horizontal-thumbnails-container visible-xs">
                             <div class="left-arrow">
                                 <a class="btn btn-xs js-thumbnailLeft hidden">
@@ -77,9 +80,7 @@
                                     <li th:each="media, iterStat : *{media}" th:if="${media.key == 'primary'}"
                                         class="active thumbnail-item">
                                         <a th:href="'#product-page'+${iterStat.count}" role="tab" data-toggle="tab"
-                                           aria-expanded="true"
                                            th:attr="data-tags=${media.value.tags}">
-
                                             <img blc:src="@{${media.value.url}}" class="img-raised img-rounded"
                                                  alt="Bottle Closeup"/>
                                         </a>

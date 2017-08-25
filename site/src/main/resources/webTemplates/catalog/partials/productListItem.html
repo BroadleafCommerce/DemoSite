@@ -1,92 +1,61 @@
 <th:block xmlns:blc="http://www.w3.org/1999/html" xmlns:th="http://www.thymeleaf.org">
-<div class="card card-product card-plain no-shadow product-list-item js-productContainer"
-     data-colored-shadow="false">
-    <div th:if="*{featuredProduct}" class="new-badge">
-        New!
-    </div>
-    <a th:href="@{*{url}}">
-        <div class="js-image image card-image">
-            <img th:if="*{media['primary']}" blc:src="@{*{media['primary'].url} + '?browse'}" alt="Sauce Image"/>
-            <!--Out Of Stock-->
-            <h2 class="js-outOfStock out-of-stock is-hidden inCart card-title">
-                <i class="material-icons">info_outline</i>
-                <th:block th:utext="#{product.outOfStock}">Out Of Stock</th:block>
-            </h2>
-            <div class="js-outOfStock out-of-stock-overlay is-hidden"></div>
+    <div class="card card-product card-plain no-shadow product-list-item js-productContainer"
+         th:data-id="*{id}" data-colored-shadow="false">
+        <div th:if="*{featuredProduct}" class="new-badge">
+            New!
         </div>
-    </a>
-    <button class="btn btn-white btn-xs btn-round hidden-xs cntr-abs-horz btn-quickview" data-toggle="modal" 
-            th:attr="data-target=*{'#' + id + '-QuickView'},
-                     data-url=*{'/product-quick-view?id=' + id}" th:utext="#{product.quickView}"></button>
-    <div class="card-content product-card">
-        <h4 class="card-title product-title">
-            <a th:href="@{*{url}}" th:utext="*{name}"></a>
-        </h4>
-        <th:block th:with="promoMessages=${#promotion_messages.getProductPromotionMessages(product, 'BROWSE')}">
-            <div class="promotion-message" th:unless="${#lists.isEmpty(promoMessages)}">
-                <span th:text="${promoMessages[0].message}"></span>
+        <a th:href="@{*{url}}">
+            <div class="js-image image card-image">
+                <img th:if="*{media['primary']}" blc:src="@{*{media['primary'].url} + '?browse'}" alt="Sauce Image"/>
+                <!--Out Of Stock-->
+                <h2 class="js-outOfStock out-of-stock is-hidden inCart card-title">
+                    <i class="material-icons">info_outline</i>
+                    <th:block th:utext="#{product.outOfStock}">Out Of Stock</th:block>
+                </h2>
+                <div class="js-outOfStock out-of-stock-overlay is-hidden"></div>
             </div>
-        </th:block>
-        <!--Wishlist / Favorite -->
-        <div class="footer" th:classappend="*{'product-actions js-productActions' + id}">
-            <div class="product-price-container">
-                <div class="price"
-                     th:if="${#object instanceof T(org.broadleafcommerce.core.catalog.domain.ProductBundle)}">
-                    <span blc:price="*{salePrice}" th:if="*{onSale}" th:classappend="*{onSale}? 'price-new'" ></span>
-                    <span blc:price="*{retailPrice}" th:classappend="*{onSale}? 'price-old'" ></span>
-                </div>
-                <div class="score" th:if="${#brc.sandbox} and *{defaultSku.score} != null">
-                    <div th:utext="*{'Score = ' + #numbers.formatDecimal(defaultSku.score, 1, 3)}"></div>
-                </div>
-                <div class="price"
-                     th:unless="${#object instanceof T(org.broadleafcommerce.core.catalog.domain.ProductBundle)}">
-                    <span blc:price="*{salePrice}" th:if="*{onSale}" th:classappend="*{onSale}? ' price-new'" ></span>
-                    <span blc:price="*{retailPrice}" th:classappend="*{onSale}? 'price-old'" ></span>
-                </div>
-            </div>
-            <!--In Cart-->
-            <div class="js-inCartLinkContainer in-cart-link-container is-hidden">
-                <a th:href="@{/cart}" class="text-success text-center btn btn-simple"
-                   rel="tooltip"
-                   th:data-original-title="#{product.inCart}">
-                    <i class="material-icons">shopping_cart</i>
-                </a>
-            </div>
-            <blc:named_order orderVar="wishlist" orderName="wishlist"></blc:named_order>
-            <div class="js-inWishListLinkContainer wishlist-container"
-                 th:classappend="${!wishlist.containsSku(product.defaultSku)}? ' is-hidden'">
-                <a th:href="@{/account/wishlist}" class="inWishlist small-button btn btn-simple wishlist-btn"
-                   rel="tooltip"
-                   th:data-original-title="#{product.addedToWishlist}">
-                    <i class="material-icons">favorite</i>
-                </a>
-            </div>
-            <div class="js-wishListAddContainer wishlist-add-container wishlist-container"
-                 th:classappend="${wishlist.containsSku(product.defaultSku)}? ' is-hidden'">
-                <blc:form method="POST" th:action="@{/account/wishlist/add}">
-                    <input type="hidden" name="productId" th:value="*{id}"/>
-                    <input type="hidden" name="quantity" value="1"/>
-                    <input type="hidden" name="hasProductOptions" value="true" th:if="!*{#lists.isEmpty(productOptions)}"/>
-                    <input type="hidden" name="outOfStockText" th:value="#{product.outOfStock}">
+        </a>
 
-                    <button th:if="${customer.loggedIn}" type="button" rel="tooltip" title=""
-                            th:href="*{#lists.isEmpty(productOptions)} ? @{/account/wishlist} : @{*{url}}"
-                            class="js-addToWishlist js-outOfStockDisable btn btn-simple wishlist-btn"
-                            th:classappend="*{#lists.isEmpty(productOptions)} ? '' : 'wishlist-not-ready'"
-                            th:data-action-required="*{#lists.isEmpty(productOptions)} ? '' : 'true'"
-                            th:data-original-title="*{#lists.isEmpty(productOptions)} ? #{product.addToWishlist} : #{product.chooseOptionsWishlist}">
-                        <i class="material-icons">favorite_border</i>
-                    </button>
-                    <button th:unless="${customer.loggedIn}" type="button" rel="tooltip" title=""
-                            th:href="@{/login}"
-                            th:data-action-required="true"
-                            class="js-addToWishlist js-outOfStockDisable btn btn-simple wishlist-btn wishlist-not-ready"
-                            th:data-original-title="#{product.addToWishlist.login}">
-                        <i class="material-icons">favorite_border</i>
-                    </button>
-                </blc:form>
+        <th:block th:replace="@{catalog/partials/productListItemHoverActions.html}" />
+
+        <div class="card-content product-card">
+            <h4 class="card-title product-title">
+                <a th:href="@{*{url}}" th:utext="*{name}"></a>
+            </h4>
+            <th:block th:with="promoMessages=${#promotion_messages.getProductPromotionMessages(product, 'BROWSE')}">
+                <div class="promotion-message" th:unless="${#lists.isEmpty(promoMessages)}">
+                    <span th:text="${promoMessages[0].message}"></span>
+                </div>
+            </th:block>
+            <!--Wishlist / Favorite -->
+            <div class="footer" th:classappend="*{'product-actions js-productActions' + id}">
+                <div class="product-price-container">
+                    <div class="price"
+                         th:if="${#object instanceof T(org.broadleafcommerce.core.catalog.domain.ProductBundle)}">
+                        <span blc:price="*{salePrice}" th:if="*{onSale}" th:classappend="*{onSale}? 'price-new'" ></span>
+                        <span blc:price="*{retailPrice}" th:classappend="*{onSale}? 'price-old'" ></span>
+                    </div>
+                    <div class="score" th:if="${#brc.sandbox} and *{defaultSku.score} != null">
+                        <div th:utext="*{'Score = ' + #numbers.formatDecimal(defaultSku.score, 1, 3)}"></div>
+                    </div>
+                    <div class="price"
+                         th:unless="${#object instanceof T(org.broadleafcommerce.core.catalog.domain.ProductBundle)}">
+                        <span blc:price="*{salePrice}" th:if="*{onSale}" th:classappend="*{onSale}? ' price-new'" ></span>
+                        <span blc:price="*{retailPrice}" th:classappend="*{onSale}? 'price-old'" ></span>
+                    </div>
+                </div>
+
+                <th:block th:include="catalog/partials/wishlistButton" th:with="isCondensedProductView=${true}" />
+
+                <!--In Cart-->
+                <div class="js-inCartLinkContainer in-cart-link-container is-hidden">
+                    <a th:href="@{/cart}" class="text-success text-center btn btn-simple"
+                       rel="tooltip"
+                       th:data-original-title="#{product.inCart}">
+                        <i class="material-icons">shopping_cart</i>
+                    </a>
+                </div>
             </div>
         </div>
     </div>
-</div>
 </th:block>

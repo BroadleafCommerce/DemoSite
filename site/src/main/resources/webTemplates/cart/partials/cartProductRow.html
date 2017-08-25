@@ -21,7 +21,7 @@
         <div class="row">
 
             <!-- Product Name -->
-            <div class="col-lg-7">
+            <div class="col-sm-7">
                 <div class="cart-product-name text-uppercase">
                     <th:block th:if="${item instanceof T(org.broadleafcommerce.core.order.domain.DiscreteOrderItem)}">
                         <a th:unless="${@blSystemPropertiesService.resolveBooleanSystemProperty('solr.index.use.sku')}" th:href="@{*{product.url}}" th:utext="*{name}"></a>
@@ -39,7 +39,7 @@
             </div>
 
             <!-- Product Pricing -->
-            <div class="col-lg-5 cart-product-pricing">
+            <div class="col-sm-5 cart-product-pricing">
                 <div>
                     <!-- Per Unit Price -->
                     <th:block blc:price="*{getPriceBeforeAdjustments(true, true)}" />
@@ -71,7 +71,9 @@
 
                 <!-- CSR Price Override -->
                 <div th:if="${#brc.csrMode}">
-                    <a th:href="@{*{'/csrtools/override-item-price/' + id}}" class="csr-direct-edit-price">Edit</a>
+                    <a th:href="@{*{'/csrtools/override-item-price/' + id}}"
+                       class="csr-direct-edit-price"
+                       th:utext="#{cart.edit}">Edit</a>
                     <a th:if="*{isRetailPriceOverride()}"
                        th:href="@{*{'/csrtools/clear-item-price-override/' + id}}"
                        class="csr-clear-override">Clear</a>
@@ -81,7 +83,7 @@
 
         <!-- Item Details -->
         <div class="row">
-            <div class="col-lg-12">
+            <div class="col-sm-12">
                 <div th:each="message : ${item.cartMessages}" class="promotion-message">
                     <span th:text="${message}"></span>
                 </div>
@@ -102,11 +104,19 @@
                             </th:block>
 
                             <th:block th:if="${item instanceof T(org.broadleafcommerce.core.order.domain.DiscreteOrderItem)}">
-                                <a th:unless="${@blSystemPropertiesService.resolveBooleanSystemProperty('solr.index.use.sku')}" class="btn btn-simple btn-bordered btn-xs js-removeFromCart" th:href="@{/cart/remove(orderItemId=*{id}, productId=*{product.id})}">Remove</a>
-                                <a th:if="${@blSystemPropertiesService.resolveBooleanSystemProperty('solr.index.use.sku')}" class="btn btn-simple btn-bordered btn-xs js-removeFromCart" th:href="@{/cart/remove(orderItemId=*{id}, skuId=*{sku.id})}">Remove</a>
+                                <a th:unless="${@blSystemPropertiesService.resolveBooleanSystemProperty('solr.index.use.sku')}"
+                                   class="btn btn-simple btn-bordered btn-xs remove-from-cart-action js-removeFromCart"
+                                   th:href="@{/cart/remove(orderItemId=*{id}, productId=*{product.id})}"
+                                   th:utext="#{cart.remove}">Remove</a>
+                                <a th:if="${@blSystemPropertiesService.resolveBooleanSystemProperty('solr.index.use.sku')}"
+                                   class="btn btn-simple btn-bordered btn-xs remove-from-cart-action js-removeFromCart"
+                                   th:href="@{/cart/remove(orderItemId=*{id}, skuId=*{sku.id})}"
+                                   th:utext="#{cart.remove}">Remove</a>
                             </th:block>
                             <th:block th:unless="${item instanceof T(org.broadleafcommerce.core.order.domain.DiscreteOrderItem)}">
-                                <a class="btn btn-simple btn-xs js-removeFromCart" th:href="@{/cart/remove(orderItemId=*{id})}">Remove</a>
+                                <a class="btn btn-simple btn-xs remove-from-cart-action js-removeFromCart"
+                                   th:href="@{/cart/remove(orderItemId=*{id})}"
+                                   th:utext="#{cart.remove}">Remove</a>
                             </th:block>
                         </li>
                     </ul>

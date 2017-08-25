@@ -43,6 +43,9 @@
 .no-left-padding {
     padding-left: 0;
 }
+.display-inline-block {
+    display: inline-block;
+}
 
 @media (max-width: 768px) {
     .main {
@@ -52,34 +55,38 @@
     .card-product {
         margin-bottom: 0;
     }
+}
 
+@media (max-width: 991px) {
     /* Force table to not be like tables anymore */
-    .mobile-table table,
-    .mobile-table thead,
-    .mobile-table tbody,
+    .mobile-table > table,
+    .mobile-table > thead,
+    .mobile-table > tbody,
     .mobile-table-tables th,
-    .mobile-table td,
-    .mobile-table tr {
+    .mobile-table > thead > tr,
+    .mobile-table > thead > tr > td,
+    .mobile-table > tbody > tr,
+    .mobile-table > tbody > tr > td {
         display: block;
     }
 
     /* Hide table headers (but not display: none;, for accessibility) */
-    .mobile-table thead tr {
+    .mobile-table > thead > tr {
         position: absolute;
         top: -9999px;
         left: -9999px;
     }
 
-    .mobile-table tr { border: 1px solid #ccc; }
+    .mobile-table > tbody > tr { border: 1px solid #ccc; }
 
-    .mobile-table td {
+    .mobile-table > tbody > tr > td {
         position: relative;
         text-align: left;
         overflow: hidden;
         padding: 20px 5px 5px 10px !important;
     }
 
-    .mobile-table td:before {
+    .mobile-table > tbody > tr > td:before {
         /* Now like a table header */
         position: absolute;
         /* Top/left values mimic padding */
@@ -95,7 +102,7 @@
     /*
     Label the data
     */
-    .mobile-table td:before { content: attr(data-title); }
+    .mobile-table > tbody > tr > td:before { content: attr(data-title); }
 }
 
 /* Makes an element position: absolute and centers it */
@@ -110,6 +117,9 @@
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
+    z-index: 1;
+    width: 100%;
+    text-align: center;
 }
 
 .cntr-abs-vert {

@@ -1,6 +1,6 @@
 <div th:fragment="customer-address-new">
     <li class="js-manage-address active" data-value="new-address">
-        <div class="shipping-address-btn">
+        <div class="shipping-address-btn" th:utext="#{account.addresses.addNew}">
             Add a new address
         </div>
     </li>
@@ -14,7 +14,8 @@
 
         <div class="shipping-address-btn">
             <strong>[[*{addressName}]]</strong>
-            <small th:if="*{address.default}">&nbsp;&nbsp;(Default)</small>
+            <small th:if="*{address.default}">
+                &nbsp;&nbsp;(<span th:utext="#{account.addresses.default}"></span>)</small>
             <br/>
             <th:block
                     th:unless="${@blSystemPropertiesService.resolveBooleanSystemProperty('validator.address.fullNameOnly')}">
@@ -32,7 +33,7 @@
             </th:block>
 
             <div class="btn btn-simple js-remove-address" type="submit" th:unless="${managePaymentMethods}">
-                Remove
+                <span th:utext="#{account.addresses.remove}">Remove</span>
                 <input type="hidden" name="removeAddress" value="Remove"/>
             </div>
         </div>

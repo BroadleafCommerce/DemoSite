@@ -1,7 +1,8 @@
 package com.community.controller.account;
 
-import org.broadleafcommerce.core.web.controller.account.BroadleafManageCustomerPaymentsController;
 import org.broadleafcommerce.core.web.checkout.model.PaymentInfoForm;
+import org.broadleafcommerce.core.web.controller.account.BroadleafManageCustomerPaymentsController;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
  * @author Chris Kittrell (ckittrell)
  * @author Jacob Mitash
  */
+@ConditionalOnProperty(name = "saved.customer.payments.enabled", matchIfMissing = true)
 @Controller
 @RequestMapping("/account/payments")
 public class ManageCustomerPaymentsController extends BroadleafManageCustomerPaymentsController {

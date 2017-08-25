@@ -1,0 +1,13 @@
+.error-page .section-header,
+.error-page .section-content {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.error-page .section-content .options-list {
+    text-align: left;
+    list-style: initial;
+    display: inline-block;
+    width: 23%;
+    margin-bottom: 20px;
+}

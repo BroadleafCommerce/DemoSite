@@ -1,0 +1,9 @@
+<th:block layout:decorator="layout/fullPageLayout">
+    <div layout:fragment="content">
+        <div th:class="default_error_message">
+            <h2>
+                <span th:utext="#{unhandled_exception_message}"/> : <span th:utext="${exceptionUUID}"/>
+            </h2>
+        </div>
+    </div>
+</th:block>

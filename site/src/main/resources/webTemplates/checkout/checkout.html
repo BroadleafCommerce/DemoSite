@@ -5,7 +5,7 @@
 
     <div id="checkout" class="checkout js-checkout row" layout:fragment="content" th:fragment="ajax">
         <th:block th:if="${#lists.isEmpty(cart.orderItems)}">
-            <div class="col-lg-12">
+            <div class="col-md-12">
                 <div class="cart-warning">
                     <h1 th:utext="#{cart.empty}">Your cart is empty</h1>
                     <a th:href="@{/}" class="btn btn-primary btn-lg" th:utext="#{cart.continueShopping}">Continue Shopping</a>
@@ -14,7 +14,7 @@
         </th:block>
 
         <th:block th:if="${cartRequiresLock != null}">
-            <div class="col-lg-12">
+            <div class="col-md-12">
                 <div class="cart-warning">
                     <h1 th:utext="#{csr_lockCartBeforeCheckout}"></h1>
 
@@ -28,21 +28,21 @@
         </th:block>
 
         <th:block th:unless="${#lists.isEmpty(cart.orderItems) or cartRequiresLock != null}">
-            <div class="col-lg-12">
+            <div class="col-md-12">
                 <h1 th:utext="#{cart.checkout}">Checkout</h1>
             </div>
 
-            <div class="col-lg-8" th:if="${#paymentMethod.getPaymentProcessingError()}">
+            <div class="col-md-8" th:if="${#paymentMethod.getPaymentProcessingError()}">
                 <div class="card checkout-card payment-processing-error" th:with="message=#{${#paymentMethod.getPaymentProcessingError()}}">
                     <th:block th:replace="~{checkout/partials/checkoutAlert}"/>
                 </div>
             </div>
 
-            <div class="col-lg-8">
+            <div class="col-md-8">
                 <th:block th:replace="checkout/partials/checkoutStages" />
             </div>
 
-            <div class="col-lg-4" th:unless="${#lists.isEmpty(cart.orderItems)}">
+            <div class="col-md-4" th:unless="${#lists.isEmpty(cart.orderItems)}">
                 <th:block th:replace="cart/partials/cartPricingSummary" />
 
                 <th:block th:replace="cart/partials/cartItemSummary" />

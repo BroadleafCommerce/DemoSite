@@ -11,7 +11,7 @@ div.products {
 .new-badge {
     width: 60px;
     height: 60px;
-    background: url(/../img/badge-new.png) no-repeat;
+    background: url(/img/badge-new.png) no-repeat;
     text-indent: -9999px;
     position: absolute;
     top: -10px;
@@ -32,28 +32,11 @@ div.products {
 }
 
 .product-card .footer > div {
-    display: table-cell;
-}
-
-.wishlist-container {
-    text-align: right;
-}
-
-.wishlist-container .btn {
-    margin-top: 1px;
-}
-
-.product-card .footer .wishlist-add-container .btn {
-    margin-top: 1px;
-    color: red;
-}
-
-.product-card .footer .btn.wishlist-not-ready {
-    color: #999999 !important;
+    display: inline-block;
 }
 
 .in-cart-link-container {
-    width: 100px;
+    float: right;
     text-align: right;
 }
 
@@ -199,14 +182,15 @@ div.products {
     vertical-align: top;
 }
 
-.product-list-item .btn-quickview {
-    z-index: 1;
-    transform: translate(-50%, -150%);
-    margin: 0;
+.product-list-item .btn-quickview,
+.product-list-item .btn-add-to-cart {
+    transform: translateY(-150%);
+    margin: 0 0.5em;
     visibility: hidden;
 }
 
-.product-list-item:hover .btn-quickview {
+.product-list-item:hover .btn-quickview,
+.product-list-item:hover .btn-add-to-cart{
     visibility: visible;
 }
 

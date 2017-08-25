@@ -3,7 +3,7 @@
     <div th:unless="${responseEvent}" class="card manage-account-form-wrapper js-manageAccountFormWrapper">
         <h3 th:utext="#{account.giftCard.title}">Enter your Gift Card Number</h3>
         <hr />
-        <div class="col-sm-9 col-md-6">
+        <div class="col-sm-12 col-md-6">
             <div th:unless="${validGiftCardNumber}" th:inline="text" >
                 <p><span class="text-danger" style="width: auto; margin: 20px 10px;" th:utext="#{account.giftCard.invalid.number}">Gift Card Number not found.</span></p>
             </div>
@@ -16,14 +16,14 @@
                       th:action="@{/account/giftcard/redeem}"
                       method="post">
                 <div class="row">
-                    <div class="col-sm-6">
+                    <div class="col-sm-9">
                         <div class="form-group label-floating" th:classappend="${#fields.hasErrors('giftCardNumber')}? 'has-error'">
                             <label class="control-label" for="giftCardNumber" th:utext="#{cart.giftCardNumber}">Gift Card Number</label>
                             <input id="giftCardNumber" type="text" th:field="*{giftCardNumber}" class="form-control" />
                             <span class="text-danger" th:if="${#fields.hasErrors('giftCardNumber')}" th:errors="*{giftCardNumber}"></span>
                         </div>
                     </div>
-                    <div class="col-sm-6">
+                    <div class="col-sm-3">
                         <input type="submit" class="btn btn-primary" th:value="#{cart.giftCard.apply}" />
                     </div>
                 </div>

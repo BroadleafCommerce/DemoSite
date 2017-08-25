@@ -18,7 +18,7 @@
                 <blc:form id="cart_promo" method="POST" th:action="@{/cart/promo}">
                     <div class="form-group label-floating">
                         <div class="input-group">
-                            <label class="control-label">Promotion Code</label>
+                            <label class="control-label" th:utext="#{cart.promotionCode}">Promotion Code</label>
                             <input id="promoCode" class="form-control" name="promoCode" type="text" th:value="*{promoCode}" value="" autocomplete="off"/>
                             <span class="material-input"></span>
                             <span class="input-group-button">

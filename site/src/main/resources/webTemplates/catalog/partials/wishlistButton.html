@@ -1,27 +1,38 @@
-<blc:named_order orderVar="wishlist" orderName="wishlist"></blc:named_order>
-<span class="js-inWishListLinkContainer"
-     th:if="${wishlist.containsSku(product.defaultSku)}"
-     th:classappend="${!wishlist.containsSku(product.defaultSku)}? ' is-hidden'">
-    <a class="inWishlist btn btn-simple btn-fab" th:href="@{/account/wishlist}">
-        <i class="material-icons">favorite</i>
-    </a>
-</span>
-<span th:unless="${wishlist.containsSku(product.defaultSku)}"
-     th:classappend="${wishlist.containsSku(product.defaultSku)}? ' is-hidden'">
-    <blc:form class="js-wishlist-form" method="POST" th:action="@{/account/wishlist/add}">
-        <input type="hidden" name="productId" th:value="*{id}"/>
-        <input type="hidden" name="quantity" value="1"/>
+<th:block th:with="isCondensedProductView=${isCondensedProductView != null}">
 
-        <button th:if="${customer.loggedIn}" type="button" rel="tooltip"
-                class="js-addToWishlist btn btn-simple btn-fab"
-                th:data-original-title="#{product.addToWishlist}">
-            <i class="material-icons">favorite_border</i>
-        </button>
-        <a th:unless="${customer.loggedIn}" type="button" rel="tooltip"
-                th:href="@{/login}"
-                class="btn btn-simple btn-fab"
-                th:data-original-title="#{product.addToWishlist.login}">
-            <i class="material-icons">favorite_border</i>
+    <blc:named_order orderVar="wishlist" orderName="wishlist"></blc:named_order>
+    <div class="wishlist-button-container js-inWishListLinkContainer"
+         th:classappend="${!wishlist.containsSku(product.defaultSku)}? ' is-hidden'">
+        <a th:href="@{/account/wishlist}" class="small-button btn btn-simple wishlist-btn is-inWishlist"
+           th:classappend="${not isCondensedProductView}? 'btn-fab'"
+           th:data-original-title="#{product.addedToWishlist}">
+            <i class="material-icons">favorite</i>
         </a>
-    </blc:form>
-</span>
+    </div>
+    <div class="wishlist-button-container js-wishListAddContainer"
+         th:classappend="${wishlist.containsSku(product.defaultSku)}? ' is-hidden'">
+        <blc:form class="js-wishlist-form" method="POST" th:action="@{/account/wishlist/add}">
+            <input type="hidden" name="productId" th:value="*{id}"/>
+            <input type="hidden" name="quantity" value="1"/>
+            <input type="hidden" name="hasProductOptions" value="true" th:if="!*{#lists.isEmpty(productOptions)}"/>
+
+            <button th:if="${customer.loggedIn}" type="button" rel="tooltip" title=""
+                    th:href="${isCondensedProductView and not #lists.isEmpty(product.productOptions)}? @{*{url}}"
+                    class="js-addToWishlist js-outOfStockDisable btn btn-simple wishlist-btn"
+                    th:classappend="|${isCondensedProductView and not #lists.isEmpty(product.productOptions)? 'wishlist-not-ready': ''} ${(not isCondensedProductView)? 'btn-fab' : ''}|"
+                    th:data-action-required="${isCondensedProductView and not #lists.isEmpty(product.productOptions)}? 'true'"
+                    th:data-original-title="${isCondensedProductView and not #lists.isEmpty(product.productOptions)} ? #{product.chooseOptionsWishlist} : #{product.addToWishlist}">
+                <i class="material-icons">favorite_border</i>
+            </button>
+            <button th:unless="${customer.loggedIn}" type="button" rel="tooltip" title=""
+                    th:href="@{/login}"
+                    class="js-addToWishlist js-outOfStockDisable btn btn-simple wishlist-btn wishlist-not-ready"
+                    th:classappend="${not isCondensedProductView}? 'btn-fab'"
+                    th:data-action-required="true"
+                    th:data-original-title="#{product.addToWishlist.login}">
+                <i class="material-icons">favorite_border</i>
+            </button>
+        </blc:form>
+    </div>
+
+</th:block>

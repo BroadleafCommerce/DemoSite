@@ -5,20 +5,28 @@
 /**
  * Toggle order details view on click
  */
-$('body').on('click', 'a.js-viewOrderDetails', function() {
-    var url = $(this).attr('href');
-    var $orderDetails = $(this).parents('table').next('div');
+$('body').on('click', '.js-viewOrderDetails', function(){
+    var $orderHistoryRow = $(this).closest('.js-orderHistoryRow');
+    var $orderDetailsRow = $orderHistoryRow.next('.js-orderDetailsRow');
+    var $orderDetailsRowData = $orderDetailsRow.find('td');
+    var $downArrow = $orderHistoryRow.find('.js-downArrow');
+    var $upArrow = $orderHistoryRow.find('.js-upArrow');
 
     // if this is the currently opened order details, collapse it
-    if ($orderDetails.is(':visible')) {
-        $orderDetails.slideToggle();
-    } else {
-        $orderDetails.load(url, function() {
-            var $visibleSections = $('.js-orderDetails:visible');
-            $orderDetails.slideToggle();
-            $visibleSections.slideToggle();
+    if ($orderDetailsRow.hasClass('is-hidden')) {
+        var url = $(this).attr('href');
+
+        $orderDetailsRowData.load(url, function() {
+            $orderDetailsRow.removeClass('is-hidden');
+            $upArrow.removeClass('is-hidden');
+            $downArrow.addClass('is-hidden');
         });
+    } else {
+        $orderDetailsRow.addClass('is-hidden');
+        $upArrow.addClass('is-hidden');
+        $downArrow.removeClass('is-hidden');
     }
+
     return false;
 });
 
@@ -130,7 +138,7 @@ $body.on('click','.js-savePayment', function () {
         AccountManagement.replaceManageAccountForm(data);
     });
 
-   return false;
+    return false;
 });
 
 /**
@@ -144,7 +152,7 @@ $body.on('click','.js-makePaymentDefault', function () {
         AccountManagement.replaceSavedPaymentCards(data);
     });
 
-   return false;
+    return false;
 });
 
 /**
@@ -158,7 +166,7 @@ $body.on('click','.js-deletePayment', function () {
         AccountManagement.replaceSavedPaymentCards(data);
     });
 
-   return false;
+    return false;
 });
 
 $(document).ready(function() {

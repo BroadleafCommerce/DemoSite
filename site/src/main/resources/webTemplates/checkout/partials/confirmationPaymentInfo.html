@@ -10,7 +10,7 @@
             <div class="col-sm-6">
                 <h4><span th:utext="#{cart.billingInformation}">Billing Information</span></h4>
 
-                <th:block th:with="payment=${order.payments[0]}">
+                <th:block th:each="payment : ${order.payments}">
                     <th:block th:if="${payment.isActive()}">
                         <th:block th:include="~{partials/simpleAddress :: read-only}" th:with="address=${payment.billingAddress}"/>
                         <address th:utext="${order.emailAddress}"></address>
@@ -30,7 +30,8 @@
                                                 expDate=*{initialTransaction.additionalFields['EXP_DATE']}" />
 
                             <div class="amount-paid">
-                                Amount paid: <span blc:price="*{amount}" ></span>
+                                <span th:utext="#{account.orders.amountPaid}">Amount paid:</span>
+                                <span blc:price="*{amount}"></span>
                             </div>
                         </th:block>
 
@@ -42,7 +43,8 @@
                                                 expDate=*{authorizeTransaction.additionalFields['EXP_DATE']}" />
 
                             <div class="amount-paid">
-                                Amount paid: <span blc:price="*{amount}" ></span>
+                                <span th:utext="#{account.orders.amountPaid}">Amount paid:</span>
+                                <span blc:price="*{amount}"></span>
                             </div>
                         </th:block>
 

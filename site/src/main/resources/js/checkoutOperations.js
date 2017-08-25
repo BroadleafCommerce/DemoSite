@@ -8,7 +8,7 @@
      */
     Checkout.modalCheckoutOptions = {
         maxWidth    : 720,
-        maxHeight   : 560,  
+        maxHeight   : 560,
         minHeight   : 360,
         position    : ['30px']
     };
@@ -96,7 +96,7 @@
         var $form = $reviewStageContent.find('#' + paymentMethod + 'CheckoutSubmissionForm');
 
         if ('CreditCard' === paymentMethod) {
-            if (!shouldUseCustomerPayment()) {
+            if (!shouldUseCustomerPayment() && !shouldSaveNewPayment()) {
                 var $paymentStageContent = $('.js-paymentStageContent');
                 var $creditCardData = $paymentStageContent.find('.js-creditCardData');
                 var nonce = SamplePaymentService.tokenizeCard($creditCardData);
@@ -111,7 +111,7 @@
     /**
      * Handles the navigation from one checkout stage to another by swapping
      *  out the section specified by `js-checkoutStages`.
-     * @param {$element} requestedCheckoutStage
+     * @param {String} requestedCheckoutStage
      */
     Checkout.navigateToCheckoutStage = function(requestedCheckoutStage) {
         var url = '/checkout/' + requestedCheckoutStage;
@@ -363,7 +363,9 @@
             data: $paymentInfoForm.serialize()
         }, function(data) {
             clearWindowStateHistory();
+
             replaceCheckoutStages(data);
+            showHiddenPerformCheckoutActions();
         });
     };
 
@@ -384,7 +386,9 @@
             data: $paymentInfoForm.serialize()
         }, function(data) {
             clearWindowStateHistory();
+
             replaceCheckoutStages(data);
+            showHiddenPerformCheckoutActions();
         });
     };
 
@@ -459,6 +463,11 @@
 
         var $reviewStageContent = $('.js-reviewStageContent');
         $reviewStageContent.removeClass('is-hidden');
+
+        showHiddenPerformCheckoutActions();
+    }
+
+    function showHiddenPerformCheckoutActions() {
         var $hiddenPerformCheckoutActions = $('.js-hiddenPerformCheckoutActions');
         $hiddenPerformCheckoutActions.removeClass('is-hidden');
     }

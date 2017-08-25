@@ -39,13 +39,13 @@
         </th:block>
 
         <th:block th:unless="${#lists.size(order.fulfillmentGroups) > 1}">
-            <div class="fulfillment_option" th:object="${order.fulfillmentGroups[0]}" th:inline="text">
-                <div class="col-sm-6">
+            <div class="row fulfillment_option" th:object="${order.fulfillmentGroups[0]}" th:inline="text">
+                <div class="col-sm-6 read-only-shipping-address">
                     <h4><span th:utext="#{cart.shippingInformation}">Shipping Information</span></h4>
 
                     <th:block th:include="~{partials/simpleAddress :: read-only}" th:with="address=*{address}"/>
                 </div>
-                <div class="col-sm-6">
+                <div class="col-sm-6 read-only-shipping-method">
                     <h4 th:utext="#{cart.shippingMethod}">Shipping Method</h4>
                     <b>[[*{fulfillmentOption.name}]]</b><br /> ([[*{fulfillmentOption.longDescription}]])
                 </div>

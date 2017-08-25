@@ -1,5 +1,5 @@
-<blc:form method="POST" th:action="@{/cart/add}">
-    <div class="col-sm-10">
+<div class="col-sm-10">
+    <blc:form method="POST" th:action="@{/cart/add}">
         <div id="product-main-button-panel" th:classappend="*{'js-productActions' + id}">
             <!-- Add to cart button -->
             <div class="js-addToCartContainer">
@@ -14,7 +14,7 @@
                 <input type="hidden" name="productId" th:value="*{id}"/>
                 <input type="hidden" name="quantity" value="1"/>
                 <button type="submit" class="btn btn-primary js-addToCart" th:classappend="${isUpdateRequest}? 'js-updateRequest'">
-                    <span th:unless="${isUpdateRequest}" th:utext="#{product.buyNow}"></span>
+                    <span th:unless="${isUpdateRequest}" th:utext="#{product.addToCart}"></span>
                     <span th:if="${isUpdateRequest}" th:utext="#{product.update}"></span>
                 </button>
             </div>
@@ -30,11 +30,19 @@
                     View in Cart
                 </a>
             </div>
+            <!-- Receive inventory notifications button -->
+            <div class="js-outOfStock is-hidden">
+                <a th:href="@{*{'/inventory/notification/' + defaultSku.id}}"
+                   class="js-inventoryNotification btn btn-sm"
+                   th:utext="#{product.inventoryNotifications}">
+                    Receive Inventory Notifications
+                </a>
+            </div>
         </div>
         <p class="text-danger" th:if="${param.errorMessage}" th:utext="${param.errorMessage[0]}"></p>
-    </div>
-</blc:form>
+    </blc:form>
+</div>
 <!-- Add to wishlist button -->
-<div class="col-lg-2 col-sm-12 text-center-mobile">
+<div class="col-sm-2 text-center-mobile">
     <th:block th:include="catalog/partials/wishlistButton" />
 </div>

@@ -23,15 +23,9 @@
                 <li th:classappend="${#httpServletRequest.getRequestURI().startsWith('/account/addresses') ? 'active' : ''}">
                     <a th:href="@{/account/addresses}" th:utext="#{account.menu.manageAddresses}">Manage Addresses</a>
                 </li>
-                <li th:classappend="${#httpServletRequest.getRequestURI().startsWith('/account/payments') ? 'active' : ''}">
-                    <a th:href="@{/account/payments}" th:utext="#{account.menu.managePayments}">Manage Payments</a>
-                </li>
-                <th:block th:if="${#module.isPresent('Gift Cards and Customer Credit (AccountCredit)')}">
-                    <li th:classappend="${#httpServletRequest.getRequestURI().startsWith('/account/credit') ? 'active' : ''}">
-                        <a  th:href="@{/account/credit}" th:utext="#{account.menu.giftcardCredit}">Gift Card Credit</a>
-                    </li>
-                    <li th:classappend="${#httpServletRequest.getRequestURI().startsWith('/account/giftcard/redeem') ? 'active' : ''}">
-                        <a  th:href="@{/account/giftcard/redeem}" th:utext="#{account.menu.redeemGiftCard}">Redeem Gift Card</a>
+                <th:block th:if="${#customer.savedPaymentsAreEnabled()}">
+                    <li th:classappend="${#httpServletRequest.getRequestURI().startsWith('/account/payments') ? 'active' : ''}">
+                        <a th:href="@{/account/payments}" th:utext="#{account.menu.managePayments}">Manage Payments</a>
                     </li>
                 </th:block>
             </ul>

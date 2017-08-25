@@ -1,0 +1,44 @@
+<!DOCTYPE HTML>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]><html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--><html class="no-js" lang="en"> <!--<![endif]-->
+
+<head>
+    <title layout:title-pattern="'Error - ' + $LAYOUT_TITLE - $CONTENT_TITLE">Error - Broadleaf Commerce Demo Store - Heat Clinic</title>
+    <th:block th:replace="layout/partials/head" />
+</head>
+
+<body th:class="${'locale-' + session.blLocale.localeCode}">
+<div id="content" class="width_setter group" role="main">
+    <div class="section">
+        <div class="container error-page">
+            <div class="card">
+                <div class="col-xs-12">
+                    <header class="section-header">
+                        <h1 class="title">The page you seek is <span>not found</span>!</h1>
+
+                        <hr />
+
+                        <h4 class="subtitle text-bold">This could be for several reasons...</h4>
+                    </header>
+
+                    <section class="section-content">
+                        <ul class="options-list">
+                            <li>The page no longer exists</li>
+                            <li>There was an error</li>
+                        </ul>
+                        <ul class="options-list">
+                            <li>It never existed</li>
+                            <li>You just like our 404 error page!</li>
+                        </ul>
+
+                        <p>Please visit our <a th:href="@{/}">Homepage</a> to find what you're looking for!</p>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

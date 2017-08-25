@@ -186,7 +186,7 @@ $body.on('click', '.js-chooseSavedPayment', function() {
     var customerPaymentId = $(this).data('customerpaymentid');
 
     var $creditCardPaymentForm = $('.js-creditCardPaymentForm');
-    $creditCardPaymentForm.find('.js-useCustomerPayment').val(true);
+    $creditCardPaymentForm.find('.js-shouldUseCustomerPayment').val(true);
     $creditCardPaymentForm.find('.js-customerPaymentId').val(customerPaymentId);
 
     $(this).closest('.js-savedPaymentsContainer').find('.active').removeClass('active');
@@ -201,7 +201,7 @@ $body.on('click', '.js-chooseSavedPaymentAction', function() {
     var $savedPaymentsContainer = $('.js-savedPaymentsContainer');
 
     var $creditCardPaymentForm = $('.js-creditCardPaymentForm');
-    $creditCardPaymentForm.find('.js-useCustomerPayment').val(true);
+    $creditCardPaymentForm.find('.js-shouldUseCustomerPayment').val(true);
     var customerPaymentId = $savedPaymentsContainer.find('.active').data('customerpaymentid');
     $creditCardPaymentForm.find('.js-customerPaymentId').val(customerPaymentId);
 
@@ -218,7 +218,7 @@ $body.on('click', '.js-defineNewCreditCard', function() {
     var $creditCardPaymentFormContainer = $('.js-creditCardPaymentFormContainer');
 
     var $creditCardPaymentForm = $creditCardPaymentFormContainer.find('form');
-    $creditCardPaymentForm.find('.js-useCustomerPayment').val(false);
+    $creditCardPaymentForm.find('.js-shouldUseCustomerPayment').val(false);
     $creditCardPaymentForm.find('.js-customerPaymentId').val('');
 
     $savedPaymentsContainer.addClass('is-hidden');

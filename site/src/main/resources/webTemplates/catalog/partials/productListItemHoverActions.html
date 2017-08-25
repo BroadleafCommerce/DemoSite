@@ -1,0 +1,27 @@
+<div class="cntr-abs-horz">
+    <!-- Quick View Button -->
+    <button class="btn btn-white btn-xs hidden-xs display-inline-block btn-quickview" data-toggle="modal"
+            th:attr="data-target=*{'#' + id + '-QuickView'},
+                         data-url=*{'/product-quick-view?id=' + id}" th:utext="#{product.quickView}"></button>
+
+    <div th:if="*{#lists.isEmpty(productOptions)}"
+         class="display-inline-block" th:classappend="*{'js-productActions' + id}">
+        <!-- Add to Cart Button -->
+        <div class="js-addToCartContainer">
+            <blc:form method="POST" th:action="@{/cart/add}">
+                <input type="hidden" name="productId" th:value="*{id}"/>
+                <input type="hidden" name="quantity" value="1"/>
+                <button class="btn btn-primary btn-xs hidden-xs btn-add-to-cart js-addToCart">
+                    <span th:utext="#{product.addToCart}"></span>
+                </button>
+            </blc:form>
+        </div>
+        <!-- In cart button -->
+        <div class="js-inCartLinkContainer is-hidden">
+            <a class="btn btn-secondary btn-xs hidden-xs btn-add-to-cart"
+               th:href="@{/cart}" th:utext="#{product.viewInCart}">
+                View in Cart
+            </a>
+        </div>
+    </div>
+</div>

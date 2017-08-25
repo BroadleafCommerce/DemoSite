@@ -5,7 +5,7 @@
      th:if="${item.parentOrderItem == null}">
 
     <!-- Product Image -->
-    <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
+    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
         <div class="img-container">
             <th:block th:unless="*{#lists.isEmpty(sku.productOptionValues)}" th:each="optionValue : *{sku.productOptionValues}">
                 <img th:if="${optionValue.attributeValue == item.sku.skuMedia['primary']?.tags}" th:src="@{*{sku.skuMedia['primary'].url}}" th:alt="*{sku.name}" />
@@ -17,7 +17,7 @@
     </div>
 
     <!-- Product Description -->
-    <div class="col-lg-9 col-md-8 col-sm-7 col-xs-12">
+    <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
         <div class="row">
 
             <!-- Product Name -->
@@ -79,11 +79,16 @@
                         <li class="wishlist-product-actions">
                             <blc:form method="POST" th:action="@{/account/wishlist/moveItemToCart}">
                                 <input type="hidden" name="itemId" th:value="*{id}"/>
-                                <button type="submit" class="btn btn-xs btn-simple btn-bordered btn-xs">Add To Cart
+                                <button type="submit"
+                                        class="btn btn-xs btn-simple btn-bordered btn-xs"
+                                        th:utext="#{product.addToCart}">
+                                    Add To Cart
                                 </button>
                             </blc:form>
                             <th:block th:replace="checkout/partials/orderItemConfigureMessaging" />
-                            <a class="btn btn-simple btn-bordered btn-xs js-removeFromCart" th:href="@{/account/wishlist/remove(orderItemId=*{id})}">Remove</a>
+                            <a class="btn btn-simple btn-bordered btn-xs js-removeFromCart"
+                               th:href="@{/account/wishlist/remove(orderItemId=*{id})}"
+                               th:utext="#{cart.remove}">Remove</a>
                         </li>
                     </ul>
                 </blc:product_option_display>

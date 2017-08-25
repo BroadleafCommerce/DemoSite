@@ -5,14 +5,14 @@
 
     <div id="cart" class="cart js-cart row" layout:fragment="content" th:fragment="ajax">
 
-        <div class="col-lg-12" th:if="${#lists.isEmpty(cart.orderItems)}">
+        <div class="col-md-12" th:if="${#lists.isEmpty(cart.orderItems)}">
             <div th:if="${#lists.isEmpty(cart.orderItems)}" class="cart-warning">
                 <h1 th:utext="#{cart.empty}">Your cart is currently empty.</h1>
                 <a th:href="@{/}" class="btn btn-primary btn-lg" th:utext="#{cart.continueShopping}">Continue Shopping</a>
             </div>
         </div>
 
-        <div class="col-lg-12" th:unless="${#lists.isEmpty(cart.orderItems)}">
+        <div class="col-md-12" th:unless="${#lists.isEmpty(cart.orderItems)}">
             <!-- Content Zone for targeting the cart -->
             <blc:content-zone name="Cart Banner Ad Zone" deepLinks="deepLinks" />
 
@@ -20,7 +20,7 @@
         </div>
 
         <!-- Shopping Cart Items -->
-        <div class="col-lg-8" th:unless="${#lists.isEmpty(cart.orderItems)}">
+        <div class="col-md-8" th:unless="${#lists.isEmpty(cart.orderItems)}">
             <div class="card checkout-card cart-summary-row">
                 <div class="row">
                     <div class="cart-summary-title">
@@ -34,7 +34,7 @@
         </div>
 
         <!-- Cart Summary -->
-        <div class="col-lg-4" th:unless="${#lists.isEmpty(cart.orderItems)}">
+        <div class="col-md-4" th:unless="${#lists.isEmpty(cart.orderItems)}">
             <th:block th:replace="cart/partials/cartPricingSummary" />
 
             <!-- Promotion Codes -->

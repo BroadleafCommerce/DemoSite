@@ -9,6 +9,29 @@
     ProductPageHandler.$buttonRight = $('.js-thumbnailRight');
     ProductPageHandler.$buttonUp = $('.js-thumbnailUp');
     ProductPageHandler.$buttonDown = $('.js-thumbnailDown');
+
+    /**
+     * Forces the thumbnails to recalculate their size and display/hide scrolls as necessary
+     */
+    ProductPageHandler.handleReadyOrResize = function () {
+        ProductPage.scaleThumbnails(ProductPageHandler.$parent);
+
+        ProductPage.resizeAdapt(
+            ProductPageHandler.$buttonLeft,
+            ProductPageHandler.$buttonRight,
+            ProductPageHandler.$parentMobile,
+            ProductPageHandler.$childMobile);
+
+        ProductPage.resizeAdapt(
+            ProductPageHandler.$buttonUp,
+            ProductPageHandler.$buttonDown,
+            ProductPageHandler.$parent,
+            ProductPageHandler.$child);
+
+        //Trigger a scroll to make sure thumbnails are fully in view
+        ProductPage.thumbnailScroll(ProductPageHandler.$parent, ProductPageHandler.$child, 0, 100, "linear");
+        ProductPage.thumbnailScroll(ProductPageHandler.$parentMobile, ProductPageHandler.$childMobile, 0, 100, "linear");
+    }
 })(window.ProductPageHandler = window.ProductPageHandler || {}, jQuery);
 
 
@@ -76,136 +99,9 @@ $('.js-thumbnailDown, .js-thumbnailRight').click(function () {
 /**
  * Prepares the product page thumbnails
  */
-$(document).ready(function () {
-    //Force a resize to display scroll elements if necessary
-    ProductPage.scaleThumbnails(ProductPageHandler.$parent);
-
-    ProductPage.resizeAdapt(
-        ProductPageHandler.$buttonLeft,
-        ProductPageHandler.$buttonRight,
-        ProductPageHandler.$parentMobile,
-        ProductPageHandler.$childMobile);
-
-    ProductPage.resizeAdapt(
-        ProductPageHandler.$buttonUp,
-        ProductPageHandler.$buttonDown,
-        ProductPageHandler.$parent,
-        ProductPageHandler.$child);
-});
+$(document).ready(ProductPageHandler.handleReadyOrResize);
 
 /**
  * Listens for resizes to rescale the thumbnail containers
  */
-$(window).resize(function () {
-    ProductPage.resizeAdapt(
-        ProductPageHandler.$buttonLeft,
-        ProductPageHandler.$buttonRight,
-        ProductPageHandler.$parentMobile,
-        ProductPageHandler.$childMobile);
-
-    ProductPage.resizeAdapt(
-        ProductPageHandler.$buttonUp,
-        ProductPageHandler.$buttonDown,
-        ProductPageHandler.$parent,
-        ProductPageHandler.$child);
-
-    ProductPage.scaleThumbnails(ProductPageHandler.$parent);
-
-    //Trigger a scroll to make sure thumbnails are fully in view
-    ProductPage.thumbnailScroll(ProductPageHandler.$parent, ProductPageHandler.$child, 0, 100, "linear");
-    ProductPage.thumbnailScroll(ProductPageHandler.$parentMobile, ProductPageHandler.$childMobile, 0, 100, "linear");
-});
-
-/**
- * Changes the shown image when a thumbnail is selected in the product zoom modal
- */
-$('body').on('click', '.js-thumbnail', function () {
-    //Swap images
-    var $img = $(this).find('img');
-    var $primaryImgs = $('.js-primary-img img, .zoomImg');
-
-    $primaryImgs.attr('alt', $img.attr('alt'));
-    $primaryImgs.attr('src', $img.attr('src'));
-
-    $('.js-thumbnail').toggleClass('active', false);
-    $(this).toggleClass('active', true);
-
-    return false;
-});
-
-/**
- * Opens and sizes the product zoom modal when image is clicked
- */
-$('body').on('click', '.js-openZoomGallery', function () {
-    var $modal = $('#img-gallery-modal');
-
-    //Do nothing on mobile
-    if ($(document).width() <= 768) {
-        return false;
-    }
-
-    //Show modal
-    $modal.modal('show');
-
-    //Set image to currently selected
-    var src = $(this).find("img").attr('src');
-    $('.js-primary-img img, .zoomImg')
-        .attr('src', src)
-        .attr('alt', $(this).find("img").attr('alt'));
-    $('.js-thumbnails').find("img").each(function() {
-        if($(this).attr('src') === src) {
-            $('.js-thumbnails .active').toggleClass('active', false);
-            $(this).parent().addClass('active');
-        }
-    });
-
-    //Don't recalculate width if already opened
-    if ($modal.hasClass('js-opened')) {
-        return false;
-    } else {
-        $modal.toggleClass('js-opened');
-    }
-
-    //Delay, otherwise jQuery.zoom starts with wrong image size
-    setTimeout(function () {
-
-        //Match thumbnails height to image height
-        var preZoomScale = $(".js-primary-img img").width() / document.querySelector('.js-primary-img img').naturalWidth;
-        $(".js-primary-img")
-            .wrap('<span style="display:inline-block; width: 100%"></span>')
-            .css('display', 'block')
-            .parent()
-            .zoom({magnify: preZoomScale * 1.75, on: "grab"});
-    }, 500);
-
-
-
-    return false;
-});
-
-/**
- * Close product zoom modal if screen becomes too small
- */
-$(window).resize(function() {
-    var $modal = $('#img-gallery-modal');
-    if ($(window).width() <= 768 && $modal.css('display') === 'block') {
-        $modal.modal('hide');
-    }
-});
-
-/**
- * Populate product zoom modal thumbnails.
- * The template and JS is set up this way because it would be difficult
- * to keep the primary image the first while keeping the bootstrap carousel
- * format with the limitations of Thymeleaf.
- */
-$(document).ready(function() {
-    var $thumbnail = $('.js-thumbnail');
-    $('.js-media img').each(function(i) {
-        $($thumbnail[i]).find('img')
-            .attr('src', $(this).attr('src'))
-            .attr('alt', $(this).attr('alt'));
-    });
-
-    $('.js-media').remove();
-});
+$(window).resize(ProductPageHandler.handleReadyOrResize);

@@ -296,7 +296,7 @@
                             <div class="row">
                                 <div class="col-sm-6">
                                     <div class="form-group label-floating" th:classappend="${#fields.hasErrors('addressName')}? 'has-error'">
-                                        <label class="control-label" for="addressName">Address Name</label>
+                                        <label class="control-label" for="addressName" th:utext="#{account.addresses.addressName}">Address Name</label>
                                         <input id="addressName" type="text" th:field="*{addressName}" class="form-control" />
                                     </div>
                                 </div>
@@ -305,14 +305,14 @@
                             <div class="row" th:unless="${@blSystemPropertiesService.resolveBooleanSystemProperty('validator.address.fullNameOnly')}">
                                 <div class="col-sm-6">
                                     <div class="form-group label-floating" th:classappend="${#fields.hasErrors('address.firstName')}? 'has-error'">
-                                        <label class="control-label" for="firstName">First Name</label>
+                                        <label class="control-label" for="firstName" th:utext="#{account.addresses.firstName}">First Name</label>
                                         <input id="firstName" type="text" th:field="*{address.firstName}" class="js-clearable form-control" />
                                         <span class="text-danger" th:if="${#fields.hasErrors('address.firstName')}" th:errors="*{address.firstName}"></span>
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="form-group label-floating" th:classappend="${#fields.hasErrors('address.lastName')}? 'has-error'">
-                                        <label class="control-label" for="lastName">Last Name</label>
+                                        <label class="control-label" for="lastName" th:utext="#{account.addresses.lastName}">Last Name</label>
                                         <input id="lastName" type="text" th:field="*{address.lastName}" class="js-clearable form-control" />
                                         <span class="text-danger" th:if="${#fields.hasErrors('address.firstName')}" th:errors="*{address.lastName}"></span>
                                     </div>
@@ -321,7 +321,7 @@
                             <div class="row" th:if="${@blSystemPropertiesService.resolveBooleanSystemProperty('validator.address.fullNameOnly')}">
                                 <div class="col-sm-12">
                                     <div class="form-group label-floating" th:classappend="${#fields.hasErrors('address.fullName')}? 'has-error'">
-                                        <label class="control-label" for="fullName">Full Name</label>
+                                        <label class="control-label" for="fullName" th:utext="#{account.addresses.fullName}">Full Name</label>
                                         <input id="fullName" type="text" th:field="*{address.fullName}" class="js-clearable form-control" />
                                         <span class="text-danger" th:if="${#fields.hasErrors('address.fullName')}" th:errors="*{address.fullName}"></span>
                                     </div>
@@ -331,14 +331,14 @@
                             <div class="row">
                                 <div class="col-sm-12">
                                     <div class="form-group label-floating" th:classappend="${#fields.hasErrors('address.addressLine1')}? 'has-error'">
-                                        <label class="control-label" for="addressLine1">Address</label>
+                                        <label class="control-label" for="addressLine1" th:utext="#{account.addresses.address}">Address</label>
                                         <input id="addressLine1" type="text" th:field="*{address.addressLine1}" class="form-control" th:classappend="${#fields.hasErrors('address.addressLine1')}? 'fieldError'" />
                                         <span class="text-danger" th:if="${#fields.hasErrors('address.addressLine1')}" th:errors="*{address.addressLine1}"></span>
                                     </div>
                                 </div>
                                 <div class="col-sm-12">
                                     <div class="form-group label-floating" th:classappend="${#fields.hasErrors('address.addressLine2')}? 'has-error'">
-                                        <label class="control-label" for="addressLine2">Address 2</label>
+                                        <label class="control-label" for="addressLine2" th:utext="#{account.addresses.address2}">Address 2</label>
                                         <input id="addressLine2" type="text" th:field="*{address.addressLine2}" class="form-control" />
                                         <span class="text-danger" th:if="${#fields.hasErrors('address.addressLine2')}" th:errors="*{address.addressLine2}"></span>
                                     </div>
@@ -348,14 +348,14 @@
                             <div class="row">
                                 <div class="col-sm-5">
                                     <div class="form-group label-floating" th:classappend="${#fields.hasErrors('address.city')}? 'has-error'">
-                                        <label class="control-label" for="city">City</label>
+                                        <label class="control-label" for="city" th:utext="#{account.addresses.city}">City</label>
                                         <input id="city" type="text" th:field="*{address.city}" class="form-control" th:classappend="${#fields.hasErrors('address.city')}? 'fieldError'" />
                                         <span class="text-danger" th:if="${#fields.hasErrors('address.city')}" th:errors="*{address.city}"></span>
                                     </div>
                                 </div>
                                 <div class="col-sm-3">
                                     <div class="form-group label-floating" th:classappend="${#fields.hasErrors('address.stateProvinceRegion')}? 'has-error'">
-                                        <label class="control-label" for="state" th:utext="#{cart.state}"></label>
+                                        <label class="control-label" for="state" th:utext="#{account.addresses.state}"></label>
                                         <select id="state" th:field="*{address.stateProvinceRegion}" class="js-clearable form-control">
                                             <option value=""></option>
                                             <option th:each="state : ${#address.getStateOptions()}"
@@ -367,7 +367,7 @@
                                 </div>
                                 <div class="col-sm-4">
                                     <div class="form-group label-floating" th:classappend="${#fields.hasErrors('address.postalCode')}? 'has-error'">
-                                        <label class="control-label" for="postalCode">Postal Code</label>
+                                        <label class="control-label" for="postalCode" th:utext="#{account.addresses.postalCode}">Postal Code</label>
                                         <input id="postalCode" type="text" th:field="*{address.postalCode}" class="form-control" th:classappend="${#fields.hasErrors('address.postalCode')}? 'fieldError'" />
                                         <span class="text-danger" th:if="${#fields.hasErrors('address.postalCode')}" th:errors="*{address.postalCode}"></span>
                                     </div>
@@ -377,7 +377,7 @@
                             <div class="row">
                                 <div class="col-sm-8">
                                     <div class="form-group label-floating" th:classappend="${#fields.hasErrors('address.phonePrimary')}? 'has-error'">
-                                        <label class="control-label" for="phone">Phone</label>
+                                        <label class="control-label" for="phone" th:utext="#{account.addresses.phone}">Phone</label>
                                         <input id="phone" type="tel" name="address.phonePrimary" th:value="*{address.phonePrimary.phoneNumber}" class="form-control" />
                                         <span class="text-danger" th:if="*{#fields.hasErrors('address.phonePrimary.phoneNumber')}" th:errors="*{address.phonePrimary.phoneNumber}"></span>
                                     </div>
@@ -390,7 +390,7 @@
                                         <label for="address.default-check">
                                             <input type="hidden" value="false" name="address.default">
                                             <input id="address.default-check" type="checkbox" name="address.default-check" th:checked="*{address.default}">
-                                            Default Shipping
+                                            <span th:utext="#{account.addresses.defaultShipping}">Default Shipping</span>
                                         </label>
                                     </div>
                                 </div>
@@ -400,15 +400,6 @@
 
                             <div class="text-right">
                                 <input class="btn btn-primary" type="submit" value="Save" />
-                                <!--<button class="btn btn-danger" th:if="*{customerAddressId}" type="submit">-->
-                                    <!--<i class="material-icons">clear</i>&nbsp;Remove-->
-                                    <!--<input type="hidden" name="removeAddress" value="Remove"/>-->
-                                <!--</button>-->
-                                <!--<a th:if="${customerAddressForm.customerAddressId}"-->
-                                   <!--th:href="@{/account/addresses}"-->
-                                   <!--class="btn btn-default">-->
-                                    <!--<i class="material-icons">add</i>&nbsp;Add new Address-->
-                                <!--</a>-->
                                 <span class="text-danger" th:if="${errorMessage}" th:utext="${errorMessage}"></span>
                             </div>
                         </blc:form>

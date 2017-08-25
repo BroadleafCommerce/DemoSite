@@ -40,19 +40,17 @@ $body.on('click', '.js-addToCart, .js-addToWishlist', function(e) {
     var wishlistAdd = $button.hasClass('js-addToWishlist');
     var isUpdateRequest = $button.hasClass('js-updateRequest');
 
+    $button.bind('click', false);
+
     //Let redirect if item is already in wishlist
-    if(wishlistAdd) {
-        if($button.hasClass('js-inWishList')) {
+    if (wishlistAdd) {
+        if ($button.hasClass('is-inWishList')) {
             return true;
-        }
-        if($button.hasClass('js-outOfStockProduct'))
-        {
-            return false;
         }
     }
 
     //If the product requires something before being added to the wishlist (options, login, etc) then follow link
-    if(wishlistAdd && $button.data('action-required')) {
+    if (wishlistAdd && $button.data('action-required')) {
         window.location.href = $button.attr('href');
         return true;
     }
@@ -76,13 +74,15 @@ $body.on('click', '.js-addToCart, .js-addToWishlist', function(e) {
             $('#' + data.productId + '-QuickView').modal('hide');
             Cart.addToCartSuccess(data, false, wishlistAdd);
             if (wishlistAdd) {
-                var $wishContainer = $button.parents('.js-wishListAddContainer');
-                $wishContainer.hide();
-                $wishContainer.siblings('.js-inWishListLinkContainer').removeClass('is-hidden');
+                var $productContainer = $('.js-productContainer[data-id="' + data.productId + '"]');
+                $productContainer.find('.js-wishListAddContainer').addClass('is-hidden');
+                $productContainer.find('.js-inWishListLinkContainer').removeClass('is-hidden');
             } else if (isUpdateRequest) {
                 window.location = '/cart';
             }
         }
+
+        $button.unbind('click');
     });
 
     return false;

@@ -1,0 +1,31 @@
+.wishlist-button-container {
+    float: right;
+    text-align: right;
+}
+
+.wishlist-button-container .btn {
+    margin-top: 2px;
+    color: red;
+}
+
+.wishlist-button-container .btn.btn-simple:focus,
+.wishlist-button-container .btn.btn-simple:hover {
+    color: red;
+}
+
+.wishlist-button-container .btn.wishlist-not-ready {
+    color: #999999 !important;
+}
+
+@media (max-width: 992px) {
+    .wishlist-button-container .btn.btn-fab {
+        min-width: 25px;
+        width: 25px;
+    }
+}
+
+@media (max-width: 768px) {
+    .wishlist-button-container {
+        text-align: center;
+    }
+}

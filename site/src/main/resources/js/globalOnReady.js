@@ -23,9 +23,16 @@
         }
 
         var ellipsis = $('.js-dotdotdot');
-        //dotdotdot complains if called on empty jQ selection
+        // dotdotdot complains if called on empty jQ selection
         if(ellipsis.length > 0) {
             ellipsis.dotdotdot({ watch: 'true'});
         }
+
+        // Make the main product image zoom-able
+        $('.product-card img.js-main-product-img').each(function(i, el) {
+            $(el)
+                .parent()
+                .zoom({magnify: 2, on: "grab"});
+        })
     };
 })(window.Global = window.Global || {}, jQuery);

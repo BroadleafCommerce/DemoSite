@@ -1,4 +1,4 @@
-<th:block th:if="${result.totalPages > 1}">
+<th:block th:if="${result != null and result.totalPages > 1 and result.getTotalResults() > 0}">
     <div class="pager" th:unless="(${#lists.isEmpty(products)} and ${#lists.isEmpty(skus)})">
         <ul class="pagination pagination-primary">
             <li class="inactive pagination-arrow">

@@ -4,14 +4,12 @@
             <span th:utext="#{cart.checkout}">Checkout</span> <i class="material-icons">keyboard_arrow_right</i>
         </a>
     </div>
-    <div class="cart-action-divider">or</div>
-    <div>
-        <form blc:sample_payment_hosted_action="${#paymentMethod.getPaymentRequestDTO()}" complete_checkout="${false}" method="POST">
-            <input type="hidden" name="TRANSACTION_AMT" th:value="${cart.total}"/>
-            <input type="hidden" name="ORDER_ID" th:value="${cart.id}"/>
-            <input type="hidden" name="COMPLETE_CHECKOUT_ON_CALLBACK" value="false"/>
-            <input type="image" src="https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif" align="center" alt="Submit Form" />
-        </form>
+    <div class="cart-action-divider" th:utext="#{cart.or}">or</div>
+    <div class="paypal-payment-method-container">
+        <img src="https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif" align="center"/>
+        <p class="config-warning">
+            To accept PayPal Express transactions, you'll need to complete the <a href="https://www.broadleafcommerce.com/docs/paypal/current/paypal-quick-start">PayPal Quick Start setup</a>.
+        </p>
     </div>
 </div>
 <div class="cart-actions js-hiddenPerformCheckoutActions is-hidden" th:if="${isCheckoutContext != null and isConfirmationContext == null}">

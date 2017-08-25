@@ -369,12 +369,12 @@
                     </li>
 
                     <li class="js-defineNewAddressAction" th:classappend="${hasErrors} ? 'is-hidden'">
-                        <div class="billing-address-btn">
+                        <div class="billing-address-btn" th:utext="#{checkout.address.useDifferent}">
                             Use a different address
                         </div>
                     </li>
                     <li class="js-chooseSavedAddressAction" th:classappend="${not hasErrors} ? 'is-hidden'">
-                        <div class="billing-address-btn">
+                        <div class="billing-address-btn" th:utext="#{checkout.address.useSaved}">
                             Use a saved address
                         </div>
                     </li>
@@ -397,5 +397,3 @@
         </div>
     </div>
 </th:block>
-
-

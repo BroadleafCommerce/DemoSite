@@ -24,6 +24,7 @@ body.sandbox-preview .navbar-fixed-top, body.csr-mode .navbar-fixed-top {
     display: block;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
+    content: url(/img/the-heat-clinic-logo-internal.png);
     width: 120px;
     transform: scale(1.92);
     transition: all .4s ease-in-out;
@@ -72,13 +73,17 @@ body.sandbox-preview .navbar-fixed-top, body.csr-mode .navbar-fixed-top {
     -webkit-border-radius: 50%;
     -moz-border-radius: 50%;
     border-radius: 50%;
-    padding: 3px;
+    padding: 4px;
     font-size: smaller;
-    width: 16px;
-    height: 16px;
+    width: 19px;
+    height: 19px;
     line-height: initial;
     display: inline-block;
     margin-left: -6px;
+    text-align: center;
+    vertical-align: middle;
+    position: relative;
+    top: -2px;
 }
 
 .header-logo {
@@ -118,8 +123,8 @@ body.sandbox-preview .navbar-fixed-top, body.csr-mode .navbar-fixed-top {
 }
 /* Needs theme, same as .navbar .dropdown-menu li > a:focus */
 .ta-dropdown-menu li.is-focused a {
-    background-color: #E40037;
-    box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(228, 0, 55, 0.4);
+    background-color: rgb(228,0,55);
+    box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(228,0,55, 0.4);
     color: white;
 }
 
@@ -178,9 +183,10 @@ body.sandbox-preview .navbar-fixed-top, body.csr-mode .navbar-fixed-top {
 
 .ta-dropdown-menu li > a .ta-price {
     font-size: 15px;
-    position: absolute;
-    bottom: -10px;
-    right: 0;
+}
+
+.ta-dropdown-menu li > a .ta-price .price-old {
+    margin-right: 3px;
 }
 
 .ta-item.is-focused span, .ta-item:hover span {
@@ -336,7 +342,7 @@ body.sandbox-preview .navbar-fixed-top, body.csr-mode .navbar-fixed-top {
     }
 
     .navbar .nav-wrapper {
-         margin-top: 0;
+        margin-top: 0;
     }
     .navbar .nav-wrapper > ul.nav {
         top: 1em;
@@ -368,26 +374,26 @@ body.sandbox-preview .navbar-fixed-top, body.csr-mode .navbar-fixed-top {
         border: 1px solid transparent;
         border-radius: 4px;
     }
-        .navbar .navbar-toggle-left .icon-bar {
-            display: block;
-            width: 22px;
-            height: 2px;
-            border-radius: 1px;
-        }
-        .navbar .navbar-toggle-left .icon-bar {
-            background-color: inherit;
-            border: 1px solid;
-            color: inherit;
-        }
-        .navbar-toggle-left .icon-bar+.icon-bar {
-            margin-top: 4px;
-        }
-        .navbar-toggle-left .icon-bar {
-            display: block;
-            width: 22px;
-            height: 2px;
-            border-radius: 1px;
-        }
+    .navbar .navbar-toggle-left .icon-bar {
+        display: block;
+        width: 22px;
+        height: 2px;
+        border-radius: 1px;
+    }
+    .navbar .navbar-toggle-left .icon-bar {
+        background-color: inherit;
+        border: 1px solid;
+        color: inherit;
+    }
+    .navbar-toggle-left .icon-bar+.icon-bar {
+        margin-top: 4px;
+    }
+    .navbar-toggle-left .icon-bar {
+        display: block;
+        width: 22px;
+        height: 2px;
+        border-radius: 1px;
+    }
 
     .navbar .form-group {
         display: inline;
@@ -411,12 +417,6 @@ body.sandbox-preview .navbar-fixed-top, body.csr-mode .navbar-fixed-top {
         float: right;
         position: relative;
         margin: 0;
-    }
-
-    .navbar .cart-count-badge {
-        padding: 2px 4px;
-        width: 14px;
-        height: 14px;
     }
 
     .type-ahead ul li a {
@@ -448,7 +448,7 @@ body.sandbox-preview .navbar-fixed-top, body.csr-mode .navbar-fixed-top {
     }
 
     .navbar-default .container-fluid .navbar-collapse {
-         padding: 0;
+        padding: 0;
     }
 
     .header-logo {

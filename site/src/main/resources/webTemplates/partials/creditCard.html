@@ -8,7 +8,7 @@
             <li th:if="${cardType} == 'DISCOVER'"><img th:src="@{/img/payment/discover-curved-32px.png}"/></li>
         </ul>
         <div class="credit-card-number" th:if="!${#strings.isEmpty(lastFour)}">
-            <span class="credit-card-hidden-chars">**** **** **** </span>
+            <span class="credit-card-hidden-chars">**** </span>
             <span class="credit-card-last-four" th:utext="${lastFour}"></span>
         </div>
     </div>
@@ -26,7 +26,7 @@
             <li id="Discover" class="is-hidden"><img th:src="@{/img/payment/discover-curved-32px.png}"/></li>
         </ul>
         <div class="credit-card-number js-creditCardNumber is-hidden">
-            <span class="credit-card-hidden-chars">**** **** **** </span>
+            <span class="credit-card-hidden-chars">**** </span>
             <span class="credit-card-last-four js-creditCardLastFour"></span>
         </div>
     </div>

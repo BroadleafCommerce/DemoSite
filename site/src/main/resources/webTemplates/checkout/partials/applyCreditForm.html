@@ -2,15 +2,19 @@
 
 <ul id="account-credit" th:inline="text" class="clearfix">
     <li>
-        <span class="account-number">Account Number</span>
-        <span class="balance">Balance</span>
+        <span class="account-number" th:utext="#{account.giftCard.accountNumber}">
+            Account Number
+        </span>
+        <span class="balance" th:utext="#{account.giftCard.balance}">Balance</span>
     </li>
 </ul>
 <br/><br/>
 
 <div th:if="${#lists.isEmpty(accounts)}">
     <p>
-        You currently do not have any credit. <a th:href="@{/account/giftcard/redeem}">Redeem your gift cards</a> and apply it to your account!
+        <span th:utext="#{account.giftCard.noCredit}"></span>
+        <a th:href="@{/account/giftcard/redeem}"><span th:utext="#{account.giftCard.redeemYourGiftCards}"></span></a>
+        <span th:utext="#{account.giftCard.andApplyIt}"></span>
     </p>
 </div>
 <blc:form th:unless="${#lists.isEmpty(accounts)}"

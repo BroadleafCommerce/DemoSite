@@ -71,13 +71,13 @@
                   novalidate="novalidate">
 
             <div class="row">
-                <div class="col-sm-6">
+                <div class="col-sm-6 read-only-shipping-address">
                     <h4><span th:utext="#{cart.shippingInformation}">Shipping Information</span></h4>
 
                     <th:block th:include="~{partials/simpleAddress :: read-only}"
                               th:with="address=*{address}, additionalClasses='js-readOnlyShippingAddress'"/>
                 </div>
-                <div class="col-sm-6">
+                <div class="col-sm-6 read-only-shipping-method">
                     <h4 th:utext="#{cart.shippingMethod}">Shipping Method</h4>
                     <b>[[*{fulfillmentOption.name}]]</b><br /> ([[*{fulfillmentOption.longDescription}]])
                 </div>
@@ -90,11 +90,11 @@
 <th:block th:fragment="singleship-info-form">
     <th:block th:if="${#module.isPresent('i18n Enterprise') and false}">
         <blc:dynamic_regional_form th:object="${shippingInfoForm}"
-              th:action="@{/checkout/singleship}"
-              th:country="${shippingInfoForm.address.isoCountryAlpha2?.alpha2}"
-              name="SHIPPING_FORM"
-              method="post" id="shippingInfo" class="js-shippingInfo"
-              novalidate="novalidate">
+                                   th:action="@{/checkout/singleship}"
+                                   th:country="${shippingInfoForm.address.isoCountryAlpha2?.alpha2}"
+                                   name="SHIPPING_FORM"
+                                   method="post" id="shippingInfo" class="js-shippingInfo"
+                                   novalidate="novalidate">
 
             <div class="left_content">
                 <div class="form50">
@@ -130,7 +130,7 @@
                                 <span th:each="fieldItem : ${fieldGroup.value}">
                                     <span th:if="${#strings.isEmpty(fieldItem.type.lookupCategory) == false}">
                                         <select class="js-cloneable js-clearable dynamic_address_country_sub_small required"
-                                               th:field="*{__${fieldItem.type.modelAttributeName}__}">
+                                                th:field="*{__${fieldItem.type.modelAttributeName}__}">
                                             <option th:if="${#strings.isEmpty(__${fieldItem.type.lookupCategory}__)}" value="">--</option>
                                             <option th:each="subdivision : ${__${fieldItem.type.lookupCategory}__}"
                                                     th:value="${subdivision.alternateAbbreviation}"
@@ -147,7 +147,7 @@
                                                     th:classappend="${#fields.hasErrors('__${fieldItem.type.modelAttributeName}__')}? fieldError"
                                                     th:placeholder="#{${fieldItem.type.friendlyType}}"
                                                     th:field="*{__${fieldItem.type.modelAttributeName}__.phoneNumber}"
-                                                    />
+                                            />
                                         </span>
                                         <span th:unless="*{__${fieldItem.type.modelAttributeName}__}">
                                             <input
@@ -158,7 +158,7 @@
                                                     th:placeholder="#{${fieldItem.type.friendlyType}}"
                                                     th:id="__${fieldItem.type.modelAttributeName}__.phoneNumber"
                                                     th:name="__${fieldItem.type.modelAttributeName}__.phoneNumber"
-                                                    />
+                                            />
                                         </span>
                                         <input th:unless="${fieldItem.type.modelAttributeName} == ${blPrimaryPhoneType.modelAttributeName} or ${fieldItem.type.modelAttributeName} == ${blSecondaryPhoneType.modelAttributeName} or ${fieldItem.type.modelAttributeName} == ${blFaxPhoneType.modelAttributeName}"
                                                type="text"
@@ -166,7 +166,7 @@
                                                th:classappend="${#fields.hasErrors('__${fieldItem.type.modelAttributeName}__')}? fieldError"
                                                th:placeholder="#{${fieldItem.placeHolder}}"
                                                th:field="*{__${fieldItem.type.modelAttributeName}__}"
-                                                />
+                                        />
                                     </span>
                                     <span th:if="${#strings.isEmpty(fieldItem.type.lookupCategory) == true and #strings.isEmpty(fieldItem.placeHolder) == true and #strings.isEmpty(fieldItem.label) == false}">
                                         <span th:if="*{__${fieldItem.type.modelAttributeName}__}">
@@ -177,7 +177,7 @@
                                                     th:classappend="${#fields.hasErrors('__${fieldItem.type.modelAttributeName}__')}? fieldError"
                                                     th:placeholder="#{${fieldItem.type.friendlyType}}"
                                                     th:field="*{__${fieldItem.type.modelAttributeName}__.phoneNumber}"
-                                                    />
+                                            />
                                         </span>
                                         <span th:unless="*{__${fieldItem.type.modelAttributeName}__}">
                                             <input
@@ -188,7 +188,7 @@
                                                     th:placeholder="#{${fieldItem.type.friendlyType}}"
                                                     th:id="__${fieldItem.type.modelAttributeName}__.phoneNumber"
                                                     th:name="__${fieldItem.type.modelAttributeName}__.phoneNumber"
-                                                    />
+                                            />
                                         </span>
                                         <input th:unless="${fieldItem.type.modelAttributeName} == ${blPrimaryPhoneType.modelAttributeName} or ${fieldItem.type.modelAttributeName} == ${blSecondaryPhoneType.modelAttributeName} or ${fieldItem.type.modelAttributeName} == ${blFaxPhoneType.modelAttributeName}"
                                                type="text"
@@ -196,7 +196,7 @@
                                                th:classappend="${#fields.hasErrors('__${fieldItem.type.modelAttributeName}__')}? fieldError"
                                                th:placeholder="#{${fieldItem.label}}"
                                                th:field="*{__${fieldItem.type.modelAttributeName}__}"
-                                                />
+                                        />
                                     </span>
                                     <span th:if="${#strings.isEmpty(fieldItem.type.lookupCategory) == true and #strings.isEmpty(fieldItem.placeHolder) == true and #strings.isEmpty(fieldItem.label) == true}">
                                         <span th:if="*{__${fieldItem.type.modelAttributeName}__}">
@@ -207,7 +207,7 @@
                                                     th:classappend="${#fields.hasErrors('__${fieldItem.type.modelAttributeName}__')}? fieldError"
                                                     th:placeholder="#{${fieldItem.type.friendlyType}}"
                                                     th:field="*{__${fieldItem.type.modelAttributeName}__.phoneNumber}"
-                                                    />
+                                            />
                                         </span>
                                         <span th:unless="*{__${fieldItem.type.modelAttributeName}__}">
                                             <input
@@ -218,7 +218,7 @@
                                                     th:placeholder="#{${fieldItem.type.friendlyType}}"
                                                     th:id="__${fieldItem.type.modelAttributeName}__.phoneNumber"
                                                     th:name="__${fieldItem.type.modelAttributeName}__.phoneNumber"
-                                                    />
+                                            />
                                         </span>
                                         <input th:unless="${fieldItem.type.modelAttributeName} == ${blPrimaryPhoneType.modelAttributeName} or ${fieldItem.type.modelAttributeName} == ${blSecondaryPhoneType.modelAttributeName} or ${fieldItem.type.modelAttributeName} == ${blFaxPhoneType.modelAttributeName}"
                                                type="text"
@@ -226,7 +226,7 @@
                                                th:classappend="${#fields.hasErrors('__${fieldItem.type.modelAttributeName}__')}? fieldError"
                                                th:placeholder="#{${fieldItem.type.friendlyType}}"
                                                th:field="*{__${fieldItem.type.modelAttributeName}__}"
-                                                />
+                                        />
                                     </span>
                                 </span>
                             </div>
@@ -238,7 +238,7 @@
                                 <span th:each="fieldItem : ${fieldGroup.value}">
                                     <span th:if="${#strings.isEmpty(__${fieldItem.type.lookupCategory}__) == false}">
                                         <select class="js-cloneable js-clearable dynamic_address_country_sub_small required"
-                                            th:field="*{__${fieldItem.type.modelAttributeName}__}">
+                                                th:field="*{__${fieldItem.type.modelAttributeName}__}">
                                             <option th:if="${#strings.isEmpty(__${fieldItem.type.lookupCategory}__)}" value="">--</option>
                                             <option th:each="subdivision : ${__${fieldItem.type.lookupCategory}__}"
                                                     th:value="${subdivision.alternateAbbreviation}"
@@ -255,7 +255,7 @@
                                                     th:classappend="${#fields.hasErrors('__${fieldItem.type.modelAttributeName}__')}? fieldError"
                                                     th:placeholder="#{${fieldItem.type.friendlyType}}"
                                                     th:field="*{__${fieldItem.type.modelAttributeName}__.phoneNumber}"
-                                                    />
+                                            />
                                         </span>
                                         <span th:unless="*{__${fieldItem.type.modelAttributeName}__}">
                                             <input
@@ -266,7 +266,7 @@
                                                     th:placeholder="#{${fieldItem.type.friendlyType}}"
                                                     th:id="__${fieldItem.type.modelAttributeName}__.phoneNumber"
                                                     th:name="__${fieldItem.type.modelAttributeName}__.phoneNumber"
-                                                    />
+                                            />
                                         </span>
                                         <input th:unless="${fieldItem.type.modelAttributeName} == ${blPrimaryPhoneType.modelAttributeName} or ${fieldItem.type.modelAttributeName} == ${blSecondaryPhoneType.modelAttributeName} or ${fieldItem.type.modelAttributeName} == ${blFaxPhoneType.modelAttributeName}"
                                                type="text"
@@ -274,7 +274,7 @@
                                                th:classappend="${#fields.hasErrors('__${fieldItem.type.modelAttributeName}__')}? fieldError"
                                                th:placeholder="#{${fieldItem.placeHolder}}"
                                                th:field="*{__${fieldItem.type.modelAttributeName}__}"
-                                                />
+                                        />
                                     </span>
                                     <span th:if="${#strings.isEmpty(__${fieldItem.type.lookupCategory}__) == true and #strings.isEmpty(fieldItem.placeHolder) == true and #strings.isEmpty(fieldItem.label) == false}">
                                         <span th:if="*{__${fieldItem.type.modelAttributeName}__}">
@@ -285,7 +285,7 @@
                                                     th:classappend="${#fields.hasErrors('__${fieldItem.type.modelAttributeName}__')}? fieldError"
                                                     th:placeholder="#{${fieldItem.type.friendlyType}}"
                                                     th:field="*{__${fieldItem.type.modelAttributeName}__.phoneNumber}"
-                                                    />
+                                            />
                                         </span>
                                         <span th:unless="*{__${fieldItem.type.modelAttributeName}__}">
                                             <input
@@ -296,7 +296,7 @@
                                                     th:placeholder="#{${fieldItem.type.friendlyType}}"
                                                     th:id="__${fieldItem.type.modelAttributeName}__.phoneNumber"
                                                     th:name="__${fieldItem.type.modelAttributeName}__.phoneNumber"
-                                                    />
+                                            />
                                         </span>
                                         <input th:unless="${fieldItem.type.modelAttributeName} == ${blPrimaryPhoneType.modelAttributeName} or ${fieldItem.type.modelAttributeName} == ${blSecondaryPhoneType.modelAttributeName} or ${fieldItem.type.modelAttributeName} == ${blFaxPhoneType.modelAttributeName}"
                                                type="text"
@@ -304,7 +304,7 @@
                                                th:classappend="${#fields.hasErrors('__${fieldItem.type.modelAttributeName}__')}? fieldError"
                                                th:placeholder="#{${fieldItem.label}}"
                                                th:field="*{__${fieldItem.type.modelAttributeName}__}"
-                                                />
+                                        />
                                     </span>
                                     <span th:if="${#strings.isEmpty(__${fieldItem.type.lookupCategory}__) == true and #strings.isEmpty(fieldItem.placeHolder) == true and #strings.isEmpty(fieldItem.label) == true}">
                                         <span th:if="*{__${fieldItem.type.modelAttributeName}__}">
@@ -315,7 +315,7 @@
                                                     th:classappend="${#fields.hasErrors('__${fieldItem.type.modelAttributeName}__')}? fieldError"
                                                     th:placeholder="#{${fieldItem.type.friendlyType}}"
                                                     th:field="*{__${fieldItem.type.modelAttributeName}__.phoneNumber}"
-                                                    />
+                                            />
                                         </span>
                                         <span th:unless="*{__${fieldItem.type.modelAttributeName}__}">
                                             <input
@@ -326,15 +326,15 @@
                                                     th:placeholder="#{${fieldItem.type.friendlyType}}"
                                                     th:id="__${fieldItem.type.modelAttributeName}__.phoneNumber"
                                                     th:name="__${fieldItem.type.modelAttributeName}__.phoneNumber"
-                                                    />
+                                            />
                                         </span>
                                         <input th:unless="${fieldItem.type.modelAttributeName} == ${blPrimaryPhoneType.modelAttributeName} or ${fieldItem.type.modelAttributeName} == ${blSecondaryPhoneType.modelAttributeName} or ${fieldItem.type.modelAttributeName} == ${blFaxPhoneType.modelAttributeName}"
-                                                type="text"
-                                                class="js-clearable field50"
-                                                th:classappend="${#fields.hasErrors('__${fieldItem.type.modelAttributeName}__')}? fieldError"
-                                                th:placeholder="#{${fieldItem.type.friendlyType}}"
-                                                th:field="*{__${fieldItem.type.modelAttributeName}__}"
-                                                />
+                                               type="text"
+                                               class="js-clearable field50"
+                                               th:classappend="${#fields.hasErrors('__${fieldItem.type.modelAttributeName}__')}? fieldError"
+                                               th:placeholder="#{${fieldItem.type.friendlyType}}"
+                                               th:field="*{__${fieldItem.type.modelAttributeName}__}"
+                                        />
                                     </span>
                                 </span>
                             </div>
@@ -434,12 +434,12 @@
                                 </li>
 
                                 <li class="js-defineNewAddressAction" th:classappend="${hasErrors} ? 'is-hidden'">
-                                    <div class="billing-address-btn">
+                                    <div class="billing-address-btn"  th:utext="#{checkout.address.useDifferent}">
                                         Use a different address
                                     </div>
                                 </li>
                                 <li class="js-chooseSavedAddressAction" th:classappend="${not hasErrors} ? 'is-hidden'">
-                                    <div class="billing-address-btn">
+                                    <div class="billing-address-btn" th:utext="#{checkout.address.useSaved}">
                                         Use a saved address
                                     </div>
                                 </li>
@@ -521,11 +521,11 @@
 
                             <div class="row">
                                 <div class="col-sm-8">
-                                    <div class="form-group label-floating" th:classappend="${#fields.hasErrors('address.phonePrimary')}? 'has-error'">
+                                    <div class="form-group label-floating" th:classappend="${#fields.hasErrors('address.phonePrimary.phoneNumber')}? 'has-error'">
                                         <label class="control-label" for="phonePrimary" th:utext="#{cart.phone}"></label>
-                                        <input type="tel" id="phonePrimary" name="address.phonePrimary" th:unless="*{address.phonePrimary == null}" th:value="*{address.phonePrimary.phoneNumber}" class="js-clearable form-control" />
-                                        <input type="tel" id="phonePrimary" name="address.phonePrimary" th:if="*{address.phonePrimary == null}" value="" class="js-clearable form-control" />
-                                        <span class="text-danger" th:if="${#fields.hasErrors('address.phonePrimary')}" th:errors="*{address.phonePrimary}"></span>
+                                        <input type="tel" id="phonePrimary" name="address.phonePrimary.phoneNumber" th:unless="*{address.phonePrimary.phoneNumber == null}" th:value="*{address.phonePrimary.phoneNumber}" class="js-clearable form-control" />
+                                        <input type="tel" id="phonePrimary" name="address.phonePrimary.phoneNumber" th:if="*{address.phonePrimary.phoneNumber == null}" value="" class="js-clearable form-control" />
+                                        <span class="text-danger" th:if="*{#fields.hasErrors('address.phonePrimary.phoneNumber')}" th:errors="*{address.phonePrimary.phoneNumber}"></span>
                                     </div>
                                 </div>
                             </div>
@@ -536,7 +536,7 @@
                                         <label for="saveAsDefault-check">
                                             <input type="hidden" value="false" name="saveAsDefault">
                                             <input id="saveAsDefault-check" type="checkbox" name="saveAsDefault-check" class="js-clearable">
-                                            Make this my default address
+                                            <span th:utext="#{checkout.address.makeDefault}">Make this my default address</span>
                                         </label>
                                     </div>
                                 </div>
@@ -562,7 +562,7 @@
                     </th:block>
 
                     <!--<p>-->
-                        <!--<a class="js-multiship" th:href="@{/checkout/multiship}"><span th:utext="#{cart.shipToMultipleAddresses}">Ship to Multiple Addresses</span></a>-->
+                    <!--<a class="js-multiship" th:href="@{/checkout/multiship}"><span th:utext="#{cart.shipToMultipleAddresses}">Ship to Multiple Addresses</span></a>-->
                     <!--</p>-->
                 </div>
             </div>

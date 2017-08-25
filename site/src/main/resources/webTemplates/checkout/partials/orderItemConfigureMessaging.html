@@ -1,10 +1,10 @@
 <!-- If the order item has product options, show a link to allow for configuring them -->
 <th:block th:if="${!#lists.isEmpty(item.product.productOptions)}">
     <a th:href="@{${item.product.url} + '?edit=true&oid=' + ${item.id}}" class="btn btn-simple btn-xs update-product-options">
-        <th:block th:unless="${item.hasValidationError}">Edit</th:block>
+        <th:block th:unless="${item.hasValidationError}" th:utext="#{cart.edit}">Edit</th:block>
         <th:block th:if="${item.hasValidationError}">
-            <i class="fa fa-exclamation-circle"></i>
-            Configuration required
+            <i class="fa fa-exclamation-circle text-primary"></i>
+            &nbsp;<span th:utext="#{cart.edit}">Edit</span>
         </th:block>
     </a>
 </th:block>

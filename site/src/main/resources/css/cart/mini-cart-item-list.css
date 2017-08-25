@@ -32,3 +32,6 @@
     padding: 0;
     margin: 0;
 }
+.mini-cart-item-actions .btn-simple:hover i {
+    color: #FFFFFF !important;
+}

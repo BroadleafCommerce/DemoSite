@@ -17,6 +17,11 @@
      * @returns {boolean} Whether the event should continue to be bubbled up
      */
     ProductPage.thumbnailScroll = function ($parent, $child, delta, animationTime, animation) {
+        //Do nothing if the page doesn't have scrollers
+        if($parent.length === 0 || $child.length === 0) {
+            return true;
+        }
+
         var isMobile = $parent.hasClass('js-horizontalThumbnails');
         var childSize = isMobile ? $child.width() : $child.height();
         var parentSize = isMobile ? $parent.width() : $parent.height();
@@ -87,7 +92,6 @@
             && childSize === isMobile ? ProductPage.prevParentMobileSize : ProductPage.prevChildSize) {
             return;
         }
-
 
         if(parentSize < childSize && $buttonBack.hasClass('hidden')) {
             //if scrolling necessary and scrolling elements not there
