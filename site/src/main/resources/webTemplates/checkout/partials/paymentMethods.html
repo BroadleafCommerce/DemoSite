@@ -20,10 +20,12 @@
     <div class="payment-method-selectors js-paymentMethodSelectors">
         <div class="nav-align-center">
             <ul class="nav nav-pills nav-pills-primary text-center">
-                <li class="center-pill active" data-value="PayPal">
+                <li class="center-pill" data-value="PayPal"
+                    th:classappend="${#paymentMethod.cartContainsThirdPartyPayment() or not #paymentMethod.cartContainsCreditCardPayment()}? 'active'">
                     <a href="#PayPal" data-toggle="pill" th:utext="#{checkout.paymentMethod.payPal}">PayPal</a>
                 </li>
-                <li class="center-pill" data-value="CreditCard">
+                <li class="center-pill" data-value="CreditCard"
+                    th:classappend="${not #paymentMethod.cartContainsThirdPartyPayment() and #paymentMethod.cartContainsCreditCardPayment()}? 'active'">
                     <a href="#CreditCard" data-toggle="pill" th:utext="#{checkout.paymentMethod.creditCard}">Credit Card</a>
                 </li>
                 <li class="center-pill" data-value="COD">
