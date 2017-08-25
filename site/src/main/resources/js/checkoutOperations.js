@@ -83,7 +83,9 @@
             advanceFromPaymentToReviewStage();
             showReadOnlyPaymentMethod(paymentMethod);
         } else if ('PayPal' === paymentMethod) {
-            collectPaymentInfoViaPayPal();
+            if (isPayPalConfigComplete()) {
+                collectPaymentInfoViaPayPal();
+            }
         }
     };
 
@@ -391,6 +393,10 @@
             showHiddenPerformCheckoutActions();
         });
     };
+
+    function isPayPalConfigComplete() {
+        return $('.js-payPalConfigLink').length === 0;
+    }
 
     /**
      * Clicks a link that leads to a redirect into PayPal's ExpressCheckout using Broadleaf's PayPal integration module.
