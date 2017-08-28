@@ -23,15 +23,16 @@ public class CoreEmailConfig {
      *   Port: 30000
      */
 //    @Bean
-//    public MailSender blMailSender() {
+//    public JavaMailSender blMailSender() {
 //        JavaMailSenderImpl sender = new JavaMailSenderImpl();
 //        sender.setHost("localhost");
-//        sender.setPort("30000");
+//        sender.setPort(30000);
 //        sender.setProtocol("smtp");
 //        Properties javaMailProps = new Properties();
-//        javaMailProps.setProperty("mail.smtp.starttls.enable", true);
-//        javaMailProps.setProperty("mail.smtp.timeout", 25000);
+//        javaMailProps.setProperty("mail.smtp.starttls.enable", ""+true);
+//        javaMailProps.setProperty("mail.smtp.timeout", "25000");
 //        sender.setJavaMailProperties(javaMailProps);
+//        return sender;
 //    }
     
     /**
