@@ -9,7 +9,8 @@
                         <div class="input-group">
                             <div class="form-group is-empty">
                                 <input type="search" class="js-search form-control" name="q" autocomplete="off"
-                                    th:attr="placeholder=#{nav.search}, value=${param.q == null ? '' : param.q}">
+                                    th:placeholder="#{nav.search}"
+                                    th:value="${param.q == null ? '' : param.q}">
                                 <span class="material-input"></span>
                             </div>
                             <span class="input-group-button">
