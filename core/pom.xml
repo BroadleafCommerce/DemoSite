@@ -42,5 +42,9 @@
             <groupId>org.broadleafcommerce</groupId>
             <artifactId>broadleaf-paypal</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.google.javascript</groupId>
+            <artifactId>closure-compiler</artifactId>
+        </dependency>
     </dependencies>
 </project>
