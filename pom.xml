@@ -32,7 +32,6 @@
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <broadleaf-paypal.version>2.7.1-GA</broadleaf-paypal.version>
         <google-closure-compiler.version>v20180204</google-closure-compiler.version>
         
         <debug.args>-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=${debug.port}</debug.args>
@@ -90,12 +89,6 @@
                 <version>${project.version}</version>
             </dependency>
 
-            <dependency>
-                <groupId>org.broadleafcommerce</groupId>
-                <artifactId>broadleaf-paypal</artifactId>
-                <version>${broadleaf-paypal.version}</version>
-            </dependency>
-            
             <dependency>
                 <groupId>com.google.javascript</groupId>
                 <artifactId>closure-compiler</artifactId>
