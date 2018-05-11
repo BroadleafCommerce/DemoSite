@@ -29,6 +29,7 @@ import org.broadleafcommerce.core.order.service.exception.UpdateCartException;
 import org.broadleafcommerce.core.pricing.service.exception.PricingException;
 import org.broadleafcommerce.core.web.controller.cart.BroadleafCartController;
 import org.broadleafcommerce.core.web.order.CartState;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -49,6 +50,9 @@ import javax.servlet.http.HttpServletResponse;
 @RequestMapping("/cart")
 public class CartController extends BroadleafCartController {
     
+    @Value("${solr.index.use.sku}")
+    protected boolean useSku;
+
     @Override
     @RequestMapping("")
     public String cart(HttpServletRequest request, HttpServletResponse response, Model model) throws PricingException {

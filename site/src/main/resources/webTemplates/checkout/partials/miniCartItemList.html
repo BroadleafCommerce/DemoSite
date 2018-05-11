@@ -13,7 +13,18 @@
     <div class="mini-cart-item-info">
         <!-- Product Name -->
         <div class="mini-cart-item-name">
-            <span th:utext="*{name}"></span>
+            <th:block th:if="${item instanceof T(org.broadleafcommerce.core.order.domain.DiscreteOrderItem)}">
+                <span th:unless="${@blSystemPropertiesService.resolveBooleanSystemProperty('solr.index.use.sku')}" th:utext="*{name}"></span>
+                <span th:if="${@blSystemPropertiesService.resolveBooleanSystemProperty('solr.index.use.sku')} and *{sku.urlKey}" th:inline="text">
+                        [[*{sku.name}]] <span th:each="optionValue : *{sku.productOptionValues}" th:utext="${optionValue.attributeValue}"></span>
+                    </span>
+                <span th:if="${@blSystemPropertiesService.resolveBooleanSystemProperty('solr.index.use.sku')} and !*{sku.urlKey}" th:inline="text">
+                        [[*{sku.name}]] <span th:each="optionValue : *{sku.productOptionValues}" th:utext="${optionValue.attributeValue}"></span>
+                    </span>
+            </th:block>
+            <th:block th:unless="${item instanceof T(org.broadleafcommerce.core.order.domain.DiscreteOrderItem)}">
+                <span th:utext="*{name}"></span>
+            </th:block>
         </div>
 
         <blc:product_option_display orderItem="${item}">
@@ -37,7 +48,8 @@
                 </th:block>
 
                 <th:block th:if="${item instanceof T(org.broadleafcommerce.core.order.domain.DiscreteOrderItem)}">
-                    <a class="btn btn-simple btn-bordered btn-xs js-removeFromCart" th:href="@{/cart/remove(orderItemId=*{id}, productId=*{product.id})}">Remove</a>
+                    <a th:unless="${@blSystemPropertiesService.resolveBooleanSystemProperty('solr.index.use.sku')}" class="btn btn-simple btn-bordered btn-xs js-removeFromCart" th:href="@{/cart/remove(orderItemId=*{id}, productId=*{product.id})}">Remove</a>
+                    <a th:if="${@blSystemPropertiesService.resolveBooleanSystemProperty('solr.index.use.sku')}" class="btn btn-simple btn-bordered btn-xs js-removeFromCart" th:href="@{/cart/remove(orderItemId=*{id}, skuId=*{sku.id})}">Remove</a>
                 </th:block>
                 <th:block th:unless="${item instanceof T(org.broadleafcommerce.core.order.domain.DiscreteOrderItem)}">
                     <a class="btn btn-simple btn-xs js-removeFromCart" th:href="@{/cart/remove(orderItemId=*{id})}">Remove</a>
