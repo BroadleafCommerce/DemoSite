@@ -28,13 +28,7 @@
                     <img th:if="*{#lists.isEmpty(sku.productOptionValues) and sku.skuMedia['primary'] != null}" th:src="@{*{sku.skuMedia['primary']?.url} + '?thumbnail'}" width="60" th:alt="*{sku.name}" />
                 </td>
                 <td align="left">
-                    <a th:unless="${@blSystemPropertiesService.resolveBooleanSystemProperty('solr.index.use.sku')}" th:href="@{*{product.url}}" th:utext="*{product.name}"></a>
-                    <a th:if="${@blSystemPropertiesService.resolveBooleanSystemProperty('solr.index.use.sku')} and *{sku.urlKey}" th:href="@{*{product.url} + *{sku.urlKey}}" th:inline="text">
-                       [[*{sku.name}]] <span th:each="optionValue : *{sku.productOptionValues}" th:utext="${optionValue.attributeValue}"></span>
-                    </a>
-                    <a th:if="${@blSystemPropertiesService.resolveBooleanSystemProperty('solr.index.use.sku')} and !*{sku.urlKey}" th:href="@{*{product.url}}" th:inline="text">
-                       [[*{sku.name}]] <span th:each="optionValue : *{sku.productOptionValues}" th:utext="${optionValue.attributeValue}"></span>
-                    </a>
+                    <a th:href="@{*{product.url}}" th:utext="*{product.name}"></a>
                     <br/>
                     <div th:replace="checkout/partials/orderItemConfigureMessaging"></div>
                     <blc:product_option_display orderItem="${item}" >
