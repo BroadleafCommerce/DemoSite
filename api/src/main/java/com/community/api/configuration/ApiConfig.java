@@ -3,8 +3,7 @@ package com.community.api.configuration;
 import org.apache.catalina.connector.Connector;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
-import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
+import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -24,7 +23,7 @@ public class ApiConfig {
     public StringFactoryBean blJmxNamingBean() {
         return new StringFactoryBean();
     }
-    
+
     /**
      * Spring Boot does not support the configuration of both an HTTP connector and an HTTPS connector via properties.
      * In order to have both, we’ll need to configure one of them programmatically (HTTP).
@@ -34,8 +33,8 @@ public class ApiConfig {
      * @return EmbeddedServletContainerFactory
      */
     @Bean
-    public EmbeddedServletContainerFactory tomcatEmbeddedServletContainerFactory(@Value("${http.server.port:8082}") int httpServerPort) {
-        TomcatEmbeddedServletContainerFactory tomcat = new TomcatEmbeddedServletContainerFactory();
+    public TomcatServletWebServerFactory tomcatEmbeddedServletContainerFactory(@Value("${http.server.port:8082}") int httpServerPort) {
+        TomcatServletWebServerFactory tomcat = new TomcatServletWebServerFactory();
         tomcat.addAdditionalTomcatConnectors(createStandardConnector(httpServerPort));
         return tomcat;
     }
