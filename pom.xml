@@ -32,7 +32,7 @@
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <google-closure-compiler.version>v20180204</google-closure-compiler.version>
+        <google-closure-compiler.version>v20180506</google-closure-compiler.version>
         
         <debug.args>-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=${debug.port}</debug.args>
         <boot.jvm.memory>-Xmx1536M</boot.jvm.memory>
@@ -91,7 +91,7 @@
 
             <dependency>
                 <groupId>com.google.javascript</groupId>
-                <artifactId>closure-compiler</artifactId>
+                <artifactId>closure-compiler-unshaded</artifactId>
                 <version>${google-closure-compiler.version}</version>
             </dependency>
         </dependencies>

@@ -44,7 +44,7 @@
         </dependency>
         <dependency>
             <groupId>com.google.javascript</groupId>
-            <artifactId>closure-compiler</artifactId>
+            <artifactId>closure-compiler-unshaded</artifactId>
         </dependency>
     </dependencies>
 </project>
