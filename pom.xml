@@ -30,8 +30,6 @@
     </repositories>
 
     <properties>
-        <google-closure-compiler.version>v20180204</google-closure-compiler.version>
-        
         <debug.args>-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=${debug.port}</debug.args>
         <boot.jvm.memory>-Xmx1536M</boot.jvm.memory>
         <boot.jvm.args>${boot.jvm.memory} ${debug.args}</boot.jvm.args>
@@ -85,12 +83,6 @@
                 <groupId>com.mycompany-community</groupId>
                 <artifactId>boot-community-demo-core</artifactId>
                 <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.google.javascript</groupId>
-                <artifactId>closure-compiler</artifactId>
-                <version>${google-closure-compiler.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
