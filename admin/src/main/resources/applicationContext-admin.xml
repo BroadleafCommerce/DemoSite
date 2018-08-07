@@ -21,28 +21,9 @@
         http://schema.broadleafcommerce.org/mo/mo-3.0.xsd">
 
     <mo:override id="blMetadataOverrides">
-        <mo:overrideItem ceilingEntity="org.broadleafcommerce.core.catalog.domain.Product">
-            <mo:field name="templatedEntity.template">
-                <mo:property name="group" value="ProductImpl_General_Misc" />
-                <mo:property name="order" value="1" />
-            </mo:field>
-            <mo:field name="defaultSku.quantityAvailable">
-                <mo:property name="excluded" value="true" />
-            </mo:field>
-            <mo:field name="displayTemplate">
-                <mo:property name="excluded" value="true" />
-            </mo:field>
-        </mo:overrideItem>
-        <mo:overrideItem ceilingEntity="org.broadleafcommerce.core.catalog.domain.Category">
-            <mo:field name="templatedEntity.template">
-                <mo:property name="group" value="CategoryImpl_Category_Miscellaneous" />
-                <mo:property name="order" value="1000" />
-                <mo:property name="tooltip" value="TemplatedEntity_CagtegoryImpl_tooltip" />
-            </mo:field>
-            <mo:field name="displayTemplate">
-                <mo:property name="excluded" value="true" />
-            </mo:field>
-        </mo:overrideItem>
+
+        <!-- Apply Admin entity metadata overrides here -->
+
     </mo:override>
 
 </beans>
