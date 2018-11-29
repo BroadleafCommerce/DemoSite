@@ -38,9 +38,5 @@
             <groupId>org.broadleafcommerce</groupId>
             <artifactId>broadleaf-sample-payment-gateway</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.broadleafcommerce</groupId>
-            <artifactId>broadleaf-paypal</artifactId>
-        </dependency>
     </dependencies>
 </project>
