@@ -39,6 +39,11 @@ public class ApiConfig {
         tomcat.addAdditionalTomcatConnectors(createStandardConnector(httpServerPort));
         return tomcat;
     }
+    
+    @Merge("blMergedCacheConfigLocations")
+    public List<String> adminOverrideCache() {
+        return Collections.singletonList("classpath:bl-override-ehcache.xml");
+    }
 
     private Connector createStandardConnector(int port) {
         Connector connector = new Connector("org.apache.coyote.http11.Http11NioProtocol");
