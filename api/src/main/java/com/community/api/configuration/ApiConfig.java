@@ -1,6 +1,7 @@
 package com.community.api.configuration;
 
 import org.apache.catalina.connector.Connector;
+import org.broadleafcommerce.common.extensibility.context.merge.Merge;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
@@ -11,6 +12,9 @@ import org.springframework.context.annotation.Import;
 
 import com.community.core.config.CoreConfig;
 import com.community.core.config.StringFactoryBean;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @author Elbert Bautista (elbertbautista)
