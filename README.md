@@ -19,7 +19,7 @@ The Community Demo is comprised of 4 individual projects:
 
 - `admin` - a Spring Boot application for the Broadleaf admin for catalog management, see completed orders, etc
 - `api` - a Spring Boot application that sets up the Broadleaf API endpoints
-- `site` - a Spring Boot application that runs the Heat Clinic UI built with Thymeleaf as tradiitional MVC
+- `site` - a Spring Boot application that runs the Heat Clinic UI built with Thymeleaf as traditional MVC
 - `core` a common jar that all other projects depend on, used for common functionality like domain
 
 ## Running the projects
