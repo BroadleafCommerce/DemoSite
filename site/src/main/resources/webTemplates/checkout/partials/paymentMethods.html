@@ -5,11 +5,11 @@
         <th:block th:replace="~{checkout/payment/creditCardPaymentMethodForm :: read-only}" />
     </div>
 
-    <div class="js-readOnlyPaymentMethod" data-type="PayPal"
+<!--    <div class="js-readOnlyPaymentMethod" data-type="PayPal"
          th:classappend="${not #paymentMethod.cartContainsThirdPartyPayment()}? 'is-hidden'">
 
         <th:block th:replace="~{checkout/payment/payPalPaymentMethodForm :: read-only}" />
-    </div>
+    </div>-->
 
     <div class="js-readOnlyPaymentMethod is-hidden" data-type="COD">
         <th:block th:replace="~{checkout/payment/codPaymentMethodForm :: read-only}" />
@@ -20,10 +20,10 @@
     <div class="payment-method-selectors js-paymentMethodSelectors">
         <div class="nav-align-center">
             <ul class="nav nav-pills nav-pills-primary text-center">
-                <li class="center-pill" data-value="PayPal"
+<!--                <li class="center-pill" data-value="PayPal"
                     th:classappend="${#paymentMethod.cartContainsThirdPartyPayment() or not #paymentMethod.cartContainsCreditCardPayment()}? 'active'">
                     <a href="#PayPal" data-toggle="pill" th:utext="#{checkout.paymentMethod.payPal}">PayPal</a>
-                </li>
+                </li>-->
                 <li class="center-pill" data-value="CreditCard"
                     th:classappend="${not #paymentMethod.cartContainsThirdPartyPayment() and #paymentMethod.cartContainsCreditCardPayment()}? 'active'">
                     <a href="#CreditCard" data-toggle="pill" th:utext="#{checkout.paymentMethod.creditCard}">Credit Card</a>
@@ -38,10 +38,12 @@
     <div class="payment-method-content">
         <div class="payment_info js-paymentInfoForm">
             <div class="tab-content">
+<!--
                 <div id="PayPal" class="tab-pane"
                      th:classappend="${#paymentMethod.cartContainsThirdPartyPayment() or not #paymentMethod.cartContainsCreditCardPayment()}? 'active'">
                     <th:block th:replace="~{checkout/payment/payPalPaymentMethodForm :: form}" />
                 </div>
+-->
                 <div id="CreditCard" class="tab-pane"
                      th:classappend="${not #paymentMethod.cartContainsThirdPartyPayment() and #paymentMethod.cartContainsCreditCardPayment()}? 'active'">
                     <th:block th:replace="~{checkout/payment/creditCardPaymentMethodForm :: form}" />
