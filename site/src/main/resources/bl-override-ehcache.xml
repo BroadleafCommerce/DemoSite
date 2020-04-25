@@ -1,6 +1,8 @@
-<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<config>
+
+    <persistence directory="${java.io.tmpdir}/cache/site"/>
     
-    <defaultCache
+<!--     <defaultCache
         maxElementsInMemory="100000"
         eternal="false"
         overflowToDisk="true"
@@ -112,12 +114,12 @@
         overflowToDisk="true"
         timeToLiveSeconds="3"/>
 
-     <!-- This is required by Hibernate to ensure that query caches return
+      This is required by Hibernate to ensure that query caches return
           corrrect results. It must contain at least as many entries as there are
-          DB tables. -->
+          DB tables. 
      <cache name="org.hibernate.cache.UpdateTimestampsCache"
         maxElementsInMemory="5000"
         eternal="true"
-        overflowToDisk="true"/>
+        overflowToDisk="true"/> -->
         
-</ehcache>
+</config>

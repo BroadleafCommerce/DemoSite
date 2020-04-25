@@ -15,8 +15,10 @@
   between you and Broadleaf Commerce. You may not use this file except in compliance with the applicable license.
   #L%
   -->
-<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<config>
+
+    <persistence directory="${java.io.tmpdir}/cache/api"/>
 
     <!--add cache overrides here -->
 
-</ehcache>
+</config>
