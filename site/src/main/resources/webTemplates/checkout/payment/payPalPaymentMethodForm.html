@@ -8,7 +8,7 @@
 </div>
 
 <div id="pay_pal_payment_method" class="paypal-payment-method-container" th:fragment="form">
-    <th:block th:if="${#paypal.hasConfigProperties()}">
+    <th:block th:if="false">
         <th:block th:if="${#paymentMethod.cartContainsThirdPartyPayment()}">
             <div class="row">
                 <div class="col-sm-3 text-center-mobile">
@@ -29,7 +29,7 @@
         </th:block>
     </th:block>
 
-    <th:block th:unless="${#paypal.hasConfigProperties()}">
+    <th:block th:unless="false">
         <div class="row">
             <div class="col-sm-3">
                 <img src="https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif" class="text-center-mobile"/>
