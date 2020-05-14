@@ -24,7 +24,7 @@ body.sandbox-preview .navbar-fixed-top, body.csr-mode .navbar-fixed-top {
     display: block;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
-    content: url(/img/the-heat-clinic-logo-internal.png);
+    content: url(../../img/the-heat-clinic-logo-internal.png);
     width: 120px;
     transform: scale(1.92);
     transition: all .4s ease-in-out;
