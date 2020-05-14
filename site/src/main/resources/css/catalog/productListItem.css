@@ -11,7 +11,7 @@ div.products {
 .new-badge {
     width: 60px;
     height: 60px;
-    background: url(/img/badge-new.png) no-repeat;
+    background: url(../../img/badge-new.png) no-repeat;
     text-indent: -9999px;
     position: absolute;
     top: -10px;
