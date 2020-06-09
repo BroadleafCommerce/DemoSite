@@ -121,5 +121,92 @@
         maxElementsInMemory="5000"
         eternal="true"
         overflowToDisk="true"/> -->
-        
+    <cache alias="blProducts">
+        <expiry>
+            <ttl unit="seconds">3</ttl>
+        </expiry>
+        <heap>1000</heap>
+    </cache>
+
+    <cache alias="blStandardElements">
+        <expiry>
+            <ttl unit="seconds">3</ttl>
+        </expiry>
+        <heap>1000</heap>
+    </cache>
+    <cache alias="blCategories">
+        <expiry>
+            <ttl unit="seconds">3</ttl>
+        </expiry>
+        <heap>1000</heap>
+    </cache>
+
+    <cache alias="blOffers">
+        <expiry>
+            <ttl unit="seconds">3</ttl>
+        </expiry>
+        <heap>1000</heap>
+    </cache>
+    <cache alias="blInventoryElements">
+        <expiry>
+            <ttl unit="seconds">3</ttl>
+        </expiry>
+        <heap>1000</heap>
+    </cache>
+
+    <cache alias="org.hibernate.cache.internal.StandardQueryCache">
+        <expiry>
+            <ttl unit="seconds">3</ttl>
+        </expiry>
+        <heap>1000</heap>
+    </cache>
+    <cache alias="query.Catalog">
+        <expiry>
+            <ttl unit="seconds">3</ttl>
+        </expiry>
+        <heap>1000</heap>
+    </cache>
+    <cache alias="query.Offer">
+        <expiry>
+            <ttl unit="seconds">3</ttl>
+        </expiry>
+        <heap>1000</heap>
+    </cache>
+    <cache alias="blOrderElements">
+        <expiry>
+            <ttl unit="seconds">3</ttl>
+        </expiry>
+        <heap>1000</heap>
+    </cache>
+    <cache alias="blCustomerElements">
+        <expiry>
+            <ttl unit="seconds">3</ttl>
+        </expiry>
+        <heap>1000</heap>
+    </cache>
+    <cache alias="generatedResourceCache">
+        <expiry>
+            <ttl unit="seconds">3</ttl>
+        </expiry>
+        <heap>1000</heap>
+    </cache>
+
+    <cache alias="blCMSElements">
+        <expiry>
+            <ttl unit="seconds">3</ttl>
+        </expiry>
+        <heap>1000</heap>
+    </cache>
+    <cache alias="blTranslationElements">
+        <expiry>
+            <ttl unit="seconds">3</ttl>
+        </expiry>
+        <heap>1000</heap>
+    </cache>
+    <cache alias="blConfigurationModuleElements">
+        <expiry>
+            <ttl unit="seconds">3</ttl>
+        </expiry>
+        <heap>1000</heap>
+    </cache>
 </config>
