@@ -1,0 +1,21 @@
+<div class="sticky-container">
+    <div class="content-area-title-bar entity-form-actions">
+        <h3>
+            Solr Indexer
+        </h3>
+    </div>
+</div>
+<div style="padding: 20px 40px;" >
+    <blc:form th:action="@{/indexer}" method="POST" style="padding-bottom: 20px">
+        <div class="fieldset-card field-group">
+            <div class="fieldset-card-content">
+                <div class="field-group" th:if="${reindexType ne null}" >Successfully initiated the Solr reindex in the background.</div>
+                <div class="field-group" style="width: auto;padding-left:20px;">
+                    <button type="submit" class="button primary large">Rebuild Index</button>
+                </div>
+            </div>
+        </div>
+    </blc:form>
+
+</div>
+
