@@ -3,7 +3,7 @@ package com.community.configuration;
 import org.broadleafcommerce.common.security.BroadleafAuthenticationFailureHandler;
 import org.broadleafcommerce.common.security.handler.SecurityFilter;
 import org.broadleafcommerce.core.web.order.security.BroadleafAuthenticationSuccessHandler;
-import org.broadleafcommerce.profile.web.site.security.SessionFixationProtectionFilter;
+import org.broadleafcommerce.profile.web.site.security.LogUnsecuredSecureRequestFilter;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -24,6 +24,8 @@ import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
+import org.springframework.security.web.authentication.session.SessionFixationProtectionStrategy;
 import org.springframework.security.web.session.SessionManagementFilter;
 
 import java.util.ArrayList;
@@ -85,8 +87,8 @@ public class SiteSecurityConfig extends WebSecurityConfigurerAdapter {
     @Resource(name="blCsrfFilter")
     protected Filter securityFilter;
 
-    @Resource(name="blSessionFixationProtectionFilter")
-    protected Filter sessionFixationProtectionFilter;
+    @Resource(name="blLogUnsecuredSecureRequestFilter")
+    protected Filter logUnsecuredSecureRequestFilter;
 
     @Resource(name="blUserDetailsService")
     protected UserDetailsService userDetailsService;
@@ -123,6 +125,7 @@ public class SiteSecurityConfig extends WebSecurityConfigurerAdapter {
             .csrf().disable()
             .headers().frameOptions().disable().and()
             .sessionManagement()
+                .sessionAuthenticationStrategy(sessionAuthenticationStrategy())
                 .sessionFixation()
                 .none()
                 .enableSessionUrlRewriting(false)
@@ -148,7 +151,7 @@ public class SiteSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutUrl("/logout")
                 .and()
             .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
-            .addFilterBefore(sessionFixationProtectionFilter, SessionManagementFilter.class);
+            .addFilterBefore(logUnsecuredSecureRequestFilter, SessionManagementFilter.class);
     }
 
     /**
@@ -174,10 +177,14 @@ public class SiteSecurityConfig extends WebSecurityConfigurerAdapter {
      * @return the registration bean that designates the filter as being disabled in the main flow
      */
     @Bean
-    public FilterRegistrationBean blSessionFixationProtectionFilterFilterRegistrationBean(@Qualifier("blSessionFixationProtectionFilter") SessionFixationProtectionFilter filter) {
+    public FilterRegistrationBean blSessionFixationProtectionFilterFilterRegistrationBean(@Qualifier("blLogUnsecuredSecureRequestFilter") LogUnsecuredSecureRequestFilter filter) {
         FilterRegistrationBean registrationBean = new FilterRegistrationBean(filter);
         registrationBean.setEnabled(false);
         return registrationBean;
     }
 
+    @Bean
+    public SessionAuthenticationStrategy sessionAuthenticationStrategy() {
+        return new SessionFixationProtectionStrategy();
+    }
 }
