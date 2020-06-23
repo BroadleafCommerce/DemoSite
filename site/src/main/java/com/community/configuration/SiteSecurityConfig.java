@@ -23,8 +23,6 @@ import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
-import org.springframework.security.web.authentication.session.SessionFixationProtectionStrategy;
 import org.springframework.security.web.session.SessionManagementFilter;
 
 import java.util.ArrayList;
@@ -124,9 +122,8 @@ public class SiteSecurityConfig extends WebSecurityConfigurerAdapter {
             .csrf().disable()
             .headers().frameOptions().disable().and()
             .sessionManagement()
-                .sessionAuthenticationStrategy(sessionAuthenticationStrategy())
                 .sessionFixation()
-                .none()
+                .migrateSession()
                 .enableSessionUrlRewriting(false)
                 .and()
             .formLogin()
@@ -168,10 +165,5 @@ public class SiteSecurityConfig extends WebSecurityConfigurerAdapter {
         return registrationBean;
     }
 
-
-    @Bean
-    public SessionAuthenticationStrategy sessionAuthenticationStrategy() {
-        return new SessionFixationProtectionStrategy();
-    }
 
 }
