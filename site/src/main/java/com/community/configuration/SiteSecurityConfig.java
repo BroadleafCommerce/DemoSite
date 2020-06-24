@@ -23,7 +23,6 @@ import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.session.SessionManagementFilter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,9 +83,6 @@ public class SiteSecurityConfig extends WebSecurityConfigurerAdapter {
     @Resource(name="blCsrfFilter")
     protected Filter securityFilter;
 
-    @Resource(name="blSessionFixationProtectionFilter")
-    protected Filter sessionFixationProtectionFilter;
-
     @Resource(name="blUserDetailsService")
     protected UserDetailsService userDetailsService;
 
@@ -146,8 +142,7 @@ public class SiteSecurityConfig extends WebSecurityConfigurerAdapter {
                 .deleteCookies("ActiveID")
                 .logoutUrl("/logout")
                 .and()
-            .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
-            .addFilterBefore(sessionFixationProtectionFilter, SessionManagementFilter.class);
+            .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     /**
