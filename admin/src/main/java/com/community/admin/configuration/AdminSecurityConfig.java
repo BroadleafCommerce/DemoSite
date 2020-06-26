@@ -54,6 +54,12 @@ public class AdminSecurityConfig extends WebSecurityConfigurerAdapter {
 
     }
 
+    @Value("${http.server.port:8081}")
+    protected int httpServerPort;
+
+    @Value("${server.port:8444}")
+    protected int httpsServerPort;
+
     @Value("${asset.server.url.prefix.internal}")
     protected String assetServerUrlPrefixInternal;
 
@@ -133,7 +139,7 @@ public class AdminSecurityConfig extends WebSecurityConfigurerAdapter {
             .portMapper()
                 .http(80).mapsTo(443)
                 .http(8080).mapsTo(8443)
-                .http(8081).mapsTo(8444)
+                .http(httpServerPort).mapsTo(httpsServerPort)
                 .and()
                 .addFilterBefore(adminCsrfFilter, UsernamePasswordAuthenticationFilter.class);
     }
