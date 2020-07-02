@@ -162,7 +162,7 @@
         <div class="row">
             <div class="container">
                 <div class="related-products"
-                     th:with="relatedProducts=${#related_products.findByProduct(product.id, 4, 'UP_SALE')}">
+                     th:with="relatedProducts=${#related_products.findByProduct(product.id)}">
                     <h3 class="text-center" th:text="#{category.featuredProducts}"></h3>
                     <div class="row">
                         <div class="col-sm-6 col-md-3" th:each="product : ${relatedProducts}" th:object="${product}"
