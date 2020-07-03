@@ -57,7 +57,7 @@ public class AdminSecurityConfig extends WebSecurityConfigurerAdapter {
     @Value("${http.server.port:8081}")
     protected int httpServerPort;
 
-    @Value("${https.redirect.port:8444}")
+    @Value("${server.port:8444}")
     protected int httpsRedirectPort;
 
     @Value("${asset.server.url.prefix.internal}")
