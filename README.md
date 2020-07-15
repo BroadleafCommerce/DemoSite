@@ -129,17 +129,6 @@ Each project by default starts up with different remote debug ports and HTTP/HTT
   - https - `8085`
   - remote debug port - `8002`
 
-To access swagger ui use the following url https://<host>:<port>/swagger-ui.html
-host is your host, for example test.localhost
-port is port you defined, the default one is 8445
-
-if you want to change swagger ui url add property:
-springdoc.swagger-ui.path=/api/v1/swagger-ui.html
-
-To access endpoint definitions in yaml use the following url:
-https://<host>:<port>/api-docs.yaml
-or https://<host>:<port>/api/v1/api-docs.yaml
-
 ## License
 
 The Broadleaf Commerce Demo Site is itself licensed under the Broadleaf Fair Use License Agreement - Version 1.0 (http://license.broadleafcommerce.org/fair_use_license-1.0.txt). The Broadleaf Commerce core and module libraries have different license models you should be aware of.

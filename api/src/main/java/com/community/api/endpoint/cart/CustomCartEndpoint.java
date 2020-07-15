@@ -16,11 +16,6 @@
 
 package com.community.api.endpoint.cart;
 
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Parameters;
-import io.swagger.v3.oas.annotations.enums.ParameterIn;
-import io.swagger.v3.oas.annotations.media.Schema;
-import org.broadleafcommerce.profile.web.core.security.RestApiCustomerStateFilter;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -45,12 +40,6 @@ import javax.servlet.http.HttpServletRequest;
                 produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
 public class CustomCartEndpoint extends CartEndpoint {
 
-    @Parameters(
-            @Parameter(name = RestApiCustomerStateFilter.CUSTOMER_ID_ATTRIBUTE,
-                    in = ParameterIn.QUERY,
-                    schema = @Schema(type = "string"),
-                    required = true)
-    )
     @Override
     @RequestMapping(value = "", method = RequestMethod.GET)
     public OrderWrapper findCartForCustomer(HttpServletRequest request) {
