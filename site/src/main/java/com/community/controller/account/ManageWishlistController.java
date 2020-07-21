@@ -52,7 +52,7 @@ public class ManageWishlistController extends BroadleafManageWishlistController 
     
     @RequestMapping(value = "/add", produces = "application/json")
     public @ResponseBody Map<String, Object> addJson(HttpServletRequest request, HttpServletResponse response, Model model,
-            @ModelAttribute("addToCartItem") AddToCartItem addToCartItem) throws IOException, PricingException, AddToCartException {
+            @ModelAttribute("addToCartItem") OrderItemRequestDTO addToCartItem) throws IOException, PricingException, AddToCartException {
         Map<String, Object> responseMap = new HashMap<String, Object>();
         try {
             super.add(request, response, model, addToCartItem, WISHLIST_ORDER_NAME);

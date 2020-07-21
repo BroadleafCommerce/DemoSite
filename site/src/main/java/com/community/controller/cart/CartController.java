@@ -20,6 +20,7 @@ package com.community.controller.cart;
 import org.broadleafcommerce.core.catalog.domain.Product;
 import org.broadleafcommerce.core.inventory.service.InventoryUnavailableException;
 import org.broadleafcommerce.core.order.service.call.AddToCartItem;
+import org.broadleafcommerce.core.order.service.call.OrderItemRequestDTO;
 import org.broadleafcommerce.core.order.service.exception.AddToCartException;
 import org.broadleafcommerce.core.order.service.exception.IllegalCartOperationException;
 import org.broadleafcommerce.core.order.service.exception.ProductOptionValidationException;
@@ -154,7 +155,7 @@ public class CartController extends BroadleafCartController {
     @Override
     @RequestMapping("/remove")
     public String remove(HttpServletRequest request, HttpServletResponse response, Model model,
-            @ModelAttribute("addToCartItem") AddToCartItem addToCartItem) throws IOException, PricingException, RemoveFromCartException {
+            @ModelAttribute("addToCartItem") OrderItemRequestDTO addToCartItem) throws IOException, PricingException, RemoveFromCartException {
         String returnPath = super.remove(request, response, model, addToCartItem);
         if (isAjaxRequest(request)) {
             returnPath += " :: ajax";
