@@ -17,7 +17,6 @@
 package com.community.controller.account;
 
 import org.broadleafcommerce.core.catalog.domain.Product;
-import org.broadleafcommerce.core.order.service.call.AddToCartItem;
 import org.broadleafcommerce.core.order.service.call.OrderItemRequestDTO;
 import org.broadleafcommerce.core.order.service.exception.AddToCartException;
 import org.broadleafcommerce.core.order.service.exception.RemoveFromCartException;
@@ -82,7 +81,7 @@ public class ManageWishlistController extends BroadleafManageWishlistController 
      */
     @RequestMapping(value = "/add", produces = "text/html")
     public String add(HttpServletRequest request, HttpServletResponse response, Model model,
-            @ModelAttribute("addToCartItem") AddToCartItem addToCartItem) throws IOException, PricingException, AddToCartException {
+            @ModelAttribute("addToCartItem") OrderItemRequestDTO addToCartItem) throws IOException, PricingException, AddToCartException {
         try {
             return super.add(request, response, model, addToCartItem, WISHLIST_ORDER_NAME);
         } catch (AddToCartException e) {

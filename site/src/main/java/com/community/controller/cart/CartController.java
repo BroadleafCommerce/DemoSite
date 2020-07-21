@@ -91,7 +91,7 @@ public class CartController extends BroadleafCartController {
      */
     @RequestMapping(value = "/add", produces = "application/json")
     public @ResponseBody Map<String, Object> addJson(HttpServletRequest request, HttpServletResponse response, Model model,
-            @ModelAttribute("addToCartItem") AddToCartItem addToCartItem) throws IOException, PricingException, AddToCartException, Exception {
+            @ModelAttribute("addToCartItem") OrderItemRequestDTO addToCartItem) throws IOException, PricingException, AddToCartException, Exception {
         Map<String, Object> responseMap = new HashMap<>();
         try {
             super.add(request, response, model, addToCartItem);
@@ -239,7 +239,7 @@ public class CartController extends BroadleafCartController {
         return responseMap;
     }
 
-    protected Map<String, Object> buildAddResponse(AddToCartItem addToCartItem) {
+    protected Map<String, Object> buildAddResponse(OrderItemRequestDTO addToCartItem) {
         Map<String, Object> responseMap = new HashMap<>();
         responseMap.put("productName", catalogService.findProductById(addToCartItem.getProductId()).getName());
         responseMap.put("quantityAdded", addToCartItem.getQuantity());
