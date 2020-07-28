@@ -151,7 +151,7 @@ public class CartController extends BroadleafCartController {
         }
     }
 
-    @Override
+//    @Override
     @RequestMapping("/remove")
     public String remove(HttpServletRequest request, HttpServletResponse response, Model model,
             @ModelAttribute("addToCartItem") AddToCartItem addToCartItem) throws IOException, PricingException, RemoveFromCartException {

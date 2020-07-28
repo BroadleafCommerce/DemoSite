@@ -7,6 +7,7 @@
             <img th:case="es_MX" th:src="@{/img/flags/Mexico.png}" alt="Mexico" title="Spanish (Mexico)"/>
             <img th:case="es_ES" th:src="@{/img/flags/Spain.png}" alt="Spain" title="Spanish (Spain)"/>
             <img th:case="fr_FR" th:src="@{/img/flags/France.png}" alt="France" title="French (France)" />
+            <img th:case="zh_CN" th:src="@{/img/flags/China.png}" alt="中国" title="简体中文（中国）" />
         </th:block>
     </a>
     <ul class="dropdown-menu">
@@ -33,6 +34,11 @@
         <li>
             <a href="javascript:;" onclick="BLC.addUrlParam(document.location.search, 'blLocaleCode', 'fr_FR')">
                 <img id="fr_FR" th:src="@{/img/flags/France.png}" alt="France" title="French (France)" /> French (France)
+            </a>
+        </li>
+        <li>
+            <a href="javascript:;" onclick="BLC.addUrlParam(document.location.search, 'blLocaleCode', 'zh_CN')">
+                <img id="zh_CN" th:src="@{/img/flags/China.png}" alt="中国" title="中文（简体）" /> 中文（简体）
             </a>
         </li>
     </ul>
