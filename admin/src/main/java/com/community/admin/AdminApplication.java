@@ -15,6 +15,8 @@ public class AdminApplication {
     public static class BroadleafFrameworkConfiguration {}
 
     public static void main(String[] args) {
+        System.setProperty("spring.devtools.restart.enabled", "false");
+        System.setProperty("spring.devtools.livereload.enabled", "false");
         SpringApplication.run(AdminApplication.class, args);
     }
  

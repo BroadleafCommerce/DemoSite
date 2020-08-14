@@ -38,5 +38,9 @@
             <groupId>org.broadleafcommerce</groupId>
             <artifactId>broadleaf-sample-payment-gateway</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+        </dependency>
     </dependencies>
 </project>
