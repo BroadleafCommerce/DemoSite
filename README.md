@@ -121,7 +121,7 @@ Each project by default starts up with different remote debug ports and HTTP/HTT
 - `admin`
   - base url: http://localhost:8081/admin
   - http - `8081`
-  - https - `8445`
+  - https - `8444`
   - remote debug port - `8001`
 - `api`
   - base url: http://localhost:8082/api/v1/swagger-ui.html
