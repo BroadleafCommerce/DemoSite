@@ -42,5 +42,9 @@
             <groupId>org.broadleafcommerce</groupId>
             <artifactId>broadleaf-sample-payment-gateway</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.broadleafcommerce</groupId>
+            <artifactId>broadleaf-boot-starter-hsql-database</artifactId>
+        </dependency>
     </dependencies>
 </project>

@@ -50,10 +50,6 @@
         </dependency>
         <dependency>
             <groupId>com.broadleafcommerce</groupId>
-            <artifactId>broadleaf-boot-starter-hsql-database</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.broadleafcommerce</groupId>
             <artifactId>broadleaf-rest-api</artifactId>
         </dependency>
         <dependency>
