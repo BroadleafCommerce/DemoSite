@@ -20,6 +20,7 @@ package com.community.controller.cart;
 import org.broadleafcommerce.core.catalog.domain.Product;
 import org.broadleafcommerce.core.inventory.service.InventoryUnavailableException;
 import org.broadleafcommerce.core.order.service.call.AddToCartItem;
+import org.broadleafcommerce.core.order.service.call.OrderItemRequestDTO;
 import org.broadleafcommerce.core.order.service.exception.AddToCartException;
 import org.broadleafcommerce.core.order.service.exception.IllegalCartOperationException;
 import org.broadleafcommerce.core.order.service.exception.ProductOptionValidationException;
@@ -90,7 +91,7 @@ public class CartController extends BroadleafCartController {
      */
     @RequestMapping(value = "/add", produces = "application/json")
     public @ResponseBody Map<String, Object> addJson(HttpServletRequest request, HttpServletResponse response, Model model,
-            @ModelAttribute("addToCartItem") AddToCartItem addToCartItem) throws IOException, PricingException, AddToCartException, Exception {
+            @ModelAttribute("addToCartItem") OrderItemRequestDTO addToCartItem) throws IOException, PricingException, AddToCartException, Exception {
         Map<String, Object> responseMap = new HashMap<>();
         try {
             super.add(request, response, model, addToCartItem);
@@ -154,7 +155,7 @@ public class CartController extends BroadleafCartController {
     @Override
     @RequestMapping("/remove")
     public String remove(HttpServletRequest request, HttpServletResponse response, Model model,
-            @ModelAttribute("addToCartItem") AddToCartItem addToCartItem) throws IOException, PricingException, RemoveFromCartException {
+            @ModelAttribute("addToCartItem") OrderItemRequestDTO addToCartItem) throws IOException, PricingException, RemoveFromCartException {
         String returnPath = super.remove(request, response, model, addToCartItem);
         if (isAjaxRequest(request)) {
             returnPath += " :: ajax";
@@ -238,7 +239,7 @@ public class CartController extends BroadleafCartController {
         return responseMap;
     }
 
-    protected Map<String, Object> buildAddResponse(AddToCartItem addToCartItem) {
+    protected Map<String, Object> buildAddResponse(OrderItemRequestDTO addToCartItem) {
         Map<String, Object> responseMap = new HashMap<>();
         responseMap.put("productName", catalogService.findProductById(addToCartItem.getProductId()).getName());
         responseMap.put("quantityAdded", addToCartItem.getQuantity());

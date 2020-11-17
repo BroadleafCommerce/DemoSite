@@ -49,10 +49,6 @@
             <artifactId>broadleaf-boot-starter-solr</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.broadleafcommerce</groupId>
-            <artifactId>broadleaf-boot-starter-hsql-database</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.broadleafcommerce</groupId>
             <artifactId>broadleaf-thymeleaf3-presentation</artifactId>
         </dependency>
