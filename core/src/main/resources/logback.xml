@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  #%L
+  Reference Site Core
+  %%
+  Copyright (C) 2009 - 2016 Broadleaf Commerce
+  %%
+  Licensed under the Broadleaf Fair Use License Agreement, Version 1.0
+  (the "Fair Use License" located  at http://license.broadleafcommerce.org/fair_use_license-1.0.txt)
+  unless the restrictions on use therein are violated and require payment to Broadleaf in which case
+  the Broadleaf End User License Agreement (EULA), Version 1.1
+  (the "Commercial License" located at http://license.broadleafcommerce.org/commercial_license-1.1.txt)
+  shall apply.
+
+  Alternatively, the Commercial License may be replaced with a mutually agreed upon license (the "Custom License")
+  between you and Broadleaf Commerce. You may not use this file except in compliance with the applicable license.
+  #L%
+  -->
+
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml" />
+    <property name="LOG_FILE" value="${LOG_FILE:-${LOG_PATH:-${LOG_TEMP:-${java.io.tmpdir:-/tmp}}/}spring.log}"/>
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml" />
+
+    <!-- This file includes appender for app which will conflict with Rolling-File appender below.
+         Remove or Comment this include and root if using GCP cloud logging with Rolling-File appender -->
+    <include resource="org/springframework/boot/logging/logback/file-appender.xml" />
+    <root level="INFO">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="FILE" />
+    </root>
+
+    <logger name="org.broadleafcommerce" level="INFO"/>
+    <logger name="org.broadleafcommerce.common.extensibility.FrameworkXmlBeanDefinitionReader" level="WARN"/>
+    <logger name="org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainer" level="INFO"/>
+    <logger name="org.springframework.boot.SpringApplication" level="INFO"/>
+    <logger name="org.hibernate.cache.ehcache.internal.strategy.AbstractReadWriteEhcacheAccessStrategy" level="ERROR"/>
+
+    <logger name="com.community.admin.web.controller" level="DEBUG" />
+
+    <logger name="org.hibernate.engine.internal.StatefulPersistenceContext" level="ERROR"/>
+
+</configuration>
