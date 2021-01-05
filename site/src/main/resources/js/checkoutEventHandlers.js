@@ -327,5 +327,12 @@ $body.on('click', '.js-edit-address', function() {
 $(function() {
     Checkout.initialize();
 
+    // Reloads page instead of loading it from the bfcache in Firefox and Safari
+    $(window).on("pageshow", function(event) {
+        if (event.originalEvent.persisted) {
+            window.location.reload()
+        }
+    });
+
     $('.js-paymentMethodCreditCard').click();
 });

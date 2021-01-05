@@ -114,19 +114,19 @@ For more information on which agent to use for your operating system, [consult t
 Each project by default starts up with different remote debug ports and HTTP/HTTPS connector ports:
 
 - `site`
-  - base url: https://localhost:8081
+  - base url: http://localhost:8080
   - http - `8080`
-  - https - `8081`
+  - https - `8443`
   - remote debug port - `8000`
 - `admin`
-  - base url: https://localhost:8083/admin
-  - http - `8082`
-  - https - `8083`
-  -  - `8001`
+  - base url: http://localhost:8081/admin
+  - http - `8081`
+  - https - `8444`
+  - remote debug port - `8001`
 - `api`
-  - base url: https://localhost:8085/api
-  - http - `8084`
-  - https - `8085`
+  - base url: http://localhost:8082/api/v1/swagger-ui.html
+  - http - `8082`
+  - https - `8445`
   - remote debug port - `8002`
 
 ## License
