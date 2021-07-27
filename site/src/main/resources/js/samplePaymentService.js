@@ -8,7 +8,7 @@
      */
     SamplePaymentService.tokenizeCard = function(creditCardForm) {
         // Use constant value regardless of form data so that we do not potentially save a legitimate credit card
-        return '4111111111111111|Hotsauce Connoisseur|01/99|123'
+        return '4111111111111111#Hotsauce Connoisseur#01/99#123'
     };
 
     /**

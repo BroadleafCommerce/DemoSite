@@ -23,10 +23,12 @@ import org.broadleafcommerce.common.payment.PaymentGatewayType;
 import org.broadleafcommerce.common.payment.PaymentTransactionType;
 import org.broadleafcommerce.common.payment.PaymentType;
 import org.broadleafcommerce.common.vendor.service.exception.PaymentException;
+import org.broadleafcommerce.common.web.BroadleafRequestContext;
 import org.broadleafcommerce.core.order.domain.Order;
 import org.broadleafcommerce.core.payment.domain.OrderPayment;
 import org.broadleafcommerce.core.payment.domain.PaymentTransaction;
 import org.broadleafcommerce.core.pricing.service.exception.PricingException;
+import org.broadleafcommerce.core.pricing.service.workflow.OfferActivity;
 import org.broadleafcommerce.core.web.checkout.model.CustomerCreditInfoForm;
 import org.broadleafcommerce.core.web.checkout.model.GiftCardInfoForm;
 import org.broadleafcommerce.core.web.checkout.model.OrderInfoForm;
@@ -145,9 +147,9 @@ public class CheckoutController extends BroadleafCheckoutController {
 
     @RequestMapping(value = "/checkout/complete", method = RequestMethod.POST)
     public String processCompleteCheckoutOrderFinalized(RedirectAttributes redirectAttributes,
-            @RequestParam(value = "payment_method_nonce", required = false) String nonce) throws PaymentException, PricingException {
+                                                        @RequestParam(value = "payment_method_nonce", required = false) String nonce) throws PaymentException, PricingException {
+        Order cart = CartState.getCart();
         if (!StringUtils.isEmpty(nonce)) {
-            Order cart = CartState.getCart();
             OrderPayment paymentNonce = createNonceOrderPayment(cart);
 
             //Populate Billing Address per UI requirements
@@ -163,12 +165,19 @@ public class CheckoutController extends BroadleafCheckoutController {
             transaction.setOrderPayment(paymentNonce);
             paymentNonce.addTransaction(transaction);
             orderService.addPaymentToOrder(cart, paymentNonce, null);
-
+            //set variable so if some offer code is removed we can notify buyer about it.
+            BroadleafRequestContext.getBroadleafRequestContext().getAdditionalProperties().put(OfferActivity.FINALIZE_CHECKOUT, Boolean.TRUE);
+            orderService.save(cart, true);
+        }else if(CollectionUtils.isNotEmpty(cart.getPayments())){
+            //set variable so if some offer code is removed we can notify buyer about it.
+            BroadleafRequestContext.getBroadleafRequestContext().getAdditionalProperties().put(OfferActivity.FINALIZE_CHECKOUT, Boolean.TRUE);
+            //price order in case some offer is expired
             orderService.save(cart, true);
         }
 
         return super.processCompleteCheckoutOrderFinalized(redirectAttributes);
     }
+
 
     protected OrderPayment getTempCreditCardPayment(Order cart) {
         OrderPayment tempPayment = null;
