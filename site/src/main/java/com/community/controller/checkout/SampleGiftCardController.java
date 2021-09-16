@@ -41,7 +41,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * This is a stub implementation to handle gift card processing.
  * Please contact us to learn more about our AccountCredit module that handles both Gift Cards and Customer Credit.
- * http://www.broadleafcommerce.com/contact
+ * https://www.broadleafcommerce.com/contact
  *
  * This should NOT be used in production, and is meant solely for demonstration
  * purposes only.
@@ -66,7 +66,7 @@ public class SampleGiftCardController extends AbstractCheckoutController {
 
         giftCardInfoFormValidator.validate(giftCardInfoForm, result);
         if (!result.hasErrors()) {
-            result.reject("giftCardNumber", "The Gift Card module is not enabled. Please contact us for more information about our AccountCredit Module (http://www.broadleafcommerce.com/contact)");
+            result.reject("giftCardNumber", "The Gift Card module is not enabled. Please contact us for more information about our AccountCredit Module (https://www.broadleafcommerce.com/contact)");
         }
 
         if (!(cart instanceof NullOrderImpl)) {
