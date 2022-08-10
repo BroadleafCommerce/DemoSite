@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.broadleafcommerce</groupId>
         <artifactId>broadleaf-boot-starter-parent</artifactId>
-        <version>5.2.24-GA</version>
+        <version>5.2.25-GA</version>
         <relativePath />
     </parent>
 
