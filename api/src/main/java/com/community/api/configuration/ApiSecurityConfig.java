@@ -52,37 +52,14 @@ import javax.servlet.Filter;
 public class ApiSecurityConfig {
 
     private static final Log LOG = LogFactory.getLog(ApiSecurityConfig.class);
-    
+
     @Value("${asset.server.url.prefix.internal}")
     protected String assetServerUrlPrefixInternal;
-
-//    @Bean(name = "blAuthenticationManager")
-//    public AuthenticationManager authenticationManager(AuthenticationManagerBuilder auth) throws Exception {
-//        String password = UUID.randomUUID().toString();
-//        String user = "broadleafapi";
-//        auth.inMemoryAuthentication()
-//                .withUser(user)
-//                .password(password)
-//                .roles("USER");
-//        LOG.info(String.format("%n%n%nBasic auth configured with user %s and password: %s%n%n%n", user, password));
-//        return auth.build();
-//    }
 
     @Bean(name = "blAuthenticationManager")
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
         return authConfig.getAuthenticationManager();
     }
-
-//    @Override
-//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//        String password = UUID.randomUUID().toString();
-//        String user = "broadleafapi";
-//        auth.inMemoryAuthentication()
-//            .withUser(user)
-//            .password(password)
-//            .roles("USER");
-//        LOG.info(String.format("%n%n%nBasic auth configured with user %s and password: %s%n%n%n", user, password));
-//    }
 
     @Bean
     @Order(0)
@@ -105,28 +82,28 @@ public class ApiSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .mvcMatcher("/api/**")
-            .httpBasic()
-            .and()
-            .csrf().disable()
-            .authorizeHttpRequests()
+                .mvcMatcher("/api/**")
+                .httpBasic()
+                .and()
+                .csrf().disable()
+                .authorizeHttpRequests()
                 .requestMatchers("/api/**")
                 .authenticated()
                 .and()
-            .sessionManagement()
+                .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .sessionFixation()
                 .none()
                 .enableSessionUrlRewriting(false)
                 .and()
-            .requiresChannel()
+                .requiresChannel()
                 .anyRequest()
                 .requires(ChannelDecisionManagerImpl.ANY_CHANNEL)
-            .and()
-            .addFilterAfter(apiCustomerStateFilter(), RememberMeAuthenticationFilter.class);
+                .and()
+                .addFilterAfter(apiCustomerStateFilter(), RememberMeAuthenticationFilter.class);
         return http.build();
     }
-    
+
     @Bean
     public Filter apiCustomerStateFilter() {
         return new RestApiCustomerStateFilter();
