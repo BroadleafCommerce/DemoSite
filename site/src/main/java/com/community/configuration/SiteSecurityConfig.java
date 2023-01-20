@@ -27,9 +27,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -37,6 +41,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.RedirectStrategy;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -52,9 +57,9 @@ import javax.servlet.Filter;
  */
 @Configuration
 @EnableWebSecurity
-@ComponentScan({"org.broadleafcommerce.common.web.security","org.broadleafcommerce.profile.web.core.security","org.broadleafcommerce.core.web.order.security"})
-@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
-public class SiteSecurityConfig extends WebSecurityConfigurerAdapter {
+@ComponentScan({"org.broadleafcommerce.common.web.security", "org.broadleafcommerce.profile.web.core.security", "org.broadleafcommerce.core.web.order.security"})
+@EnableMethodSecurity(securedEnabled = true)
+public class SiteSecurityConfig {
 
     @Configuration
     public static class DependencyConfiguration {
@@ -91,75 +96,84 @@ public class SiteSecurityConfig extends WebSecurityConfigurerAdapter {
     @Value("${asset.server.url.prefix.internal}")
     protected String assetServerUrlPrefixInternal;
 
-    @Resource(name="blAuthenticationSuccessHandler")
+    @Resource(name = "blAuthenticationSuccessHandler")
     protected AuthenticationSuccessHandler successHandler;
 
-    @Resource(name="blAuthenticationFailureHandler")
+    @Resource(name = "blAuthenticationFailureHandler")
     protected AuthenticationFailureHandler failureHandler;
 
-    @Resource(name="blCsrfFilter")
+    @Resource(name = "blCsrfFilter")
     protected Filter securityFilter;
 
-    @Resource(name="blUserDetailsService")
+    @Resource(name = "blUserDetailsService")
     protected UserDetailsService userDetailsService;
 
-    @Resource(name="blPasswordEncoder")
+    @Resource(name = "blPasswordEncoder")
     protected PasswordEncoder passwordEncoder;
 
-    @Override
-    public void configure(WebSecurity web) throws Exception {
-        web
-            .ignoring()
-                .antMatchers("/css/**")
-                .antMatchers("/fonts/**")
-                .antMatchers("/img/**")
-                .antMatchers("/js/**")
-                .antMatchers("/**/"+assetServerUrlPrefixInternal+"/**")
-                .antMatchers("/favicon.ico");
-    }
-
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
-    }
-
-    @Bean(name="blAuthenticationManager")
-    @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManager();
-    }
-
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
+    @Bean
+    @Order(0)
+    SecurityFilterChain resources(HttpSecurity http) throws Exception {
         http
-            .csrf().disable()
-            .headers().frameOptions().disable().and()
-            .sessionManagement()
+                .requestMatchers((matchers) -> matchers.antMatchers(
+                        "/css/**",
+                        "/fonts/**",
+                        "/img/**",
+                        "/js/**",
+                        "/**/" + assetServerUrlPrefixInternal + "/**",
+                        "/favicon.ico"
+                ))
+                .authorizeHttpRequests((authorize) -> authorize.anyRequest().permitAll())
+                .securityContext().disable()
+                .sessionManagement().disable();
+        return http.build();
+    }
+
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(userDetailsService);
+        authProvider.setPasswordEncoder(passwordEncoder);
+        return authProvider;
+    }
+
+    @Bean(name = "blAuthenticationManager")
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
+        return authConfig.getAuthenticationManager();
+    }
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+                .csrf().disable()
+                .headers().frameOptions().disable().and()
+                .sessionManagement()
                 .sessionFixation()
                 .migrateSession()
                 .enableSessionUrlRewriting(false)
                 .and()
-            .formLogin()
+                .formLogin()
                 .permitAll()
                 .successHandler(successHandler)
                 .failureHandler(failureHandler)
                 .loginPage("/login")
                 .loginProcessingUrl("/login_post.htm")
                 .and()
-            .authorizeRequests()
-                .antMatchers("/account/wishlist/**", "/account/**")
-                .access("isAuthenticated()")
+                .authorizeHttpRequests()
+                .requestMatchers("/account/wishlist/**", "/account/**")
+                .authenticated()
                 .and()
-            .requiresChannel()
-                .antMatchers("/","/**")
+                .requiresChannel()
+                .requestMatchers("/", "/**")
                 .requiresSecure()
                 .and()
-            .logout()
+                .logout()
                 .invalidateHttpSession(true)
                 .deleteCookies("ActiveID")
                 .logoutUrl("/logout")
                 .and()
-            .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
+        return http.build();
     }
 
     /**
@@ -176,6 +190,5 @@ public class SiteSecurityConfig extends WebSecurityConfigurerAdapter {
         registrationBean.setEnabled(false);
         return registrationBean;
     }
-
 
 }
