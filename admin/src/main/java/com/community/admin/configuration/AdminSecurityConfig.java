@@ -27,15 +27,16 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.core.annotation.Order;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -49,9 +50,9 @@ import javax.servlet.Filter;
  */
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
-@ComponentScan({"org.broadleafcommerce.profile.web.core.security","org.broadleafcommerce.core.web.order.security"})
-public class AdminSecurityConfig extends WebSecurityConfigurerAdapter {
+@ComponentScan({"org.broadleafcommerce.profile.web.core.security", "org.broadleafcommerce.core.web.order.security"})
+@EnableMethodSecurity(securedEnabled = true)
+public class AdminSecurityConfig {
 
     @Configuration
     public static class DependencyConfiguration {
@@ -104,61 +105,68 @@ public class AdminSecurityConfig extends WebSecurityConfigurerAdapter {
     @Resource(name = "blAdminAuthenticationProvider")
     protected AuthenticationProvider authenticationProvider;
 
-    @Override
-    public void configure(WebSecurity web) throws Exception {
-        web
-            .ignoring()
-            .antMatchers("/**/*.css")
-            .antMatchers("/**/*.js")
-            .antMatchers("/img/**")
-            .antMatchers("/fonts/**")
-            .antMatchers("/**/"+assetServerUrlPrefixInternal+"/**")
-            .antMatchers("/favicon.ico")
-            .antMatchers("/robots.txt");
-    }
-
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(adminUserDetailsService).passwordEncoder(passwordEncoder);
-    }
-
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
+    @Bean
+    @Order(0)
+    SecurityFilterChain resources(HttpSecurity http) throws Exception {
         http
-            .authenticationProvider(authenticationProvider)
-            .csrf().disable()
-            .headers().frameOptions().disable().and()
-            .sessionManagement()
+                .requestMatchers((matchers) -> matchers.antMatchers(
+                        "/**/*.css",
+                        "/**/*.js",
+                        "/img/**",
+                        "/fonts/**",
+                        "/**/" + assetServerUrlPrefixInternal + "/**",
+                        "/favicon.ico",
+                        "/robots.txt"
+                ))
+                .authorizeHttpRequests((authorize) -> authorize.anyRequest().permitAll())
+                .securityContext().disable()
+                .sessionManagement().disable();
+        return http.build();
+    }
+
+    @Bean(name = "blAdminAuthenticationManager")
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
+        return authConfig.getAuthenticationManager();
+    }
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+                .authenticationProvider(authenticationProvider)
+                .csrf().disable()
+                .headers().frameOptions().disable().and()
+                .sessionManagement()
                 .enableSessionUrlRewriting(false)
                 .and()
-            .formLogin()
+                .formLogin()
                 .permitAll()
                 .successHandler(successHandler)
                 .failureHandler(failureHandler)
                 .loginPage("/login")
                 .loginProcessingUrl("/login_admin_post")
                 .and()
-            .authorizeRequests()
-                .antMatchers("/sendResetPassword", "/forgotUsername", "/forgotPassword", "/resetPassword", "/login")
-                .access("permitAll")
-                .antMatchers("/**")
-                .access("isAuthenticated()")
+                .authorizeHttpRequests()
+                .requestMatchers("/sendResetPassword", "/forgotUsername", "/forgotPassword", "/resetPassword", "/login")
+                .permitAll()
+                .requestMatchers("/**")
+                .authenticated()
                 .and()
-            .requiresChannel()
-                .antMatchers("/**")
+                .requiresChannel()
+                .requestMatchers("/**")
                 .requiresSecure()
                 .and()
-            .logout()
+                .logout()
                 .invalidateHttpSession(true)
                 .logoutUrl("/adminLogout.htm")
                 .logoutSuccessHandler(logoutSuccessHandler)
                 .and()
-            .portMapper()
+                .portMapper()
                 .http(80).mapsTo(443)
                 .http(8080).mapsTo(8443)
                 .http(httpServerPort).mapsTo(httpsRedirectPort)
                 .and()
                 .addFilterBefore(adminCsrfFilter, UsernamePasswordAuthenticationFilter.class);
+        return http.build();
     }
 
     /**
