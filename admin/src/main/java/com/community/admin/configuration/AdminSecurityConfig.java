@@ -27,13 +27,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
-import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -44,6 +44,8 @@ import org.springframework.security.web.authentication.logout.LogoutSuccessHandl
 
 import javax.annotation.Resource;
 import javax.servlet.Filter;
+
+import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
 
 /**
  * @author Elbert Bautista (elbertbautista)
@@ -106,22 +108,15 @@ public class AdminSecurityConfig {
     protected AuthenticationProvider authenticationProvider;
 
     @Bean
-    @Order(0)
-    SecurityFilterChain resources(HttpSecurity http) throws Exception {
-        http
-                .requestMatchers((matchers) -> matchers.antMatchers(
-                        "/**/*.css",
-                        "/**/*.js",
-                        "/img/**",
-                        "/fonts/**",
-                        "/**/" + assetServerUrlPrefixInternal + "/**",
-                        "/favicon.ico",
-                        "/robots.txt"
-                ))
-                .authorizeHttpRequests((authorize) -> authorize.anyRequest().permitAll())
-                .securityContext().disable()
-                .sessionManagement().disable();
-        return http.build();
+    public WebSecurityCustomizer webSecurityCustomizer() {
+
+        return (web) -> web.ignoring().requestMatchers(antMatcher("/**/*.css"),
+                antMatcher("/**/*.js"),
+                antMatcher("/img/**"),
+                antMatcher("/fonts/**"),
+                antMatcher("/**/" + assetServerUrlPrefixInternal + "/**"),
+                antMatcher("/favicon.ico"),
+                antMatcher("/robots.txt"));
     }
 
     @Bean(name = "blAdminAuthenticationManager")
