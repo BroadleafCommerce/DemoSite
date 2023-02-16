@@ -27,17 +27,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
-import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.RedirectStrategy;
@@ -51,6 +47,8 @@ import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.Filter;
+
+import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
 
 /**
  * @author Elbert Bautista (elbertbautista)
@@ -112,21 +110,15 @@ public class SiteSecurityConfig {
     protected PasswordEncoder passwordEncoder;
 
     @Bean
-    @Order(0)
-    SecurityFilterChain resources(HttpSecurity http) throws Exception {
-        http
-                .requestMatchers((matchers) -> matchers.antMatchers(
-                        "/css/**",
-                        "/fonts/**",
-                        "/img/**",
-                        "/js/**",
-                        "/**/" + assetServerUrlPrefixInternal + "/**",
-                        "/favicon.ico"
-                ))
-                .authorizeHttpRequests((authorize) -> authorize.anyRequest().permitAll())
-                .securityContext().disable()
-                .sessionManagement().disable();
-        return http.build();
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring().requestMatchers(
+                antMatcher("/css/**"),
+                antMatcher("/fonts/**"),
+                antMatcher("/img/**"),
+                antMatcher("/js/**"),
+                antMatcher("/widget/js/**"),
+                antMatcher("/**/" + assetServerUrlPrefixInternal + "/**"),
+                antMatcher("/favicon.ico"));
     }
 
     @Bean
@@ -164,7 +156,7 @@ public class SiteSecurityConfig {
                 .authenticated()
                 .and()
                 .requiresChannel()
-                .requestMatchers("/", "/**")
+                .requestMatchers("/**")
                 .requiresSecure()
                 .and()
                 .logout()

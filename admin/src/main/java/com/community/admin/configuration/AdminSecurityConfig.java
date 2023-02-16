@@ -86,22 +86,22 @@ public class AdminSecurityConfig {
     @Value("${enforce.secure:true}")
     protected boolean enforceSecure;
 
-    @Resource(name="blAdminAuthenticationSuccessHandler")
+    @Resource(name = "blAdminAuthenticationSuccessHandler")
     protected AuthenticationSuccessHandler successHandler;
 
-    @Resource(name="blAdminAuthenticationFailureHandler")
+    @Resource(name = "blAdminAuthenticationFailureHandler")
     protected AuthenticationFailureHandler failureHandler;
 
-    @Resource(name="blAdminLogoutSuccessHandler")
+    @Resource(name = "blAdminLogoutSuccessHandler")
     protected LogoutSuccessHandler logoutSuccessHandler;
 
-    @Resource(name="blAdminCsrfFilter")
+    @Resource(name = "blAdminCsrfFilter")
     protected Filter adminCsrfFilter;
 
-    @Resource(name="blAdminUserDetailsService")
+    @Resource(name = "blAdminUserDetailsService")
     protected UserDetailsService adminUserDetailsService;
 
-    @Resource(name="blAdminPasswordEncoder")
+    @Resource(name = "blAdminPasswordEncoder")
     protected PasswordEncoder passwordEncoder;
 
     @Resource(name = "blAdminAuthenticationProvider")
@@ -109,14 +109,15 @@ public class AdminSecurityConfig {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-
-        return (web) -> web.ignoring().requestMatchers(antMatcher("/**/*.css"),
+        return (web) -> web.ignoring().requestMatchers(
+                antMatcher("/**/*.css"),
                 antMatcher("/**/*.js"),
                 antMatcher("/img/**"),
                 antMatcher("/fonts/**"),
                 antMatcher("/**/" + assetServerUrlPrefixInternal + "/**"),
                 antMatcher("/favicon.ico"),
-                antMatcher("/robots.txt"));
+                antMatcher("/robots.txt")
+        );
     }
 
     @Bean(name = "blAdminAuthenticationManager")
