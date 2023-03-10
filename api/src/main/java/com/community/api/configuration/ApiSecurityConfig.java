@@ -22,26 +22,21 @@ import org.apache.commons.logging.LogFactory;
 import org.broadleafcommerce.profile.web.core.security.RestApiCustomerStateFilter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.channel.ChannelDecisionManagerImpl;
 import org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter;
 
-import java.util.UUID;
-
 import javax.servlet.Filter;
+
+import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
 
 /**
  * @author Elbert Bautista (elbertbautista)
@@ -62,21 +57,15 @@ public class ApiSecurityConfig {
     }
 
     @Bean
-    @Order(0)
-    SecurityFilterChain resources(HttpSecurity http) throws Exception {
-        http
-                .requestMatchers((matchers) -> matchers.antMatchers(
-                        "/api/**/webjars/**",
-                        "/api/**/images/favicon-*",
-                        "/api/**/jhawtcode/**",
-                        "/api/**/swagger-ui.html",
-                        "/api/**/swagger-resources/**",
-                        "/api/**/v2/api-docs"
-                ))
-                .authorizeHttpRequests((authorize) -> authorize.anyRequest().permitAll())
-                .securityContext().disable()
-                .sessionManagement().disable();
-        return http.build();
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring().requestMatchers(
+                antMatcher("/api/**/webjars/**"),
+                antMatcher("/api/**/images/favicon-*"),
+                antMatcher("/api/**/jhawtcode/**"),
+                antMatcher("/api/**/swagger-ui.html"),
+                antMatcher("/api/**/swagger-resources/**"),
+                antMatcher("/api/**/v2/api-docs")
+        );
     }
 
     @Bean
@@ -108,5 +97,5 @@ public class ApiSecurityConfig {
     public Filter apiCustomerStateFilter() {
         return new RestApiCustomerStateFilter();
     }
-    
+
 }
