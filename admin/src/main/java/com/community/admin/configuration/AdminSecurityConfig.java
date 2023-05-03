@@ -17,9 +17,11 @@
  */
 package com.community.admin.configuration;
 
+import com.community.admin.web.filter.AdminContentSecurityPolicyFilter;
 import org.broadleafcommerce.common.security.handler.SecurityFilter;
 import org.broadleafcommerce.openadmin.security.BroadleafAdminAuthenticationFailureHandler;
 import org.broadleafcommerce.openadmin.security.BroadleafAdminAuthenticationSuccessHandler;
+import org.broadleafcommerce.openadmin.web.filter.AdminSecurityFilter;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -79,6 +81,13 @@ public class AdminSecurityConfig {
 
     @Value("${server.port:8444}")
     protected int httpsRedirectPort;
+
+    @Value("${site.baseurl.domain}")
+    private String baseUrl;
+
+    @Value("${site.baseurl.port}")
+    private String baseUrlPort;
+
 
     @Value("${asset.server.url.prefix.internal}")
     protected String assetServerUrlPrefixInternal;
@@ -161,9 +170,23 @@ public class AdminSecurityConfig {
                 .http(8080).mapsTo(8443)
                 .http(httpServerPort).mapsTo(httpsRedirectPort)
                 .and()
-                .addFilterBefore(adminCsrfFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(adminCsrfFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(new AdminContentSecurityPolicyFilter(getCSPHeader()), AdminSecurityFilter.class);
         return http.build();
     }
+
+    /**
+     * Add the site's baseUrl and port as a frame-src value to the Content Security Policy header.
+     * This enables admin's CSR mode to load the site in a modal.
+     * @return The CSP header
+     */
+    private String getCSPHeader() {
+        // Can contain one or more %s placeholders for substitution of a nonce token (e.g. 'nonce-%s')
+        return "default-src 'self';script-src 'self' 'unsafe-eval' 'nonce-%s'; " +
+                "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data:; " +
+                "font-src 'self' https://fonts.gstatic.com data:; frame-src 'self' *." + baseUrl + ":" + baseUrlPort + ";";
+    }
+
 
     /**
      * Don't allow the auto registration of the filter for the main request flow. This filter should be limited
