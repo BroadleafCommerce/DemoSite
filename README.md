@@ -136,3 +136,6 @@ The Broadleaf Commerce Demo Site is itself licensed under the Broadleaf Fair Use
 Broadleaf Commerce core libraries, as well as the menu library, are released under a dual license format. They may be used under the terms of the Fair Use License 1.0 (http://license.broadleafcommerce.org/fair_use_license-1.0.txt) unless the restrictions on use therein are violated and require payment to Broadleaf, in which case the Broadleaf End User License Agreement (EULA), Version 1.1 (http://license.broadleafcommerce.org/commercial_license-1.1.txt) shall apply. Alternatively, the Commercial License may be replaced with a mutually agreed upon license between you and Broadleaf Commerce.
 
 Various commercial modules that are also available (for instance, price list management) are released under the applicable commercial license. These are not included with the core Broadleaf framework.
+
+## Production Considerations
+By default, Caching is disabled and Exploit Protection is enabled in [properties](https://github.com/BroadleafCommerce/DemoSite/blob/develop-6.2.x/core/src/main/resources/runtime-properties/default-shared.properties) but there are more things to be considered. Read through https://www.broadleafcommerce.com/docs/core/current/appendix/production-considerations for more information.
