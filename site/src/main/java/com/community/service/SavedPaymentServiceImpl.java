@@ -33,7 +33,7 @@ import org.broadleafcommerce.profile.core.domain.Customer;
 import org.broadleafcommerce.vendor.sample.service.payment.MessageConstants;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 
 /**
  * @author Chris Kittrell (ckittrell)

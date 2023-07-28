@@ -23,7 +23,6 @@ import org.broadleafcommerce.core.web.controller.account.BroadleafManageCustomer
 import org.broadleafcommerce.core.web.controller.account.CustomerAddressForm;
 import org.broadleafcommerce.profile.core.domain.Country;
 import org.broadleafcommerce.profile.core.domain.CustomerAddress;
-import org.broadleafcommerce.profile.core.domain.State;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -37,7 +36,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
 @RequestMapping("/account/addresses")
@@ -46,11 +45,6 @@ public class ManageCustomerAddressesController extends BroadleafManageCustomerAd
     @InitBinder
     protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) throws Exception {
         super.initBinder(request, binder);
-    }
-    
-    @ModelAttribute("states")
-    protected List<State> populateStates() {
-        return super.populateStates();
     }
     
     @ModelAttribute("countries")

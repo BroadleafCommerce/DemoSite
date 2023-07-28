@@ -34,7 +34,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.channel.ChannelDecisionManagerImpl;
 import org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter;
 
-import javax.servlet.Filter;
+import jakarta.servlet.Filter;
 
 import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
 
@@ -71,13 +71,11 @@ public class ApiSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .mvcMatcher("/api/**")
-                .httpBasic()
-                .and()
+                .httpBasic().disable()
                 .csrf().disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/api/**")
-                .authenticated()
+                .requestMatchers("/api/*")
+                .permitAll()
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)

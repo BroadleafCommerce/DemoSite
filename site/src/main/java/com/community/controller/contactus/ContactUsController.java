@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.HashMap;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 
 @Controller("blContactUsController")
 public class ContactUsController {
