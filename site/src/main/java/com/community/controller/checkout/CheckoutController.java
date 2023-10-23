@@ -19,7 +19,8 @@
 package com.community.controller.checkout;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.solr.common.StringUtils;
+
+import org.apache.commons.lang3.StringUtils;
 import org.broadleafcommerce.common.exception.ServiceException;
 import org.broadleafcommerce.common.payment.PaymentGatewayType;
 import org.broadleafcommerce.common.payment.PaymentTransactionType;
