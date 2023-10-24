@@ -29,7 +29,7 @@ import org.broadleafcommerce.core.workflow.ProcessContext;
 
 import java.util.HashMap;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 
 
 /**

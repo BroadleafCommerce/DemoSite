@@ -23,6 +23,7 @@ import org.broadleafcommerce.core.search.service.SearchService;
 import org.broadleafcommerce.core.search.service.solr.SolrConfiguration;
 import org.broadleafcommerce.core.search.service.solr.SolrSearchServiceImpl;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
@@ -32,6 +33,7 @@ import org.springframework.stereotype.Component;
  * @author Phillip Verheyden (phillipuniverse)
  */
 @Component
+@ConditionalOnProperty(name = "using.solr.cloud", havingValue = "false", matchIfMissing = true)
 public class ApplicationSolrConfiguration {
 
     @Value("${solr.url.primary}")

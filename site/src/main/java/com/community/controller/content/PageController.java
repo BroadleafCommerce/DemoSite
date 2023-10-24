@@ -22,8 +22,8 @@ import org.broadleafcommerce.cms.web.controller.BroadleafPageController;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * This class works in combination with the PageHandlerMapping which finds a category based upon

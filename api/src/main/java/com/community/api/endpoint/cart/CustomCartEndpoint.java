@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.broadleafcommerce.rest.api.endpoint.order.CartEndpoint;
 import com.broadleafcommerce.rest.api.wrapper.OrderWrapper;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 
 /**

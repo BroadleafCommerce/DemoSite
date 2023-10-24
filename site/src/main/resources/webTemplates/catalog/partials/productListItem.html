@@ -1,7 +1,7 @@
 <th:block xmlns:blc="http://www.w3.org/1999/html" xmlns:th="http://www.thymeleaf.org">
     <div class="card card-product card-plain no-shadow product-list-item js-productContainer"
          th:data-id="*{id}" data-colored-shadow="false">
-        <div th:if="*{featuredProduct}" class="new-badge">
+        <div th:if="*{#related_products.isFeaturedProduct(id)}" class="new-badge">
             New!
         </div>
         <a th:href="@{*{url}}">

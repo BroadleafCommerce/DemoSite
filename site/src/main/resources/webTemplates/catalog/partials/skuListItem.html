@@ -1,4 +1,4 @@
-<div th:if="*{product.featuredProduct}" class="new-badge">New!</div>
+<div th:if="*{#related_products.isFeaturedProduct(product.id)}" class="new-badge">New!</div>
 
 <div class="js-image image">
     <a th:href="@{*{product.url} + *{#strings.isEmpty(urlKey)? '' : urlKey}}">

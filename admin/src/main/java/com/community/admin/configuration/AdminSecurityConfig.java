@@ -17,7 +17,6 @@
  */
 package com.community.admin.configuration;
 
-import com.community.admin.web.filter.AdminContentSecurityPolicyFilter;
 import org.broadleafcommerce.common.security.handler.SecurityFilter;
 import org.broadleafcommerce.openadmin.security.BroadleafAdminAuthenticationFailureHandler;
 import org.broadleafcommerce.openadmin.security.BroadleafAdminAuthenticationSuccessHandler;
@@ -36,18 +35,18 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.SessionManagementConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
-import javax.annotation.Resource;
-import javax.servlet.Filter;
+import com.community.admin.web.filter.AdminContentSecurityPolicyFilter;
 
-import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
+import jakarta.annotation.Resource;
+import jakarta.servlet.Filter;
 
 /**
  * @author Elbert Bautista (elbertbautista)
@@ -107,25 +106,19 @@ public class AdminSecurityConfig {
     @Resource(name = "blAdminCsrfFilter")
     protected Filter adminCsrfFilter;
 
-    @Resource(name = "blAdminUserDetailsService")
-    protected UserDetailsService adminUserDetailsService;
-
-    @Resource(name = "blAdminPasswordEncoder")
-    protected PasswordEncoder passwordEncoder;
-
     @Resource(name = "blAdminAuthenticationProvider")
     protected AuthenticationProvider authenticationProvider;
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring().requestMatchers(
-                antMatcher("/**/*.css"),
-                antMatcher("/**/*.js"),
-                antMatcher("/img/**"),
-                antMatcher("/fonts/**"),
-                antMatcher("/**/" + assetServerUrlPrefixInternal + "/**"),
-                antMatcher("/favicon.ico"),
-                antMatcher("/robots.txt")
+                "/css/**",
+                "/js/**",
+                "/img/**",
+                "/fonts/**",
+                "/" + assetServerUrlPrefixInternal + "/**",
+                "/favicon.ico",
+                "/robots.txt"
         );
     }
 
@@ -136,43 +129,51 @@ public class AdminSecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-                .authenticationProvider(authenticationProvider)
-                .csrf().disable()
-                .headers().frameOptions().disable().and()
-                .sessionManagement()
-                .enableSessionUrlRewriting(false)
-                .and()
-                .formLogin()
-                .permitAll()
-                .successHandler(successHandler)
-                .failureHandler(failureHandler)
-                .loginPage("/login")
-                .loginProcessingUrl("/login_admin_post")
-                .and()
-                .authorizeHttpRequests()
-                .requestMatchers("/sendResetPassword", "/forgotUsername", "/forgotPassword", "/resetPassword", "/login")
-                .permitAll()
-                .requestMatchers("/**")
-                .authenticated()
-                .and()
-                .requiresChannel()
-                .requestMatchers("/**")
-                .requiresSecure()
-                .and()
-                .logout()
-                .invalidateHttpSession(true)
-                .logoutUrl("/adminLogout.htm")
-                .logoutSuccessHandler(logoutSuccessHandler)
-                .and()
-                .portMapper()
-                .http(80).mapsTo(443)
-                .http(8080).mapsTo(8443)
-                .http(httpServerPort).mapsTo(httpsRedirectPort)
-                .and()
-                .addFilterBefore(adminCsrfFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilterAfter(new AdminContentSecurityPolicyFilter(getCSPHeader()), AdminSecurityFilter.class);
-        return http.build();
+            http
+                    .authenticationProvider(authenticationProvider)
+                    .csrf(AbstractHttpConfigurer::disable)
+                    .headers(headers -> headers.frameOptions().disable())
+                    .sessionManagement(
+                            sm -> {
+                                sm.sessionFixation(SessionManagementConfigurer.SessionFixationConfigurer::migrateSession);
+                                sm.enableSessionUrlRewriting(false);
+                            }
+                    )
+                    .formLogin(
+                            form -> form
+                                    .successHandler(successHandler)
+                                    .failureHandler(failureHandler)
+                                    .loginPage("/login")
+                                    .loginProcessingUrl("/login_admin_post")
+                    )
+                    .authorizeHttpRequests(
+                            req -> {
+                                req.requestMatchers("/global").hasRole("GLOBAL_ADMIN");
+                                req.requestMatchers("/sendResetPassword", "/forgotUsername", "/forgotPassword", "/resetPassword", "/login").permitAll();
+                                req.requestMatchers("/**").authenticated();
+                            }
+                    )
+                    .requiresChannel(
+                            channel -> channel
+                                    .requestMatchers("/**")
+                                    .requiresSecure()
+                    )
+                    .logout(
+                            logout -> logout
+                                    .invalidateHttpSession(true)
+                                    .deleteCookies("ActiveId")
+                                    .logoutUrl("/adminLogout.htm")
+                                    .logoutSuccessHandler(logoutSuccessHandler)
+                    )
+                    .portMapper(
+                            mapper -> mapper
+                                    .http(80).mapsTo(443)
+                                    .http(8080).mapsTo(8443)
+                                    .http(httpServerPort).mapsTo(httpsRedirectPort)
+                    )
+                    .addFilterBefore(adminCsrfFilter, UsernamePasswordAuthenticationFilter.class)
+                    .addFilterAfter(new AdminContentSecurityPolicyFilter(getCSPHeader()), AdminSecurityFilter.class);
+            return http.build();
     }
 
     /**

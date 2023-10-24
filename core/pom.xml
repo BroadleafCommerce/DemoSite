@@ -46,5 +46,10 @@
             <groupId>com.broadleafcommerce</groupId>
             <artifactId>broadleaf-boot-starter-hsql-database</artifactId>
         </dependency>
+        <dependency>
+            <groupId>net.bytebuddy</groupId>
+            <artifactId>byte-buddy</artifactId>
+            <version>1.14.8</version>
+        </dependency>
     </dependencies>
 </project>

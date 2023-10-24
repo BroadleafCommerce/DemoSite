@@ -34,6 +34,8 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.SessionManagementConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.RedirectStrategy;
@@ -45,10 +47,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Resource;
-import javax.servlet.Filter;
-
-import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
+import jakarta.annotation.Resource;
+import jakarta.servlet.Filter;
 
 /**
  * @author Elbert Bautista (elbertbautista)
@@ -112,13 +112,13 @@ public class SiteSecurityConfig {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring().requestMatchers(
-                antMatcher("/css/**"),
-                antMatcher("/fonts/**"),
-                antMatcher("/img/**"),
-                antMatcher("/js/**"),
-                antMatcher("/widget/js/**"),
-                antMatcher("/**/" + assetServerUrlPrefixInternal + "/**"),
-                antMatcher("/favicon.ico"));
+                "/css/**",
+                "/fonts/**",
+                "/img/**",
+                "/js/**",
+                "/widget/js/**",
+                "/" + assetServerUrlPrefixInternal + "/**",
+                "/favicon.ico");
     }
 
     @Bean
@@ -137,33 +137,38 @@ public class SiteSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf().disable()
-                .headers().frameOptions().disable().and()
-                .sessionManagement()
-                .sessionFixation()
-                .migrateSession()
-                .enableSessionUrlRewriting(false)
-                .and()
-                .formLogin()
-                .permitAll()
-                .successHandler(successHandler)
-                .failureHandler(failureHandler)
-                .loginPage("/login")
-                .loginProcessingUrl("/login_post.htm")
-                .and()
-                .authorizeHttpRequests()
-                .requestMatchers("/account/wishlist/**", "/account/**")
-                .authenticated()
-                .and()
-                .requiresChannel()
-                .requestMatchers("/**")
-                .requiresSecure()
-                .and()
-                .logout()
-                .invalidateHttpSession(true)
-                .deleteCookies("ActiveID")
-                .logoutUrl("/logout")
-                .and()
+                .csrf(AbstractHttpConfigurer::disable)
+                .headers(headers -> headers.frameOptions().disable())
+                .sessionManagement(
+                        sm -> {
+                            sm.sessionFixation(SessionManagementConfigurer.SessionFixationConfigurer::migrateSession);
+                            sm.enableSessionUrlRewriting(false);
+                        }
+                )
+                .formLogin(
+                        form -> form
+                                .successHandler(successHandler)
+                                .failureHandler(failureHandler)
+                                .loginPage("/login")
+                                .loginProcessingUrl("/login_post.htm")
+                )
+                .authorizeHttpRequests(
+                        req -> {
+                            req.requestMatchers("/account/**").authenticated();
+                            req.anyRequest().permitAll();
+                        }
+                )
+                .requiresChannel(
+                        channel -> channel
+                                .requestMatchers("/")
+                                .requiresSecure()
+                )
+                .logout(
+                        logout -> logout
+                                .invalidateHttpSession(true)
+                                .deleteCookies("ActiveId")
+                                .logoutUrl("/logout")
+                )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
