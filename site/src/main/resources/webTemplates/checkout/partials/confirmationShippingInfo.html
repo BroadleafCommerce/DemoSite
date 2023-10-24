@@ -24,13 +24,12 @@
                         <td align="center" th:utext="${item.quantity}"></td>
                         <td align="left">
                             <span th:utext="*{sku.name}"></span>
-                            <blc:product_option_display orderItem="${item.orderItem}" >
-                                <ul th:unless="${#lists.isEmpty(productOptionDisplayValues)}" class="js-productOptions productOptions">
+                            <ul th:unless="${#product_option_display.getDisplayValues(item).isEmpty()}" class="js-productOptions productOptions">
+                                <li th:each="entry: ${#product_option_display.getDisplayValues(item)}" th:if="${entry.key != ''}">
                                     <li th:each="entry: ${productOptionDisplayValues}">
                                         <span  th:utext="${entry.key} + ': ' + ${entry.value}"></span>
                                     </li>
                                 </ul>
-                            </blc:product_option_display>
                         </td>
                     </tr>
                     </tbody>
@@ -43,7 +42,7 @@
                 <div class="col-sm-6 read-only-shipping-address">
                     <h4><span th:utext="#{cart.shippingInformation}">Shipping Information</span></h4>
 
-                    <th:block th:include="~{partials/simpleAddress :: read-only}" th:with="address=*{address}"/>
+                    <th:block th:insert="~{partials/simpleAddress :: read-only}" th:with="address=*{address}"/>
                 </div>
                 <div class="col-sm-6 read-only-shipping-method">
                     <h4 th:utext="#{cart.shippingMethod}">Shipping Method</h4>

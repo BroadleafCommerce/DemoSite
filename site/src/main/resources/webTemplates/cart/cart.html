@@ -28,17 +28,17 @@
                     </div>
                 </div>
                 <div class="row" th:unless="${cart.itemCount == 0}">
-                    <th:block th:replace="cart/partials/cartProductRow" />
+                    <th:block th:replace="~{cart/partials/cartProductRow}" />
                 </div>
             </div>
         </div>
 
         <!-- Cart Summary -->
         <div class="col-md-4" th:unless="${#lists.isEmpty(cart.orderItems)}">
-            <th:block th:replace="cart/partials/cartPricingSummary" />
+            <th:block th:replace="~{cart/partials/cartPricingSummary}" />
 
             <!-- Promotion Codes -->
-            <th:block th:replace="checkout/partials/promoCodes" />
+            <th:block th:replace="~{checkout/partials/promoCodes}" />
         </div>
 
         <div id="blc-extra-data" class="is-hidden" th:utext="${blcextradata}" th:if="${!#strings.isEmpty(blcextradata)}"></div>

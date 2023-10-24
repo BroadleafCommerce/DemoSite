@@ -16,14 +16,11 @@
             <span th:utext="*{name}"></span>
         </div>
 
-        <blc:product_option_display orderItem="${item}">
-            <ul class="product-option-list">
-                <!-- Product Options -->
-                <li th:each="entry: ${productOptionDisplayValues}" th:unless="${#lists.isEmpty(productOptionDisplayValues)}">
-                    <span th:utext="${entry.key} + ': ' + ${entry.value}"></span>
-                </li>
-            </ul>
-        </blc:product_option_display>
+        <ul class="product-option-list">
+            <!-- Product Options -->
+            <li th:each="entry: ${#product_option_display.getDisplayValues(item)}" th:unless="${#product_option_display.getDisplayValues(item).isEmpty()}">
+            </li>
+        </ul>
 
         <!-- Per Unit Price -->
         <span blc:price="*{getPriceBeforeAdjustments(true, true)}" class="mini-cart-item-price"></span>
@@ -33,7 +30,7 @@
         <ul th:unless="${excludeOrderItemActions}" class="mini-cart-item-actions">
             <li>
                 <th:block th:if="${item instanceof T(org.broadleafcommerce.core.order.domain.DiscreteOrderItem)}">
-                    <th:block th:replace="checkout/partials/orderItemConfigureMessaging" />
+                    <th:block th:replace="~{checkout/partials/orderItemConfigureMessaging}" />
                 </th:block>
 
                 <th:block th:if="${item instanceof T(org.broadleafcommerce.core.order.domain.DiscreteOrderItem)}">

@@ -139,7 +139,7 @@
                         <input type="text" th:field="*{address.city}" class="field25 required" th:classappend="${#fields.hasErrors('address.city')}? 'fieldError'" />
                         <select id="state" th:field="*{address.stateProvinceRegion}" size="1" style="width: 48px;" class="required" th:classappend="${#fields.hasErrors('address.stateProvinceRegion')}? 'fieldError'">
                             <option value="">--</option>
-                            <option th:each="state : ${#address.getStateOptions()}" th:value="${state.abbreviation}" th:utext="${state.abbreviation}"></option>
+                            <option th:each="state : ${#address.getCountrySubOptionsByCountryAbbrev('US')}" th:value="${state.alternateAbbreviation}" th:utext="${state.alternateAbbreviation}"></option>
                         </select>
                     </div>
                     <div class="form25 margin20">

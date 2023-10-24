@@ -2,9 +2,9 @@
      xmlns:th="http://www.w3.org/1999/xhtml" xmlns:layout="http://www.w3.org/1999/xhtml">
 
     <head layout:fragment="custom-head">
-        <th:block th:include="seo/partials/seoMetaProperties" th:with="metaProperties=${#seo.getMetaProperties(product)}" />
+        <th:block th:insert="~{seo/partials/seoMetaProperties}" th:with="metaProperties=${#seo.getMetaProperties(product)}" />
 
-        <th:block th:include="layout/partials/head" th:with="hasMetaDesc=${true}"/>
+        <th:block th:insert="~{layout/partials/head}" th:with="hasMetaDesc=${true}"/>
     </head>
 
 
@@ -108,7 +108,7 @@
                     <h3 th:utext="*{name}"></h3>
                     <div id="maker" th:utext="*{manufacturer}"></div>
                     <!-- Item price -->
-                    <th:block th:include="catalog/partials/productPrice"/>
+                    <th:block th:insert="~{catalog/partials/productPrice}"/>
                     <!-- Promo Message -->
                     <th:block
                             th:with="promoMessages=${#promotion_messages.getProductPromotionMessages(product, 'PRODUCT_DETAIL')}">
@@ -117,14 +117,14 @@
                         </div>
                     </th:block>
                     <!-- Insert product options -->
-                    <div class="js-productOptions productOptions" th:replace="catalog/partials/productOptions"></div>
+                    <div class="js-productOptions productOptions" th:replace="~{catalog/partials/productOptions}"></div>
                     <!-- Form for adding product to cart -->
                     <!-- Section for buttons (buy now, out of stock, in cart, inventory notifications) -->
                     <div class="row">
-                        <th:block th:include="catalog/partials/productOperations"/>
+                        <th:block th:insert="~{catalog/partials/productOperations}"/>
                     </div>
                     <!-- Social media buttons -->
-                    <th:block th:include="catalog/partials/socialMediaButtons"/>
+                    <th:block th:insert="~{catalog/partials/socialMediaButtons}"/>
                     <!-- Product description -->
                     <div id="accordion" class="panel-group" role="tablist" aria-multiselectable="true">
                         <div class="panel panel-border panel-default">
@@ -153,7 +153,7 @@
         <hr/>
 
         <div class="row">
-            <div th:include="catalog/partials/productReviews"></div>
+            <div th:insert="~{catalog/partials/productReviews}"></div>
         </div>
 
         <hr/>
@@ -166,7 +166,7 @@
                     <h3 class="text-center" th:text="#{category.featuredProducts}"></h3>
                     <div class="row">
                         <div class="col-sm-6 col-md-3" th:each="product : ${relatedProducts}" th:object="${product}"
-                             th:include="catalog/partials/productListItem"
+                             th:insert="~{catalog/partials/productListItem}"
                              th:if="${product.isActive()}">
                         </div>
                     </div>

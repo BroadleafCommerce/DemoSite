@@ -12,7 +12,7 @@
 
                 <th:block th:each="payment : ${order.payments}">
                     <th:block th:if="${payment.isActive()}">
-                        <th:block th:include="~{partials/simpleAddress :: read-only}" th:with="address=${payment.billingAddress}"/>
+                        <th:block th:insert="~{partials/simpleAddress :: read-only}" th:with="address=${payment.billingAddress}"/>
                         <address th:utext="${order.emailAddress}"></address>
                     </th:block>
                 </th:block>
@@ -24,7 +24,7 @@
                 <th:block class="payment_method" th:each="payment : ${order.payments}" th:object="${payment}" th:inline="text">
                     <div th:if="${payment.isActive()}" class="confirmation-order-payment">
                         <th:block th:if="${payment.initialTransaction != null} and !*{#strings.isEmpty(initialTransaction.additionalFields['CARD_TYPE'])}">
-                            <th:block th:include="~{partials/creditCard :: read-only}"
+                            <th:block th:insert="~{partials/creditCard :: read-only}"
                                       th:with="cardType=*{initialTransaction.additionalFields['CARD_TYPE']},
                                                 lastFour=*{initialTransaction.additionalFields['LAST_FOUR']},
                                                 expDate=*{initialTransaction.additionalFields['EXP_DATE']}" />
@@ -37,7 +37,7 @@
 
                         <th:block th:if="${payment.authorizeTransaction != null} and !*{#strings.isEmpty(authorizeTransaction.additionalFields['CARD_TYPE'])}"
                                   th:unless="${payment.initialTransaction != null} and !*{#strings.isEmpty(initialTransaction.additionalFields['CARD_TYPE'])}">
-                            <th:block th:include="~{partials/creditCard :: read-only}"
+                            <th:block th:insert="~{partials/creditCard :: read-only}"
                                       th:with="cardType=*{authorizeTransaction.additionalFields['CARD_TYPE']},
                                                 lastFour=*{authorizeTransaction.additionalFields['LAST_FOUR']},
                                                 expDate=*{authorizeTransaction.additionalFields['EXP_DATE']}" />

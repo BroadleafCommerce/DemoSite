@@ -12,6 +12,6 @@
         </div>
     </div>
     <ul class="cart-item-summary">
-        <th:block th:include="checkout/partials/miniCartItemList" th:with="excludeOrderItemActions=${true}" />
+        <th:block th:insert="~{checkout/partials/miniCartItemList}" th:with="excludeOrderItemActions=${true}" />
     </ul>
 </div>

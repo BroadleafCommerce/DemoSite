@@ -81,20 +81,19 @@
                 <div th:each="message : ${item.cartMessages}" class="promotion-message">
                     <span th:text="${message}"></span>
                 </div>
-                <blc:product_option_display orderItem="${item}">
                     <ul>
                         <!-- Product Options -->
-                        <li th:each="entry: ${productOptionDisplayValues}" th:unless="${#lists.isEmpty(productOptionDisplayValues)}">
+                        <li th:each="entry: ${#product_option_display.getDisplayValues(item)}" th:unless="${#product_option_display.getDisplayValues(item).isEmpty()}">
                             <span th:utext="${entry.key} + ': ' + ${entry.value}"></span>
                         </li>
 
                         <!-- Bundled Products -->
-                        <li th:replace="cart/partials/cartBundledProducts"></li>
+                        <li th:replace="~{cart/partials/cartBundledProducts}"></li>
 
                         <!-- Item Actions -->
                         <li class="mini-cart-item-actions">
                             <th:block th:if="${item instanceof T(org.broadleafcommerce.core.order.domain.DiscreteOrderItem)}">
-                                <th:block th:replace="checkout/partials/orderItemConfigureMessaging" />
+                                <th:block th:replace="~{checkout/partials/orderItemConfigureMessaging}" />
                             </th:block>
 
                             <th:block th:if="${item instanceof T(org.broadleafcommerce.core.order.domain.DiscreteOrderItem)}">
@@ -109,7 +108,6 @@
                             </th:block>
                         </li>
                     </ul>
-                </blc:product_option_display>
 
                 <!-- Applied Promotions -->
                 <div th:unless="*{adjustmentValue.zero}" class="product-promotion-row">

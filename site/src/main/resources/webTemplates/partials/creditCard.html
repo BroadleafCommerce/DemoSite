@@ -37,12 +37,12 @@
 <th:block th:fragment="form-inputs">
     <div class="js-creditCardData">
         <blc:credit_card_types>
-            <div class="row" th:if="${paymentGatewayCardTypes != null}">
+            <div class="row" th:if="${#credit_card_types.getTypes() != null}">
                 <div class="col-sm-12">
                     <div class="form-group label-floating">
                         <label class="control-label" for="cartType" th:utext="#{cart.firstName}"></label>
                         <select id="cartType" class="form-control" th:name="${#paymentGatewayField.mapName('creditCard.creditCardType')}">
-                            <option th:each="entry : ${paymentGatewayCardTypes}" th:value="${entry.key}" th:utext="${entry.value}"></option>
+                            <option th:each="entry : ${#credit_card_types.getTypes()}" th:value="${entry.key}" th:utext="${entry.value}"></option>
                         </select>
                     </div>
                 </div>

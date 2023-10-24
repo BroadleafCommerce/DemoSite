@@ -138,7 +138,7 @@
                                     <h6 th:utext="#{account.orders.paymentMethod}">Payment Method</h6>
 
                                     <th:block th:if="${payment.initialTransaction != null} and !*{#strings.isEmpty(initialTransaction.additionalFields['CARD_TYPE'])}">
-                                        <th:block th:include="~{partials/creditCard :: read-only}"
+                                        <th:block th:insert="~{partials/creditCard :: read-only}"
                                                   th:with="cardType=*{initialTransaction.additionalFields['CARD_TYPE']},
                                                 lastFour=*{initialTransaction.additionalFields['LAST_FOUR']},
                                                 expDate=*{initialTransaction.additionalFields['EXP_DATE']}" />
@@ -150,7 +150,7 @@
 
                                     <th:block th:if="${payment.authorizeTransaction != null} and !*{#strings.isEmpty(authorizeTransaction.additionalFields['CARD_TYPE'])}"
                                               th:unless="${payment.initialTransaction != null} and !*{#strings.isEmpty(initialTransaction.additionalFields['CARD_TYPE'])}">
-                                        <th:block th:include="~{partials/creditCard :: read-only}"
+                                        <th:block th:insert="~{partials/creditCard :: read-only}"
                                                   th:with="cardType=*{authorizeTransaction.additionalFields['CARD_TYPE']},
                                                 lastFour=*{authorizeTransaction.additionalFields['LAST_FOUR']},
                                                 expDate=*{authorizeTransaction.additionalFields['EXP_DATE']}" />
@@ -163,7 +163,7 @@
                                 <div class="col-md-6" th:if="*{type.type == 'CREDIT_CARD'} and ${payment.initialTransaction != null}">
                                     <h6 th:utext="#{account.orders.billingAddress}">Billing Address</h6>
                                     <div th:if="*{billingAddress}">
-                                        <th:block th:include="~{partials/simpleAddress :: read-only}" th:with="address=*{billingAddress}"/>
+                                        <th:block th:insert="~{partials/simpleAddress :: read-only}" th:with="address=*{billingAddress}"/>
                                     </div>
                                     <div th:unless="*{billingAddress}">
                                         <p>The billing address is not listed.</p>
