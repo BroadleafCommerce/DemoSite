@@ -2,7 +2,7 @@
     <div th:if="${product != null}" th:object="${product}" class="breadcrumb-container">
         <a th:href="@{/}" th:utext="#{home.home}"></a>
         <th:block th:each="parentCategory : *{category.allParentCategoryXrefs}">
-            <th:block th:include="~{layout/partials/breadcrumbs :: grand-parents}" th:with="cat=${parentCategory.category}" />
+            <th:block th:insert="~{layout/partials/breadcrumbs :: grand-parents}" th:with="cat=${parentCategory.category}" />
             /
             <a th:href="@{${parentCategory.category.url}}" th:utext="#{${parentCategory.category.name}}"></a>
         </th:block>
@@ -13,7 +13,7 @@
     <div th:if="${category != null}" th:object="${category}" class="breadcrumb-container">
         <a th:href="@{/}" th:utext="#{home.home}"></a>
         <th:block th:each="parentCategory : *{allParentCategoryXrefs}">
-            <th:block th:include="~{layout/partials/breadcrumbs :: grand-parents}" th:with="cat=${parentCategory.category}" />
+            <th:block th:insert="~{layout/partials/breadcrumbs :: grand-parents}" th:with="cat=${parentCategory.category}" />
             /
             <a th:href="@{${parentCategory.category.url}}" th:utext="#{${parentCategory.category.name}}"></a>
         </th:block>
@@ -22,7 +22,7 @@
 
 <th:block th:fragment="grand-parents">
     <th:block th:each="parentCategory : ${cat.allParentCategoryXrefs}">
-        <th:block th:include="~{layout/partials/breadcrumbs :: grand-parents}" th:with="cat=${parentCategory.category}" />
+        <th:block th:insert="~{layout/partials/breadcrumbs :: grand-parents}" th:with="cat=${parentCategory.category}" />
         /
         <a th:href="@{${parentCategory.category.url}}" th:utext="#{${parentCategory.category.name}}"></a>
     </th:block>

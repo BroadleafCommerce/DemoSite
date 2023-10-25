@@ -23,7 +23,7 @@
 
             <!-- Mega-Menu Dropdown -->
             <li th:if="${#strings.isEmpty(menuItem.categoryId)}" class="mega-dropdown dropdown">
-                <th:block th:replace="@{layout/partials/navMegaMenu}" />
+                <th:block th:replace="~{@{layout/partials/navMegaMenu}}" />
             </li>
         </th:block>
     </th:block>

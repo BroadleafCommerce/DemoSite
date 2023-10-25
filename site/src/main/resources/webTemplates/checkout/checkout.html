@@ -39,18 +39,18 @@
             </div>
 
             <div class="col-md-8">
-                <th:block th:replace="checkout/partials/checkoutStages" />
+                <th:block th:replace="~{checkout/partials/checkoutStages}" />
             </div>
 
             <div class="col-md-4" th:unless="${#lists.isEmpty(cart.orderItems)}">
-                <th:block th:replace="cart/partials/cartPricingSummary" />
+                <th:block th:replace="~{cart/partials/cartPricingSummary}" />
 
-                <th:block th:replace="cart/partials/cartItemSummary" />
+                <th:block th:replace="~{cart/partials/cartItemSummary}" />
 
-                <th:block th:replace="checkout/partials/promoCodes" />
+                <th:block th:replace="~{checkout/partials/promoCodes}" />
 
                 <th:block th:if="${#module.isPresent('Gift Cards and Customer Credit (AccountCredit)')}">
-                    <th:block th:replace="checkout/partials/accountCreditForm" />
+                    <th:block th:replace="~{checkout/partials/accountCreditForm}" />
                 </th:block>
             </div>
         </th:block>

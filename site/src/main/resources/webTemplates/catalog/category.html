@@ -1,9 +1,9 @@
 <th:block layout:decorate="~{layout/fullPageLayout}">
 
     <head layout:fragment="custom-head">
-        <th:block th:include="seo/partials/seoMetaProperties" th:with="metaProperties=${#seo.getMetaProperties(category)}" />
+        <th:block th:insert="~{seo/partials/seoMetaProperties}" th:with="metaProperties=${#seo.getMetaProperties(category)}" />
 
-        <th:block th:include="layout/partials/head" th:with="hasMetaDesc=${true}"></th:block>
+        <th:block th:insert="~{layout/partials/head}" th:with="hasMetaDesc=${true}"></th:block>
     </head>
 
     <div layout:fragment="content" id="category" class="ecommerce-page" th:fragment="ajax">
@@ -31,7 +31,7 @@
             <div id="left_column" class="left-column col-md-3">
                 <div blc:cache="true" cacheCategory="true">
                     <div id="options" class="ecommerce-page">
-                        <div th:include="catalog/partials/facetFilter"></div>
+                        <div th:insert="~{catalog/partials/facetFilter}"></div>
                         <div class="js-rightHandBannerAdsPlaceholder"></div>
                     </div>
                 </div>
@@ -42,15 +42,15 @@
             <div class="col-md-9" id="right_column" blc:cache="true" cacheCategory="true">
                 <div th:if="${products}" id="products" class="products row">
                     <div th:each="product : ${products}" th:object="${product}"
-                         th:include="catalog/partials/productListItem" class="col-md-4"></div>
+                         th:insert="~{catalog/partials/productListItem}" class="col-md-4"></div>
                 </div>
 
                 <ul th:if="${skus}" id="products" class="products js-products group">
-                    <li th:each="sku : ${skus}" th:object="${sku}" th:include="catalog/partials/skuListItem"
+                    <li th:each="sku : ${skus}" th:object="${sku}" th:insert="~{catalog/partials/skuListItem}"
                         class="js-productContainer productContainer"></li>
                 </ul>
 
-                <div th:include="catalog/partials/productPagingOptions"></div>
+                <div th:insert="~{catalog/partials/productPagingOptions}"></div>
 
             </div>
             <!--End of List of Products-->
@@ -66,7 +66,7 @@
                     <h3 class="title text-center" th:text="#{category.featuredProducts}"></h3>
                     <div class="row row-centered">
                         <div class="col-sm-6 col-md-3 col-centered" th:each="product : ${relatedProducts}" th:object="${product}"
-                             th:include="catalog/partials/relatedProduct"
+                             th:insert="~{catalog/partials/relatedProduct}"
                              th:if="${product.isActive()}">
                         </div>
                     </div>
@@ -77,6 +77,6 @@
 
     </div>
 
-    <div layout:fragment="post-content" th:replace="catalog/partials/rightHandBannerAds"></div>
+    <div layout:fragment="post-content" th:replace="~{catalog/partials/rightHandBannerAds}"></div>
 
 </th:block>

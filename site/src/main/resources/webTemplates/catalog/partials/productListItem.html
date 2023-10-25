@@ -16,7 +16,7 @@
             </div>
         </a>
 
-        <th:block th:replace="@{catalog/partials/productListItemHoverActions.html}" />
+        <th:block th:replace="~{@{catalog/partials/productListItemHoverActions.html}}" />
 
         <div class="card-content product-card">
             <h4 class="card-title product-title">
@@ -45,7 +45,7 @@
                     </div>
                 </div>
 
-                <th:block th:include="catalog/partials/wishlistButton" th:with="isCondensedProductView=${true}" />
+                <th:block th:insert="~{catalog/partials/wishlistButton}" th:with="isCondensedProductView=${true}" />
 
                 <!--In Cart-->
                 <div class="js-inCartLinkContainer in-cart-link-container is-hidden">

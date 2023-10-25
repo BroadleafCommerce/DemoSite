@@ -1,9 +1,7 @@
 <div class="js-productOptions" th:fragment="productOptions">
 
-    <blc:product_options productId="*{id}"></blc:product_options>
-
     <div class="js-productOptionData row pick-size" hidden="hidden"
-         th:attr="data-product-option-pricing=${skuPricing}, data-product-options=${allProductOptions}"></div>
+         th:attr="data-product-option-pricing=${#product_options.getData(product.id).get('skuPricing')}, data-product-options=${#product_options.getData(product.id).get('allProductOptions')}"></div>
 
     <div th:each="productOption : *{productOptions}" th:object="${productOption}" class="js-productOptionGroup product-options">
 

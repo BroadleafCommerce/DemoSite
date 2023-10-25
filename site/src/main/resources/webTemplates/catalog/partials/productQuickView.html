@@ -48,7 +48,7 @@
                         <h3 class="modal-title" th:utext="*{name}"></h3>
                         <p id="maker" th:utext="*{manufacturer}"></p>
                         <!-- Item price -->
-                        <th:block th:include="catalog/partials/productPrice" />
+                        <th:block th:insert="~{catalog/partials/productPrice}" />
                         <!-- Promo Message -->
                         <th:block th:with="promoMessages=${#promotion_messages.getProductPromotionMessages(product, 'PRODUCT_DETAIL')}">
                             <div class="promotion-message" th:unless="${#lists.isEmpty(promoMessages)}">
@@ -56,12 +56,12 @@
                             </div>
                         </th:block>
                         <!-- Insert product options -->
-                        <div class="js-productOptions productOptions" th:replace="catalog/partials/productOptions"></div>
+                        <div class="js-productOptions productOptions" th:replace="~{catalog/partials/productOptions}"></div>
                         <!-- Social media buttons -->
-                        <th:block th:include="catalog/partials/socialMediaButtons" />
+                        <th:block th:insert="~{catalog/partials/socialMediaButtons}" />
                         <div class="row">
                             <!-- Product Actions -->
-                            <th:block th:include="catalog/partials/productOperations" />
+                            <th:block th:insert="~{catalog/partials/productOperations}" />
                         </div>
                     </div>
                 </div>

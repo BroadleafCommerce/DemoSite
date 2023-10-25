@@ -6,7 +6,7 @@
 
 <head>
     <title layout:title-pattern="'Error - ' + $LAYOUT_TITLE - $CONTENT_TITLE">Error - Broadleaf Commerce Demo Store - Heat Clinic</title>
-    <th:block th:replace="layout/partials/head" />
+    <th:block th:replace="~{layout/partials/head}" />
 </head>
 
 <body th:class="${'locale-' + session.blLocale.localeCode}">

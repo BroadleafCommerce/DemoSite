@@ -14,7 +14,7 @@
                     </button>
                 </div>
 
-                <th:block th:include="~{partials/creditCard :: read-only}"
+                <th:block th:insert="~{partials/creditCard :: read-only}"
                           th:with="cardType=${payment.getAdditionalFields().get('CARD_TYPE')},
                                    lastFour=${payment.getAdditionalFields().get('LAST_FOUR')},
                                    expDate=${payment.getAdditionalFields().get('EXP_DATE')}" />

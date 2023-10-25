@@ -1,8 +1,8 @@
 <th:block layout:decorate="~{layout/fullPageLayout}">
     <head layout:fragment="custom-head">
-        <th:block th:include="seo/partials/seoMetaProperties" th:with="metaProperties=${#seo.getMetaProperties(BLC_PAGE)}" />
+        <th:block th:insert="~{seo/partials/seoMetaProperties}" th:with="metaProperties=${#seo.getMetaProperties(BLC_PAGE)}" />
 
-        <th:block th:include="layout/partials/head" th:with="hasMetaDesc=${true}"/>
+        <th:block th:insert="~{layout/partials/head}" th:with="hasMetaDesc=${true}"/>
     </head>
 
     <div layout:fragment="content">
@@ -25,7 +25,7 @@
             <h3 class="text-center" th:text="#{category.featuredProducts}"></h3>
             <div class="row">
                 <div class="col-sm-6 col-md-3" th:each="product : ${relatedProducts}" th:object="${product}"
-                     th:include="catalog/partials/productListItem"
+                     th:insert="~{catalog/partials/productListItem}"
                      th:if="${product.isActive()}">
                 </div>
             </div>

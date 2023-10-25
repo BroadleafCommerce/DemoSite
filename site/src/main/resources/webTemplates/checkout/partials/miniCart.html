@@ -4,7 +4,7 @@
         <span class="cart-count-badge js-cartItemsCount" th:if="${cart.itemCount > 0}" th:utext="${cart.itemCount}"></span>
     </a>
     <ul class="dropdown-menu mini-cart-wrapper">
-        <th:block th:replace="checkout/partials/miniCartItemList" />
+        <th:block th:replace="~{checkout/partials/miniCartItemList}" />
 
         <th:block th:unless="${cart.itemCount == 0}">
             <!-- Mini Cart Subtotal -->

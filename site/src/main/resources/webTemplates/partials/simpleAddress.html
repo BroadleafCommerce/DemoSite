@@ -75,9 +75,9 @@
                 <label class="control-label" for="stateProvinceRegion" th:utext="#{cart.state}"></label>
                 <select id="stateProvinceRegion" th:field="*{address.stateProvinceRegion}" class="js-clearable form-control">
                     <option value=""></option>
-                    <option th:each="state : ${#address.getStateOptions()}"
-                            th:value="${state.abbreviation}"
-                            th:utext="${state.abbreviation}"></option>
+                    <option th:each="state : ${#address.getCountrySubOptionsByCountryAbbrev('US')}"
+                            th:value="${state.alternateAbbreviation}"
+                            th:utext="${state.alternateAbbreviation}"></option>
                 </select>
                 <span class="text-danger" th:if="${#fields.hasErrors('address.stateProvinceRegion')}" th:errors="*{address.stateProvinceRegion}"></span>
             </div>

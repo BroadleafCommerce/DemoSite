@@ -6,7 +6,7 @@
     <div id="order_confirmation" class="order-confirmation row" layout:fragment="content">
         <div class="col-lg-12">
             <div class="card confirmation-card">
-                <th:block th:replace="checkout/partials/confirmationMessages" />
+                <th:block th:replace="~{checkout/partials/confirmationMessages}" />
             </div>
         </div>
 
@@ -19,9 +19,9 @@
         </div>
 
         <div class="col-lg-4" th:with="cart=${order}">
-            <th:block th:replace="cart/partials/cartPricingSummary" />
+            <th:block th:replace="~{cart/partials/cartPricingSummary}" />
 
-            <th:block th:replace="cart/partials/cartItemSummary" />
+            <th:block th:replace="~{cart/partials/cartItemSummary}" />
         </div>
     </div>
 

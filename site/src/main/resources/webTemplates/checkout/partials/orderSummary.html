@@ -30,9 +30,10 @@
                 <td align="left">
                     <a th:href="@{*{product.url}}" th:utext="*{product.name}"></a>
                     <br/>
-                    <div th:replace="checkout/partials/orderItemConfigureMessaging"></div>
+                    <div th:replace="~{checkout/partials/orderItemConfigureMessaging}"></div>
                     <blc:product_option_display orderItem="${item}" >
-                        <ul th:unless="${#lists.isEmpty(productOptionDisplayValues)}" class="js-productOptions productOptions">
+                        <ul th:unless="${#product_option_display.getDisplayValues(item).isEmpty()}" class="js-productOptions productOptions">
+                            <li th:each="entry: ${#product_option_display.getDisplayValues(item)}">
                             <li th:each="entry: ${productOptionDisplayValues}">
                                 <span  th:utext="${entry.key} + ': ' + ${entry.value}"></span>
                             </li>
@@ -48,7 +49,7 @@
 
                 <td align="center" class="discount" th:unless="*{adjustmentValue.zero}" >
                     <span  align="center"  blc:price="*{totalAdjustmentValue}" class="promotion" ></span>
-                    <div class="js-productOptions productOptions" th:replace="catalog/partials/offers :: offers"></div>
+                    <div class="js-productOptions productOptions" th:replace="~{catalog/partials/offers :: offers}"></div>
 
                 </td>
                 <td align="center" class="value" blc:price="*{totalPrice}"></td>

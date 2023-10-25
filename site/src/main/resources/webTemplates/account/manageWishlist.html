@@ -7,7 +7,7 @@
            th:utext="#{account.wishlist.noItems}">You do not have any items in your wishlist.</p>
 
         <div class="col-sm-12" th:if="${wishlist != null and !#lists.isEmpty(wishlist.discreteOrderItems)}">
-            <th:block th:include="account/partials/wishlistItemsRow"/>
+            <th:block th:insert="~{account/partials/wishlistItemsRow}"/>
 
             <blc:form method="POST" th:action="@{/account/wishlist/moveListToCart}">
                 <div class="pull-right">
