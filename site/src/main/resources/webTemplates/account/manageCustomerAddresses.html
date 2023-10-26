@@ -18,7 +18,7 @@
                 <div class="col-sm-6 js-manage-address-entry">
                     <th:block th:if="${#module.isPresent('i18n Enterprise') and false}">
                         <blc:dynamic_regional_form th:object="${customerAddressForm}"
-                                                   th:action="@{'/account/addresses/' + ${customerAddressForm.customerAddressId != null ? customerAddressForm.customerAddressId : ''}}"
+                                                   th:action="@{'/account/addresses' + ${customerAddressForm.customerAddressId != null ? '/' + customerAddressForm.customerAddressId : ''}}"
                                                    th:country="${customerAddressForm.address.isoCountryAlpha2?.alpha2}"
                                                    name="CUSTOMER_ADDRESS_FORM"
                                                    method="post">
@@ -290,7 +290,7 @@
                     <th:block th:unless="${#module.isPresent('i18n Enterprise') and false}">
                         <blc:form class="manage-account"
                                   method="post"
-                                  th:action="@{'/account/addresses/' + ${customerAddressForm.customerAddressId != null ? customerAddressForm.customerAddressId : ''}}"
+                                  th:action="@{'/account/addresses' + ${customerAddressForm.customerAddressId != null ? '/' + customerAddressForm.customerAddressId : ''}}"
                                   th:object="${customerAddressForm}">
 
                             <div class="row">
