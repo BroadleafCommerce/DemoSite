@@ -36,8 +36,8 @@
                         <td align="left">
                             <span th:utext="*{sku.name}"></span>
 
-                            <blc:product_option_display orderItem="${item.orderItem}" >
-                                <ul th:unless="${#lists.isEmpty(productOptionDisplayValues)}" class="js-productOptions productOptions">
+                            <ul th:unless="${#product_option_display.getDisplayValues(item).isEmpty()}" class="js-productOptions productOptions">
+                                <li th:each="entry: ${#product_option_display.getDisplayValues(item)}">
                                     <li th:each="entry: ${productOptionDisplayValues}">
                                         <span  th:utext="${entry.key} + ': ' + ${entry.value}"></span>
                                     </li>

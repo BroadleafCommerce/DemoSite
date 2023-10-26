@@ -8,12 +8,12 @@
     <title layout:title-pattern="$LAYOUT_TITLE - $CONTENT_TITLE">
         Broadleaf Commerce Demo Store - Heat Clinic
     </title>
-    <th:block th:include="layout/partials/head" />
+    <th:block th:insert="~{layout/partials/head}" />
 </head>
 
 <body th:class="${'locale-' + session.blLocale.localeCode} + ' index-page'">
     <div id="notification_bar"></div>
-    <div th:replace="layout/partials/nav"></div>
+    <div th:replace="~{layout/partials/nav}"></div>
     <div class="main checkout-page">
         <div class="container">
             <div layout:fragment="content" ></div>
@@ -22,7 +22,7 @@
 
     <th:block layout:fragment="post-content" />
 
-    <footer th:replace="layout/partials/footer"></footer>
+    <footer th:replace="~{layout/partials/footer}"></footer>
 
 </body>
 </html>

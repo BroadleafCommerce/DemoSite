@@ -47,7 +47,7 @@
             <div class="col-sm-6">
                 <h4><span th:utext="#{cart.billingInformation}">Billing Information</span></h4>
 
-                <th:block th:include="~{partials/simpleAddress :: read-only}" th:with="address=*{address}"/>
+                <th:block th:insert="~{partials/simpleAddress :: read-only}" th:with="address=*{address}"/>
             </div>
         </div>
     </th:block>
@@ -382,7 +382,7 @@
             </div>
 
             <div class="js-customAddress" th:classappend="${#lists.size(customer.customerAddresses) > 0 and not hasErrors} ? 'is-hidden'">
-                <th:block th:include="~{partials/simpleAddress :: form-inputs}" />
+                <th:block th:insert="~{partials/simpleAddress :: form-inputs}" />
             </div>
         </div>
 

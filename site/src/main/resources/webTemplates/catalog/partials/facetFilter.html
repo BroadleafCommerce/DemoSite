@@ -7,7 +7,7 @@
     <th:block th:fragment="search-facet-filter">
         <div class="card card-refine card-plain">
             <div class="card-content">
-                <div th:include="catalog/partials/productSortOptions"></div>
+                <div th:insert="~{catalog/partials/productSortOptions}"></div>
                 <h4 class="card-title" th:utext="#{category.filterResults}"> </h4>
                 <!-- Active facets -->
                 <div th:each="facetDto,iter : ${facets}"  class="panel panel-default filter-panel js-filter-panel">

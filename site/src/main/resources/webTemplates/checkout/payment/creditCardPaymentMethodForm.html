@@ -3,7 +3,7 @@
         <div class="col-sm-6">
             <h4><span th:utext="#{cart.billingInformation}">Billing Information</span></h4>
 
-            <th:block th:include="~{partials/simpleAddress :: read-only}" th:with="address=${paymentInfoForm.address}"/>
+            <th:block th:insert="~{partials/simpleAddress :: read-only}" th:with="address=${paymentInfoForm.address}"/>
             <address th:utext="${paymentInfoForm.emailAddress}"></address>
 
         </div>
@@ -12,14 +12,14 @@
             <h4><span th:utext="#{account.payments.paymentFormTitle}">Payment Information</span></h4>
 
             <th:block th:if="${paymentInfoForm.shouldUseCustomerPayment}">
-                <th:block th:include="~{partials/creditCard :: read-only}"
+                <th:block th:insert="~{partials/creditCard :: read-only}"
                           th:with="cardType=${#paymentMethod.getCreditCardTypeFromCart()},
                                     lastFour=${#paymentMethod.getCreditCardLastFourFromCart()},
                                     expDate=${#paymentMethod.getCreditCardExpDateFromCart()}" />
             </th:block>
 
             <th:block th:unless="${paymentInfoForm.shouldUseCustomerPayment}">
-                <th:block th:include="~{partials/creditCard :: hidden-read-only}" />
+                <th:block th:insert="~{partials/creditCard :: hidden-read-only}" />
             </th:block>
         </div>
     </div>

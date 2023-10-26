@@ -15,7 +15,7 @@
                 <b class="caret"></b>
             </a>
             <ul class="dropdown-menu"
-                th:with="urlBuilder=${T(org.springframework.web.servlet.support.ServletUriComponentsBuilder).fromCurrentRequest()}">
+                th:with="urlBuilder=${#httpServletRequest.uriBuilderFromCurrentRequest()}">
 
                 <li><a th:href="${urlBuilder.replaceQueryParam('sort').toUriString()}"
                        th:unless="${param.sort == null}"

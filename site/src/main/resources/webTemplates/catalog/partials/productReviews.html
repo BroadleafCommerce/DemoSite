@@ -127,6 +127,6 @@
     <!-- New review form -->
     <div th:if="${customer.loggedIn and currentCustomerReview == null}" id="review-form"
          style="display: none">
-        <div th:replace="catalog/partials/review"></div>
+        <div th:replace="~{catalog/partials/review}"></div>
     </div>
 </div>

@@ -1,6 +1,5 @@
 <th:block th:with="isCondensedProductView=${isCondensedProductView != null}">
 
-    <blc:named_order orderVar="wishlist" orderName="wishlist"></blc:named_order>
     <div class="wishlist-button-container js-inWishListLinkContainer"
          th:classappend="${!#named_order.getWishlist().containsSku(product.defaultSku)}? ' is-hidden'">
         <a th:href="@{/account/wishlist}" class="small-button btn btn-simple wishlist-btn is-inWishlist"

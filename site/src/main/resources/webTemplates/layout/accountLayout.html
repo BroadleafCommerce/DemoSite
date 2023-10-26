@@ -11,7 +11,7 @@
 <head>
     <title layout:title-pattern="$LAYOUT_TITLE - $CONTENT_TITLE">Broadleaf Commerce Demo Store - Heat Clinic -
         Account</title>
-    <th:block th:replace="layout/partials/head" />
+    <th:block th:replace="~{layout/partials/head}" />
 </head>
 
 <body th:class="${'locale-' + session.blLocale.localeCode}">
@@ -19,13 +19,13 @@
 
 <div id="content" class="width_setter group" role="main">
 
-    <nav th:replace="layout/partials/nav"></nav>
+    <nav th:replace="~{layout/partials/nav}"></nav>
 
     <div class="main account-page">
         <div class="section">
             <div class="container">
 
-                <ul th:replace="account/partials/accountMenu"></ul>
+                <ul th:replace="~{account/partials/accountMenu}"></ul>
 
                 <div class="col-sm-9">
                     <th:block layout:fragment="content" />
@@ -36,7 +36,7 @@
     </div>
 </div>
 
-<footer th:replace="layout/partials/footer"></footer>
+<footer th:replace="~{layout/partials/footer}"></footer>
 
 </body>
 </html>

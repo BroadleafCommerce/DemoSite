@@ -121,7 +121,7 @@
             <div class="clearfix"></div>
             <div id="customer-reviews-container">
                 <blc:ratings itemId="*{id}" ></blc:ratings>
-                <div th:if="${ratingSummary}" th:object="${ratingSummary}">
+                <div th:if="${#ratings.getRatings(product.id).get('ratingSummary')}" th:object="${#ratings.getRatings(product.id).get('ratingSummary')}">
                     <span class="title">Community Rating</span>
                     <div id="community-rating-container">
                         <blc:form id="community-rating" class="star-rating" th:attr="data-community-rating=*{averageRating}">
@@ -152,9 +152,8 @@
                         </div>
                     </div>
                     <div class="clearfix"></div>
-                    <blc:ratings itemId="*{product.id}" ></blc:ratings>
-                    <div th:if="${currentCustomerReview}" th:object="${currentCustomerReview}" class="customer-reviews current-customer-review">
-                        <h4>Your Review</h4>
+                    <div th:if="${#ratings.getRatings(product.id).get('currentCustomerReview')}" th:object="${#ratings.getRatings(product.id).get('currentCustomerReview')}" class="customer-reviews current-customer-review">
+                    <h4>Your Review</h4>
                         <p class="voting-summary" th:if="*{notHelpfulCount()} + *{helpfulCount()} > 0">
                             <span th:utext="*{helpfulCount()}">9</span> of
                             <span th:utext="*{notHelpfulCount()} + *{helpfulCount()}">10</span> found the following review helpful
@@ -219,7 +218,7 @@
                     <ul id="featuredProducts" class="js-featuredProducts group" th:with="relatedProducts=${#related_products.findByProduct(__*{product.id}__)}">
                         <li th:each="product : ${relatedProducts}"
                             th:object="${product}"
-                            th:include="catalog/partials/productListItem"
+                            th:insert="~{catalog/partials/productListItem}"
                             class="js-productContainer productContainer"></li>
                     </ul>
                 </div>

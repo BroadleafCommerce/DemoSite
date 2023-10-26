@@ -53,19 +53,19 @@
 
                 <!-- Registered Customer Actions -->
                 <th:block th:if="${!customer.anonymous}">
-                    <th:block th:replace="@{layout/partials/registeredCustomerActions}" />
+                    <th:block th:replace="~{@{layout/partials/registeredCustomerActions}}" />
                 </th:block>
 
                 <!-- Mobile Main Navigation Menu -->
                 <li class="visible-xs">
-                    <th:block th:replace="@{layout/partials/navMenu}" />
+                    <th:block th:replace="~{@{layout/partials/navMenu}}" />
                 </li>
 
                 <!-- Locale options -->
-                <li th:replace="layout/partials/navLocaleSelector"></li>
+                <li th:replace="~{layout/partials/navLocaleSelector}"></li>
 
                 <!-- Mini Cart -->
-                <th:block th:replace="checkout/partials/miniCart" />
+                <th:block th:replace="~{checkout/partials/miniCart}" />
             </ul>
         </div>
 
@@ -85,13 +85,13 @@
             </button>
 
             <ul class="visible-xs nav navbar-nav">
-                <th:block th:replace="checkout/partials/miniCart" />
+                <th:block th:replace="~{checkout/partials/miniCart}" />
             </ul>
         </div>
 
         <div id="left-nav" class="left-nav hidden-xs collapse main-menu-wrapper">
             <!-- Main Navigation Menu -->
-            <th:block th:replace="@{layout/partials/navMenu}" />
+            <th:block th:replace="~{@{layout/partials/navMenu}}" />
         </div>
     </div>
 </nav>

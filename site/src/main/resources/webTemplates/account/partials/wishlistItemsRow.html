@@ -67,7 +67,7 @@
                         </li>
 
                         <!-- Bundled Products -->
-                        <li th:replace="cart/partials/cartBundledProducts"></li>
+                        <li th:replace="~{cart/partials/cartBundledProducts}"></li>
 
                         <!-- Item Actions -->
                         <li class="wishlist-product-actions">
@@ -79,7 +79,7 @@
                                     Add To Cart
                                 </button>
                             </blc:form>
-                            <th:block th:replace="checkout/partials/orderItemConfigureMessaging" />
+                            <th:block th:replace="~{checkout/partials/orderItemConfigureMessaging}" />
                             <a class="btn btn-simple btn-bordered btn-xs js-removeFromCart"
                                th:href="@{/account/wishlist/remove(orderItemId=*{id})}"
                                th:utext="#{cart.remove}">Remove</a>

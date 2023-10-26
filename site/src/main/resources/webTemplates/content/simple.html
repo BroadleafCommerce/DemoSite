@@ -2,7 +2,7 @@
 
     <head layout:fragment="custom-head">
         <title th:utext="${BLC_PAGE.description}"></title>
-        <th:block th:include="layout/partials/head" th:with="hasMetaDesc=${false}"></th:block>
+        <th:block th:insert="~{layout/partials/head}" th:with="hasMetaDesc=${false}"></th:block>
     </head>
 
     <div layout:fragment="content" >
