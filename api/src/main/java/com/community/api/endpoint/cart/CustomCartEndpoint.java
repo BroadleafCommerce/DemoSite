@@ -18,16 +18,18 @@
 
 package com.community.api.endpoint.cart;
 
+import com.broadleafcommerce.rest.api.endpoint.order.CartEndpoint;
+import com.broadleafcommerce.rest.api.wrapper.OrderWrapper;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.servlet.http.HttpServletRequest;
+import org.broadleafcommerce.profile.web.core.security.RestApiCustomerStateFilter;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.broadleafcommerce.rest.api.endpoint.order.CartEndpoint;
-import com.broadleafcommerce.rest.api.wrapper.OrderWrapper;
-
-import jakarta.servlet.http.HttpServletRequest;
-
 
 /**
  * This is a reference REST API endpoint for cart. This can be modified, used as is, or removed. 
@@ -43,6 +45,12 @@ import jakarta.servlet.http.HttpServletRequest;
 public class CustomCartEndpoint extends CartEndpoint {
 
     @Override
+    @Parameters(
+            @Parameter(name = RestApiCustomerStateFilter.CUSTOMER_ID_ATTRIBUTE,
+                    in = ParameterIn.QUERY,
+                    schema = @Schema(type = "long"),
+                    required = true)
+    )
     @RequestMapping(value = "", method = RequestMethod.GET)
     public OrderWrapper findCartForCustomer(HttpServletRequest request) {
         try {

@@ -29,14 +29,15 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.channel.ChannelDecisionManagerImpl;
 import org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter;
 
-import jakarta.servlet.Filter;
+import java.util.Arrays;
 
-import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
+import jakarta.servlet.Filter;
 
 /**
  * @author Elbert Bautista (elbertbautista)
@@ -51,6 +52,12 @@ public class ApiSecurityConfig {
     @Value("${asset.server.url.prefix.internal}")
     protected String assetServerUrlPrefixInternal;
 
+    @Value("${server.port:8445}")
+    private int httpsRedirectPort;
+
+    @Value("${http.server.port:8082}")
+    protected int httpServerPort;
+
     @Bean(name = "blAuthenticationManager")
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
         return authConfig.getAuthenticationManager();
@@ -59,41 +66,45 @@ public class ApiSecurityConfig {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring().requestMatchers(
-                antMatcher("/api/**/webjars/**"),
-                antMatcher("/api/**/images/favicon-*"),
-                antMatcher("/api/**/jhawtcode/**"),
-                antMatcher("/api/**/swagger-ui.html"),
-                antMatcher("/api/**/swagger-resources/**"),
-                antMatcher("/api/**/v2/api-docs")
+                "/swagger-ui.html",
+                "/api/*/swagger-ui.html",
+                "/swagger-ui*/**",
+                "/api/*/swagger-ui*/**",
+                "/api/*/swagger-resources/*",
+                //this is default url where docs are generated
+                "/api/*/v3/api-docs",
+                "/api/*/v3/api-docs.yaml",
+                "/v3/api-docs/**",
+                "/v3/api-docs.yaml",
+                "/api/*/api-docs.yaml",
+                "/api-docs.yaml"
         );
     }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .httpBasic().disable()
-                .csrf().disable()
-                .authorizeHttpRequests()
-                .requestMatchers("/api/*")
-                .permitAll()
-                .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .sessionFixation()
-                .none()
-                .enableSessionUrlRewriting(false)
-                .and()
-                .requiresChannel()
-                .anyRequest()
-                .requires(ChannelDecisionManagerImpl.ANY_CHANNEL)
-                .and()
-                .addFilterAfter(apiCustomerStateFilter(), RememberMeAuthenticationFilter.class);
+            .httpBasic(AbstractHttpConfigurer::disable)
+            .csrf(AbstractHttpConfigurer::disable)
+            .authorizeHttpRequests(req -> req.anyRequest().permitAll())
+            .sessionManagement(session -> {
+                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                session.sessionFixation().none();
+                session.enableSessionUrlRewriting(false);
+            })
+            .requiresChannel(channel -> channel.anyRequest().requires(ChannelDecisionManagerImpl.ANY_CHANNEL))
+            .portMapper(
+                    mapper -> mapper
+                            .http(httpServerPort).mapsTo(httpsRedirectPort)
+            )
+            .addFilterAfter(apiCustomerStateFilter(), RememberMeAuthenticationFilter.class);
         return http.build();
     }
 
     @Bean
     public Filter apiCustomerStateFilter() {
-        return new RestApiCustomerStateFilter();
+        RestApiCustomerStateFilter restApiCustomerStateFilter = new RestApiCustomerStateFilter();
+        restApiCustomerStateFilter.setExcludeUrlPatterns(Arrays.asList("/api/*/swagger*", "/api/*/swagger*/**", "/swagger*", "/swagger*/**", "/**/swagger*/**"));
+        return restApiCustomerStateFilter;
     }
-
 }
