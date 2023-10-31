@@ -35,6 +35,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.channel.ChannelDecisionManagerImpl;
 import org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter;
 
+import java.util.Arrays;
+
 import jakarta.servlet.Filter;
 
 /**
@@ -65,13 +67,16 @@ public class ApiSecurityConfig {
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring().requestMatchers(
                 "/swagger-ui.html",
-                "/swagger-ui*/**", "/v3/api-docs/**",
-                "/api/*/webjars/*",
-                "/api/*/images/favicon-*",
-                "/api/*/jhawtcode/*",
                 "/api/*/swagger-ui.html",
+                "/swagger-ui*/**",
+                "/api/*/swagger-ui*/**",
                 "/api/*/swagger-resources/*",
+                //this is default url where docs are generated
                 "/api/*/v3/api-docs",
+                "/api/*/v3/api-docs.yaml",
+                "/v3/api-docs/**",
+                "/v3/api-docs.yaml",
+                "/api/*/api-docs.yaml",
                 "/api-docs.yaml"
         );
     }
@@ -79,26 +84,27 @@ public class ApiSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .httpBasic(AbstractHttpConfigurer::disable)
-                .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(req->req.anyRequest().permitAll())
-                .sessionManagement(session->{
-                    session.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-                    session.sessionFixation().none();
-                    session.enableSessionUrlRewriting(false);
-                })
-                .requiresChannel(channel->channel.anyRequest().requires(ChannelDecisionManagerImpl.ANY_CHANNEL))
-                .portMapper(
-                        mapper -> mapper
-                                .http(httpServerPort).mapsTo(httpsRedirectPort)
-                )
-                .addFilterAfter(apiCustomerStateFilter(), RememberMeAuthenticationFilter.class);
+            .httpBasic(AbstractHttpConfigurer::disable)
+            .csrf(AbstractHttpConfigurer::disable)
+            .authorizeHttpRequests(req -> req.anyRequest().permitAll())
+            .sessionManagement(session -> {
+                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                session.sessionFixation().none();
+                session.enableSessionUrlRewriting(false);
+            })
+            .requiresChannel(channel -> channel.anyRequest().requires(ChannelDecisionManagerImpl.ANY_CHANNEL))
+            .portMapper(
+                    mapper -> mapper
+                            .http(httpServerPort).mapsTo(httpsRedirectPort)
+            )
+            .addFilterAfter(apiCustomerStateFilter(), RememberMeAuthenticationFilter.class);
         return http.build();
     }
 
     @Bean
     public Filter apiCustomerStateFilter() {
-        return new RestApiCustomerStateFilter();
+        RestApiCustomerStateFilter restApiCustomerStateFilter = new RestApiCustomerStateFilter();
+        restApiCustomerStateFilter.setExcludeUrlPatterns(Arrays.asList("/api/*/swagger*", "/api/*/swagger*/**", "/swagger*", "/swagger*/**", "/**/swagger*/**"));
+        return restApiCustomerStateFilter;
     }
-
 }
