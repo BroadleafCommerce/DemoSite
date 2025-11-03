@@ -1,0 +1,11 @@
+groups:
+- name: SRE_FInal_alerts
+  rules:
+  - alert: ElevatedResponseTime
+    expr: http_request_duration_seconds_mean > 0.5
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      summary: "Elevated Response Time Alert"
+      description: "The average response time has exceeded 0.5 seconds for over 1 minute."
